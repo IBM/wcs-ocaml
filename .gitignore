@@ -1,3 +1,5 @@
+# OCaml generated files
+
 *.annot
 *.cmo
 *.cma
@@ -15,6 +17,5 @@ _build/
 *.byte
 *.native
 
-# oasis generated files
-setup.data
-setup.log
+# emacs
+*~
