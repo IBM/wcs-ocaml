@@ -5,10 +5,10 @@ OCAMLBUILD= ocamlbuild \
 TARGET=native
 MAIN=test
 
-GENERATED= api/wcs_t.ml \
-	   api/wcs_t.mli \
-	   api/wcs_j.ml \
-	   api/wcs_j.mli
+GENERATED= wcs_t.ml \
+	   wcs_t.mli \
+	   wcs_j.ml \
+	   wcs_j.mli
 
 all: $(MAIN)
 
@@ -18,9 +18,9 @@ $(MAIN): $(MAIN).$(TARGET)
 	cp _build/$< $@
 
 $(MAIN).$(TARGET): $(GENERATED)
-	$(OCAMLBUILD) -I api -I bmd -I parser -I workspaces \
-		-use-ocamlfind -use-menhir \
-		-pkg atdgen -pkg cohttp.lwt -pkg ppx_deriving_yojson $@
+	$(OCAMLBUILD) \
+		-use-ocamlfind \
+		-pkg atdgen -pkg cohttp.lwt $@
 
 %_t.ml %_t.mli: %.atd
 	atdgen -t $<
