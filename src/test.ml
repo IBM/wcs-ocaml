@@ -1,22 +1,8 @@
 
-let read_json_file filetype reader f =
-  begin try
-    let lexstate = Yojson.init_lexer ~fname:f () in
-    let ch = open_in f in
-    let lexbuf = Lexing.from_channel ch in
-    let json = reader lexstate lexbuf in
-    close_in ch;
-    json
-  with
-  | Yojson.Json_error err ->
-      raise (Failure ("Unable to parse "^ filetype ^ " file "^f^": "^err))
-  | exn ->
-      raise(Failure ("Unable to read " ^ filetype ^ " file "^f^": "^(Printexc.to_string exn)))
-  end
-
 let wcs_credential : Wcs_t.credential option ref = ref None
 let set_wcs_credential f =
-  wcs_credential := Some (read_json_file "credential" Wcs_j.read_credential f)
+  let cred = Json_util.read_json_file Wcs_j.read_credential f in
+  wcs_credential := Some cred
 
 let ws_ids : Wcs_t.json option ref = ref None
 let set_ws_ids f =

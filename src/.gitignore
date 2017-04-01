@@ -3,3 +3,4 @@ wcs_t.mli
 wcs_j.ml
 wcs_j.mli
 test
+wcs_cli

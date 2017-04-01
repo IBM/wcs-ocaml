@@ -3,7 +3,7 @@ OCAMLBUILD= ocamlbuild \
 		-tags annot,debug,bin_annot
 
 TARGET=native
-MAIN=test
+MAIN=wcs_cli
 
 GENERATED= wcs_t.ml \
 	   wcs_t.mli \
