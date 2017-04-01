@@ -1,0 +1,161 @@
+(**
+   Data srcutures used in Watson Conversation Service.
+
+   Based on the documentation available at:
+   https://www.ibm.com/watson/developercloud/conversation/api/v1/
+
+   Version 2016-09-20.
+*)
+
+type json <ocaml module="Json_t"> = abstract
+(** Type of arbitraty JSON values. *)
+
+(** {6 Credentials} *)
+
+
+type credential = {
+    ~url <ocaml default="\"https://gateway.watsonplatform.net/conversation/api\""> : string;
+    password : string;
+    username : string;
+  } <ocaml field_prefix="cred_">
+(** Watson Conversation Service credentials. *)
+
+(** {6 Workspace } *)
+
+type intent_example = {
+    text : string;
+    ?created : string nullable;
+  } <ocaml field_prefix="ex_">
+(** Type of intent examples. *)
+
+type intent_def = {
+    intent : string;
+    ?description : string nullable;
+    ~examples : intent_example list;
+    ?created : string nullable;
+  } <ocaml field_prefix="i_def_">
+(** Type of intent definitions. *)
+
+type entity_value = {
+    value : string;
+    ?metadata : json nullable;
+    ~synonyms : string list;
+    ?created : string nullable;
+  } <ocaml field_prefix="e_">
+(** Type of entity values. *)
+
+type entity_def = {
+    entity : string;
+    ?description : string nullable;
+    (* ?type : string nullable; *)
+    ?source : string nullable;
+    ?open_list : bool option;
+    ~values : entity_value list;
+    ?created : string nullable;
+  } <ocaml field_prefix="e_def_">
+(** Type of entity definitions. *)
+
+type go_to = {
+    ~return <ocaml default="false"> : bool;
+    selector : string;
+    dialog_node : string;
+  } <ocaml field_prefix="goto_">
+(** Type of goto definitions. *)
+
+type output_def = json
+(** Type of outputs of a dialog node. *)
+
+type dialog_node = {
+    dialog_node : string;
+    ?description : string nullable;
+    ?conditions : string nullable;
+    ?parent : string nullable;
+    ?previous_sibling : string nullable;
+    ?output : output_def nullable;
+    ?context : json nullable;
+    ?metadata : json nullable;
+    ?go_to : go_to nullable;
+    ?child_input_kind : string nullable;
+    ?created : string nullable;
+  } <ocaml field_prefix="node_">
+(** Type of dialog nodes. *)
+
+type workspace = {
+    name : string nullable;
+    ?description : string nullable;
+    ?language : string nullable;
+    ?metadata : json nullable;
+    ~counterexamples : intent_example list;
+    ~dialog_nodes : dialog_node list;
+    ~entities : entity_def list;
+    ~intents : intent_def list;
+    ?created : string nullable;
+    ?modified : string nullable;
+    ?created_by : string nullable;
+    ?modified_by : string nullable;
+    ?workspace_id : string nullable;
+  } <ocaml field_prefix="ws_">
+(** Type of workspaces *)
+
+
+(** {6 Types for the [message] method} *)
+
+type input = {
+    text : string;
+  } <ocaml field_prefix="in_">
+
+type entity = {
+    entity : string;
+    location : json;
+    value : string;
+  } <ocaml field_prefix="e_">
+
+type intent = {
+    intent : string;
+    confidence : float;
+  } <ocaml field_prefix="i_">
+
+type output = {
+    log_messages : json;
+    text : string list;
+  } <ocaml field_prefix="out_">
+
+type message_request = {
+    input : input;
+    ~alternate_intents <ocaml default="false"> : bool;
+    ?context : json option;
+    ?entities : entity list option;
+    ?intents : intent list option;
+    ?output : output option;
+  } <ocaml field_prefix="msg_req_">
+
+type message_response = {
+    input : input;
+    ~alternate_intents <ocaml default="false"> : bool;
+    context : json;
+    entities : entity list;
+    intents : intent list;
+    output : output;
+  } <ocaml field_prefix="msg_rsp_">
+
+(** {6 Types for the workspace creation method }*)
+
+type create_response = {
+    ?name : string nullable;
+    ?created : string nullable;
+    ?updated : string nullable;
+    ?language : string nullable;
+    ?metadata : string nullable;
+    ?description : string nullable;
+    ?workspace_id : string nullable;
+  } <ocaml field_prefix="crea_rsp_">
+
+
+(** {6 Action} *)
+type action = {
+    name : string;
+    ~agent <ocaml default="\"client\""> : string;
+    ~type_ <json name="type"> <ocaml default="\"conversation\""> : string;
+    ~parameters <ocaml default="`Null"> : json;
+    ?result_variable : string nullable;
+  } <ocaml field_prefix="act_">
