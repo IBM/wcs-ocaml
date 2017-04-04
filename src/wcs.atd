@@ -4,7 +4,7 @@
    Based on the documentation available at:
    https://www.ibm.com/watson/developercloud/conversation/api/v1/
 
-   Version 2016-09-20.
+   Version 2017-02-03.
 *)
 
 type json <ocaml module="Json_t"> = abstract
@@ -20,7 +20,59 @@ type credential = {
   } <ocaml field_prefix="cred_">
 (** Watson Conversation Service credentials. *)
 
-(** {6 Workspace } *)
+
+type version = [
+  | V_2017_02_03 <json name="2017-02-03">
+  ]
+
+(** {6 Workspaces } *)
+
+
+(** {8 List workspaces} *)
+
+type sort_criteria = [
+  | Sort_name_incr <json name="name">
+  | Sort_modified_incr <json name="modified">
+  | Sort_workspace_id_incr <json name="workspace_id">
+  | Sort_name_incr_decr <json name="-name">
+  | Sort_modified_decr <json name="-modified">
+  | Sort_workspace_id_decr <json name="-workspace_id">
+  ]
+(** Sorting criteria for list of workspaces. *)
+
+type workspace_response = {
+    name : string nullable;
+    description : string nullable;
+    language : string nullable;
+    metadata : json nullable;
+    created : string nullable;
+    updated : string nullable;
+    workspace_id : string;
+  }
+(** A workspace metadata. *)
+
+type pagination_response = {
+    ?refresh_url : string nullable;
+    ?next_url : string nullable;
+    ?total : int nullable;
+    ?matched : int nullable;
+  }
+(** Pagination information *)
+
+type list_workspaces_request = {
+    ~version <ocaml default="`V_2017_02_03"> : version;
+    ~page_limit <ocaml default="100"> : int;
+    ~include_count <ocaml default="false"> : bool;
+    ~sort <ocaml default="`Sort_workspace_id_incr"> : sort_criteria;
+    ?cursor : string nullable;
+  } <ocaml field_prefix="list_ws_req_">
+(** Request the list of workspaces. *)
+
+type list_workspaces_response = {
+    workspaces : workspace_response list;
+    pagination : pagination_response;
+  } <ocaml field_prefix="list_ws_rsp_">
+(** Response to the list of workspaces request. *)
 
 type intent_example = {
     text : string;

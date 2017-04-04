@@ -1,5 +1,6 @@
 type command =
   | Cmd_nothing
+  | Cmd_list
   | Cmd_update
 
 let wcs_credential : Wcs_t.credential option ref = ref None
@@ -30,6 +31,17 @@ let speclist =
       ]
 
 let anon_args = ref (fun s -> ())
+
+(** {6. The [list] command} *)
+
+let list_anon_args s =
+  Log.warning "Wcs_cli" ("ignored argument: " ^ s)
+
+let list wcs_cred =
+  let rsp =
+    Wcs.list_workspaces wcs_cred (Wcs_builder.list_workspaces_request ())
+  in
+  Format.printf "%s@." (Wcs_util.pretty_list_workspaces_response rsp)
 
 (** {6. The [update] command} *)
 
@@ -69,6 +81,9 @@ let update wcs_cred =
 
 let set_command cmd =
   begin match cmd with
+  | "list" ->
+      command := Cmd_list;
+      anon_args := list_anon_args
   | "update" ->
       command := Cmd_update;
       speclist := Arg.align (update_speclist @ !speclist);
@@ -99,6 +114,7 @@ let main () =
   in
   begin match !command with
   | Cmd_nothing -> ()
+  | Cmd_list -> list wcs_cred
   | Cmd_update -> update wcs_cred
   end;
   ()

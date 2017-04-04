@@ -3,7 +3,7 @@ open Wcs_t
 
 exception Error of string
 
-let version = "version=2016-09-20"
+let version = "version=2017-02-03"
 
 (** {6. Check workspaces} *)
 
@@ -47,9 +47,9 @@ let post wcs_cred method_ req =
   let rsp = Lwt_main.run call in
   rsp
 
-let get wcs_cred method_ param =
+let get wcs_cred method_ params =
   let uri =
-    Uri.of_string (wcs_cred.cred_url^method_^"?"^version^param)
+    Uri.of_string (wcs_cred.cred_url^method_^"?"^version^params)
   in
   let headers =
     let h = Cohttp.Header.init () in
@@ -95,6 +95,13 @@ let delete wcs_cred method_ =
 
 
 (** {Watson Conversation API} *)
+
+let list_workspaces wcs_cred req =
+  let method_ = "/v1/workspaces" in
+  let params = "&page_limit="^(string_of_int req.list_ws_req_page_limit) in
+  let rsp = get wcs_cred method_ params in
+  Wcs_j.list_workspaces_response_of_string rsp
+
 
 let message wcs_cred workspace_id req_msg =
   let method_ = "/v1/workspaces/"^workspace_id^"/message" in
