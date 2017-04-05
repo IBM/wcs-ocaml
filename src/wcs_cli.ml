@@ -234,7 +234,7 @@ let () = anon_args := set_command
 let anon_args s = !anon_args s
 
 let usage =
-  Sys.argv.(0)^" -wcs-cred credentials.json (list | create | get | delete | update | try) [options]"
+  Sys.argv.(0)^" -wcs-cred credentials.json (list | create | delete | get | update | try) [options]"
 
 let main () =
   Arg.parse_dynamic speclist anon_args usage;
