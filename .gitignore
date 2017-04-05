@@ -17,5 +17,8 @@ _build/
 *.byte
 *.native
 
+# binaries
+bin/wcs-cli
+
 # emacs
 *~
