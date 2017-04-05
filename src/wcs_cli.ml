@@ -195,7 +195,8 @@ let main () =
 let _ =
   begin try
     main ()
-  with Log.Error (module_name, msg) ->
+  with
+  | Log.Error (module_name, msg) when not !Log.debug_message ->
     Format.eprintf "%s@." msg;
     exit 1
   end
