@@ -17,6 +17,7 @@ can just add the corresponding libraries:
 ```
 opam install ocamlfind
 opam install ocamlbuild
+opam install atdgen
 opam install lwt ssl cohttp
 ```
 
