@@ -10,8 +10,6 @@
 
 open Wcs_t
 
-exception Error of string
-
 (** {6. Workspaces} *)
 
 val list_workspaces : credential ->

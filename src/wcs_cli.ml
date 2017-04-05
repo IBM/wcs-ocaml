@@ -193,4 +193,9 @@ let main () =
   ()
 
 let _ =
-  main ()
+  begin try
+    main ()
+  with Log.Error (module_name, msg) ->
+    Format.eprintf "%s@." msg;
+    exit 1
+  end

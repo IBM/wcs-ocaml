@@ -1,8 +1,6 @@
 open Lwt
 open Wcs_t
 
-exception Error of string
-
 let version = "version=2017-02-03"
 
 (** {6. Check workspaces} *)
@@ -66,7 +64,9 @@ let post wcs_cred method_ req =
         begin match code with
         | 200 | 201 -> body
         | _ ->
-            raise (Error (Format.sprintf "[POST %s] %d: %s" method_ code body))
+            Log.error
+              "Wcs" None
+              (Format.sprintf "[POST %s] %d: %s" method_ code body)
         end
   in
   let rsp = Lwt_main.run call in
@@ -89,7 +89,9 @@ let get wcs_cred method_ params =
         begin match code with
         | 200 -> body
         | _ ->
-            raise (Error (Format.sprintf "[GET %s] %d: %s" method_ code body))
+            Log.error
+              "Wcs" None
+              (Format.sprintf "[GET %s] %d: %s" method_ code body)
         end
   in
   let rsp = Lwt_main.run call in
@@ -112,7 +114,10 @@ let delete wcs_cred method_ =
       body |> Cohttp_lwt_body.to_string >|= fun body ->
         begin match code with
         | 200 | 201 -> body
-        | _ -> raise (Error (Format.sprintf "[DELETE %s] %d: %s" method_ code body))
+        | _ ->
+            Log.error
+              "Wcs" None
+              (Format.sprintf "[DELETE %s] %d: %s" method_ code body)
         end
   in
   let rsp = Lwt_main.run call in
@@ -136,11 +141,14 @@ let create_workspace wcs_cred workspace =
   let req = Wcs_j.string_of_workspace workspace in
   let rsp =
     begin try post wcs_cred method_ req
-    with Error err ->
+    with Log.Error ("Wcs", err) ->
       begin match workspace.ws_name with
       | Some ws_name ->
-          raise (Error (Format.sprintf "[%s]%s" ws_name err))
-      | None -> raise (Error err)
+          Log.error
+            "Wcs" None
+            (Format.sprintf "[%s]%s" ws_name err)
+      | None ->
+          Log.error "Wcs" None err
       end
     end
   in
@@ -167,11 +175,14 @@ let update_workspace wcs_cred workspace_id workspace =
   let req = Wcs_j.string_of_workspace workspace in
   let rsp =
     begin try post wcs_cred method_ req
-    with Error err ->
+    with Log.Error ("Wcs", err) ->
       begin match workspace.ws_name with
       | Some ws_name ->
-          raise (Error (Format.sprintf "[%s]%s" ws_name err))
-      | None -> raise (Error err)
+          Log.error
+            "Wcs" None
+            (Format.sprintf "[%s]%s" ws_name err)
+      | None ->
+          Log.error "Wcs" None err
       end
     end
   in
