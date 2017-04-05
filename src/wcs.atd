@@ -203,11 +203,11 @@ type create_response = {
   } <ocaml field_prefix="crea_rsp_">
 
 
-(** {6 Action} *)
-type action = {
-    name : string;
-    ~agent <ocaml default="\"client\""> : string;
-    ~type_ <json name="type"> <ocaml default="\"conversation\""> : string;
-    ~parameters <ocaml default="`Null"> : json;
-    ?result_variable : string nullable;
-  } <ocaml field_prefix="act_">
+(* (\** {6 Action} *\) *)
+(* type action = { *)
+(*     name : string; *)
+(*     ~agent <ocaml default="\"client\""> : string; *)
+(*     ~type_ <json name="type"> <ocaml default="\"conversation\""> : string; *)
+(*     ~parameters <ocaml default="`Null"> : json; *)
+(*     ?result_variable : string nullable; *)
+(*   } <ocaml field_prefix="act_"> *)
