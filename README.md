@@ -29,7 +29,7 @@ To compile, do:
 make
 ```
 
-## Command line interface
+## Watson Conversation Service command line interface
 
 The compilation produces a command line interface for Watson
 Conversation Service in:
@@ -45,3 +45,9 @@ The command line interface support the following commands:
   * `get` - Get information about workspaces, optionally including all workspace contents.
   * `update` - Update an existing workspace with new or modified data.
   * `try` - Generic bot running in the terminal.
+
+
+## Watson Conversation Service OCaml API
+
+The interface to use Watson Conversation Service is defined in the
+module `Wcs` (https://github.ibm.com/Conversational/wcs-ocaml/blob/master/src/wcs.mli).
