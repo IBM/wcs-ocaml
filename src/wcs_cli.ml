@@ -4,6 +4,7 @@ type command =
   | Cmd_nothing
   | Cmd_list
   | Cmd_create
+  | Cmd_delete
   | Cmd_update
 
 let wcs_credential : Wcs_t.credential option ref = ref None
@@ -110,6 +111,23 @@ let create wcs_cred =
       Format.printf "Workspace %s: %s@." name ws_id)
     !create_ws_fnames
 
+(** {6. The [delete] command} *)
+
+let delete_ws_ids = ref []
+
+let delete_speclist =
+  [ ]
+
+let delete_anon_args s =
+  delete_ws_ids := !delete_ws_ids @ [ s ]
+
+let delete wcs_cred =
+  List.iter
+    (fun id ->
+      Wcs.delete_workspace wcs_cred id;
+      Format.printf "Workspace %s deleted@." id)
+    !delete_ws_ids
+
 
 (** {6. The [update] command} *)
 
@@ -156,6 +174,10 @@ let set_command cmd =
       command := Cmd_create;
       speclist := Arg.align (create_speclist @ !speclist);
       anon_args := create_anon_args
+  | "delete" ->
+      command := Cmd_delete;
+      speclist := Arg.align (delete_speclist @ !speclist);
+      anon_args := delete_anon_args
   | "update" ->
       command := Cmd_update;
       speclist := Arg.align (update_speclist @ !speclist);
@@ -172,7 +194,7 @@ let () = anon_args := set_command
 let anon_args s = !anon_args s
 
 let usage =
-  Sys.argv.(0)^" -wcs-cred credentials.json (list | create | update | rm | try) [options]"
+  Sys.argv.(0)^" -wcs-cred credentials.json (list | create | delete | update | try) [options]"
 
 let main () =
   Arg.parse_dynamic speclist anon_args usage;
@@ -188,6 +210,7 @@ let main () =
   | Cmd_nothing -> ()
   | Cmd_list -> list wcs_cred
   | Cmd_create -> create wcs_cred
+  | Cmd_delete -> delete wcs_cred
   | Cmd_update -> update wcs_cred
   end;
   ()

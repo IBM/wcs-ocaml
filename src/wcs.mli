@@ -15,6 +15,7 @@ open Wcs_t
 val list_workspaces : credential ->
   list_workspaces_request -> list_workspaces_response
 (**
+   [list_workspaces wcs_cred req]
    List the workspaces associated with a Conversation service instance.
    [https://www.ibm.com/watson/developercloud/conversation/api/v1/#list_workspaces]
 *)
@@ -22,8 +23,17 @@ val list_workspaces : credential ->
 val create_workspace : credential ->
   workspace -> create_response
 (**
-   Create a workspace on a Conversation service instance.
+   [create_workspace wcs_cred ws]
+   Create a workspace on the Conversation service instance.
    [https://www.ibm.com/watson/developercloud/conversation/api/v1/#create_workspace]
+*)
+
+val delete_workspace : credential ->
+  string -> unit
+(**
+   [delete_workspace wcs_cred ws_id]
+   Delete a workspace from the Conversation service instance.
+   [https://www.ibm.com/watson/developercloud/conversation/api/v1/#delete_workspace]
 *)
 
 val message : credential ->
@@ -34,6 +44,3 @@ val get_workspace : credential ->
 
 val update_workspace : credential ->
   string -> workspace -> unit
-
-val delete_workspace : credential ->
-  string -> unit

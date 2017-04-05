@@ -154,6 +154,10 @@ let create_workspace wcs_cred workspace =
   in
   Wcs_j.create_response_of_string rsp
 
+let delete_workspace wcs_cred workspace_id =
+  let method_ = "/v1/workspaces/"^workspace_id in
+  let rsp = delete wcs_cred method_ in
+  ignore rsp
 
 
 (* XXXXXXXXXXXXXXXXXXXXXXXXX *)
@@ -186,9 +190,4 @@ let update_workspace wcs_cred workspace_id workspace =
       end
     end
   in
-  ignore rsp
-
-let delete_workspace wcs_cred workspace_id =
-  let method_ = "/v1/workspaces/"^workspace_id in
-  let rsp = delete wcs_cred method_ in
   ignore rsp
