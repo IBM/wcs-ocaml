@@ -1,6 +1,9 @@
+open Wcs_t
+
 type command =
   | Cmd_nothing
   | Cmd_list
+  | Cmd_create
   | Cmd_update
 
 let wcs_credential : Wcs_t.credential option ref = ref None
@@ -51,16 +54,15 @@ let set_list_cursor s =
   list_cursor := Some (Some s)
 
 let list_speclist =
-  Arg.align
-    [ "-page_limit", Arg.Int set_list_page_limit,
-      "n The number of records to return in each page of results.";
-      "-include_count", Arg.Bool set_list_include_count,
-      "b Whether to include information about the number of records returned.";
-      "-sort", Arg.String set_list_sort,
-      "The attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). Supported values are name, modified, and workspace_id. ";
-      "-cursor", Arg.String set_list_cursor,
-      "A token identifying the last value from the previous page of results.";
-    ]
+  [ "-page_limit", Arg.Int set_list_page_limit,
+    "n The number of records to return in each page of results.";
+    "-include_count", Arg.Bool set_list_include_count,
+    "b Whether to include information about the number of records returned.";
+    "-sort", Arg.String set_list_sort,
+    "The attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). Supported values are name, modified, and workspace_id.";
+    "-cursor", Arg.String set_list_cursor,
+    "A token identifying the last value from the previous page of results.";
+  ]
 
 let list_anon_args s =
   Log.warning "Wcs_cli" ("ignored argument: " ^ s)
@@ -77,6 +79,38 @@ let list wcs_cred =
   let rsp = Wcs.list_workspaces wcs_cred req in
   Format.printf "%s@." (Json_util.pretty_list_workspaces_response rsp)
 
+(** {6. The [create] command} *)
+
+let create_ws_fnames = ref []
+
+let create_speclist = []
+
+let create_anon_args s =
+  create_ws_fnames := !create_ws_fnames @ [ s ]
+
+let create wcs_cred =
+  List.iter
+    (fun fname ->
+      let ws =
+        Json_util.read_json_file Wcs_j.read_workspace fname
+      in
+      let rsp = Wcs.create_workspace wcs_cred ws in
+      let name =
+        begin match rsp.crea_rsp_name with
+        | Some name -> name
+        | None -> "?"
+        end
+      in
+      let ws_id =
+        begin match rsp.crea_rsp_workspace_id with
+        | Some id -> id
+        | None -> "?"
+        end
+      in
+      Format.printf "Workspace %s: %s@." name ws_id)
+    !create_ws_fnames
+
+
 (** {6. The [update] command} *)
 
 let update_ws_fname = ref None
@@ -86,10 +120,9 @@ let set_update_ws_id id =
   update_ws_id := Some id
 
 let update_speclist =
-  Arg.align
-    [ "-ws-id", Arg.String set_update_ws_id,
-      "file The file containing the workspace identifiers.";
-    ]
+  [ "-ws-id", Arg.String set_update_ws_id,
+    "file The file containing the workspace identifiers.";
+  ]
 
 let update_anon_args s =
   anon_args := (fun s -> Log.warning "Wcs_cli" ("ignored argument: " ^ s));
@@ -119,6 +152,10 @@ let set_command cmd =
       command := Cmd_list;
       speclist := Arg.align (list_speclist @ !speclist);
       anon_args := list_anon_args
+  | "create" ->
+      command := Cmd_create;
+      speclist := Arg.align (create_speclist @ !speclist);
+      anon_args := create_anon_args
   | "update" ->
       command := Cmd_update;
       speclist := Arg.align (update_speclist @ !speclist);
@@ -135,7 +172,7 @@ let () = anon_args := set_command
 let anon_args s = !anon_args s
 
 let usage =
-  Sys.argv.(0)^" -wcs-cred credentials.json (create|update|rm|try) [options]"
+  Sys.argv.(0)^" -wcs-cred credentials.json (list | create | update | rm | try) [options]"
 
 let main () =
   Arg.parse_dynamic speclist anon_args usage;
@@ -150,6 +187,7 @@ let main () =
   begin match !command with
   | Cmd_nothing -> ()
   | Cmd_list -> list wcs_cred
+  | Cmd_create -> create wcs_cred
   | Cmd_update -> update wcs_cred
   end;
   ()

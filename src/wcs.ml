@@ -130,6 +130,26 @@ let list_workspaces wcs_cred req =
   Wcs_j.list_workspaces_response_of_string rsp
 
 
+let create_workspace wcs_cred workspace =
+  assert (ws_check workspace);
+  let method_ = "/v1/workspaces" in
+  let req = Wcs_j.string_of_workspace workspace in
+  let rsp =
+    begin try post wcs_cred method_ req
+    with Error err ->
+      begin match workspace.ws_name with
+      | Some ws_name ->
+          raise (Error (Format.sprintf "[%s]%s" ws_name err))
+      | None -> raise (Error err)
+      end
+    end
+  in
+  Wcs_j.create_response_of_string rsp
+
+
+
+(* XXXXXXXXXXXXXXXXXXXXXXXXX *)
+
 let message wcs_cred workspace_id req_msg =
   let method_ = "/v1/workspaces/"^workspace_id^"/message" in
   let req = Wcs_j.string_of_message_request req_msg in
@@ -156,22 +176,6 @@ let update_workspace wcs_cred workspace_id workspace =
     end
   in
   ignore rsp
-
-let create_workspace wcs_cred workspace =
-  assert (ws_check workspace);
-  let method_ = "/v1/workspaces" in
-  let req = Wcs_j.string_of_workspace workspace in
-  let rsp =
-    begin try post wcs_cred method_ req
-    with Error err ->
-      begin match workspace.ws_name with
-      | Some ws_name ->
-          raise (Error (Format.sprintf "[%s]%s" ws_name err))
-      | None -> raise (Error err)
-      end
-    end
-  in
-  Wcs_j.create_response_of_string rsp
 
 let delete_workspace wcs_cred workspace_id =
   let method_ = "/v1/workspaces/"^workspace_id in
