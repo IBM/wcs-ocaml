@@ -54,7 +54,7 @@ let set_list_sort s =
 
 let list_cursor = ref None
 let set_list_cursor s =
-  list_cursor := Some (Some s)
+  list_cursor := Some s
 
 let list_speclist =
   [ "-page_limit", Arg.Int set_list_page_limit,

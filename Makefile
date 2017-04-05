@@ -4,7 +4,7 @@ bin/wcs-cli: src/wcs_cli
 	mkdir -p bin
 	cp $< $@
 
-.PHONY: src/wcs_wcs clean
+.PHONY: src/wcs_cli clean
 
 src/wcs_cli:
 	$(MAKE) -C src

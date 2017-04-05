@@ -61,9 +61,9 @@ type pagination_response = {
 
 type list_workspaces_request = {
     (* ~version <ocaml default="`V_2017_02_03"> : version; *)
-    ~page_limit <ocaml default="100"> : int;
-    ~include_count <ocaml default="false"> : bool;
-    ~sort <ocaml default="`Sort_workspace_id_incr"> : sort_criteria;
+    ?page_limit : int nullable;
+    ?include_count : bool nullable;
+    ?sort : sort_criteria nullable;
     ?cursor : string nullable;
   } <ocaml field_prefix="list_ws_req_">
 (** Request the list of workspaces. *)

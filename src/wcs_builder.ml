@@ -1,11 +1,11 @@
 open Wcs_t
 
 let list_workspaces_request
-    ?(version=`V_2017_02_03)
-    ?(page_limit=100)
-    ?(include_count=false)
-    ?(sort=`Sort_workspace_id_incr)
-    ?(cursor=None)
+    (* ?version *)
+    ?page_limit
+    ?include_count
+    ?sort
+    ?cursor
     ()
     : list_workspaces_request =
   { (* list_ws_req_version = version; *)
