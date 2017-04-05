@@ -23,25 +23,59 @@ let set_debug () =
 
 let speclist =
   ref [ "-wcs-cred", Arg.String set_wcs_credential,
-        "cred.json The file containing the Watson Conversation Service credentials";
+        "cred.json The file containing the Watson Conversation Service credentials.";
         "-no-error-recovery", Arg.Unit unset_error_recovery,
-        " Do not try to recover in case of error";
+        " Do not try to recover in case of error.";
         "-debug", Arg.Unit set_debug,
-        " Print dubg messages";
+        " Print debug messages.";
       ]
 
 let anon_args = ref (fun s -> ())
 
 (** {6. The [list] command} *)
 
+let list_page_limit = ref None
+let set_list_page_limit n =
+  list_page_limit := Some n
+
+let list_include_count = ref None
+let set_list_include_count b =
+  list_include_count := Some b
+
+let list_sort = ref None
+let set_list_sort s =
+  list_sort := Some (Wcs_j.sort_criteria_of_string (Yojson.Basic.to_string (`String s)))
+
+let list_cursor = ref None
+let set_list_cursor s =
+  list_cursor := Some (Some s)
+
+let list_speclist =
+  Arg.align
+    [ "-page_limit", Arg.Int set_list_page_limit,
+      "n The number of records to return in each page of results.";
+      "-include_count", Arg.Bool set_list_include_count,
+      "b Whether to include information about the number of records returned.";
+      "-sort", Arg.String set_list_sort,
+      "The attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). Supported values are name, modified, and workspace_id. ";
+      "-cursor", Arg.String set_list_cursor,
+      "A token identifying the last value from the previous page of results.";
+    ]
+
 let list_anon_args s =
   Log.warning "Wcs_cli" ("ignored argument: " ^ s)
 
 let list wcs_cred =
-  let rsp =
-    Wcs.list_workspaces wcs_cred (Wcs_builder.list_workspaces_request ())
+  let req =
+    Wcs_builder.list_workspaces_request
+      ?page_limit:!list_page_limit
+      ?include_count:!list_include_count
+      ?sort:!list_sort
+      ?cursor:!list_cursor
+      ()
   in
-  Format.printf "%s@." (Wcs_util.pretty_list_workspaces_response rsp)
+  let rsp = Wcs.list_workspaces wcs_cred req in
+  Format.printf "%s@." (Json_util.pretty_list_workspaces_response rsp)
 
 (** {6. The [update] command} *)
 
@@ -54,7 +88,7 @@ let set_update_ws_id id =
 let update_speclist =
   Arg.align
     [ "-ws-id", Arg.String set_update_ws_id,
-      "file The file containing the workspace identifiers";
+      "file The file containing the workspace identifiers.";
     ]
 
 let update_anon_args s =
@@ -83,6 +117,7 @@ let set_command cmd =
   begin match cmd with
   | "list" ->
       command := Cmd_list;
+      speclist := Arg.align (list_speclist @ !speclist);
       anon_args := list_anon_args
   | "update" ->
       command := Cmd_update;

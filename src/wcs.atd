@@ -20,10 +20,10 @@ type credential = {
   } <ocaml field_prefix="cred_">
 (** Watson Conversation Service credentials. *)
 
-
 type version = [
-  | V_2017_02_03 <json name="2017-02-03">
-  ]
+  | V_2017_02_03
+  ] (* <ocaml repr="classic"> *)
+(** Supported versions *)
 
 (** {6 Workspaces } *)
 
@@ -37,7 +37,7 @@ type sort_criteria = [
   | Sort_name_incr_decr <json name="-name">
   | Sort_modified_decr <json name="-modified">
   | Sort_workspace_id_decr <json name="-workspace_id">
-  ]
+  ] (* <ocaml repr="classic"> *)
 (** Sorting criteria for list of workspaces. *)
 
 type workspace_response = {
@@ -60,7 +60,7 @@ type pagination_response = {
 (** Pagination information *)
 
 type list_workspaces_request = {
-    ~version <ocaml default="`V_2017_02_03"> : version;
+    (* ~version <ocaml default="`V_2017_02_03"> : version; *)
     ~page_limit <ocaml default="100"> : int;
     ~include_count <ocaml default="false"> : bool;
     ~sort <ocaml default="`Sort_workspace_id_incr"> : sort_criteria;

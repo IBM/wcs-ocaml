@@ -21,6 +21,31 @@ let ws_check ws =
   true
 
 
+(** {6. Utility functions} *)
+
+let parameters_of_json (o: json) : string =
+  begin match o with
+  | `Assoc [] -> ""
+  (* | `Assoc ((x, v) :: l) -> *)
+  (*     let params = "?"^x^"="^(Yojson.Basic.to_string o) in *)
+  (*     List.fold_left *)
+  (*       (fun params (x, v) -> *)
+  (*         "&"^x^"="^(Yojson.Basic.to_string o)) *)
+  (*       params l *)
+  | `Assoc l ->
+      List.fold_left
+        (fun params (x, v) ->
+          begin match v with
+          | `String s -> "&"^x^"="^s
+          | _ -> "&"^x^"="^(Yojson.Basic.to_string o)
+          end)
+        "" l
+  | _ ->
+      Log.error "Wcs" (Some "")
+        ("parameters_of_json "^ (Yojson.Basic.pretty_to_string o) ^
+         ": json object expected")
+  end
+
 (** {6. Generic functions} *)
 
 let post wcs_cred method_ req =
@@ -98,7 +123,9 @@ let delete wcs_cred method_ =
 
 let list_workspaces wcs_cred req =
   let method_ = "/v1/workspaces" in
-  let params = "&page_limit="^(string_of_int req.list_ws_req_page_limit) in
+  let params =
+    parameters_of_json (Json_util.json_of_list_workspaces_request req)
+  in
   let rsp = get wcs_cred method_ params in
   Wcs_j.list_workspaces_response_of_string rsp
 
