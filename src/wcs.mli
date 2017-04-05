@@ -36,11 +36,18 @@ val delete_workspace : credential ->
    [https://www.ibm.com/watson/developercloud/conversation/api/v1/#delete_workspace]
 *)
 
+val get_workspace : credential ->
+  get_workspace_request -> workspace
+(**
+   [get_workspace wcs_cred req]
+   Get information about a workspace, optionally including all
+   workspace content.
+   [https://www.ibm.com/watson/developercloud/conversation/api/v1/#get_workspace]
+*)
+
+
 val message : credential ->
   string -> message_request -> message_response
-
-val get_workspace : credential ->
-  string -> workspace
 
 val update_workspace : credential ->
   string -> workspace -> unit

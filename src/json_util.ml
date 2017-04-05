@@ -181,6 +181,15 @@ let json_of_create_response x =
 let pretty_create_response x =
   Yojson.Basic.pretty_to_string (json_of_create_response x)
 
+(** {8. get_workspace_request} *)
+
+let json_of_get_workspace_request x =
+  Yojson.Basic.from_string (Wcs_j.string_of_get_workspace_request x)
+
+let pretty_get_workspace_request x =
+  Yojson.Basic.pretty_to_string (json_of_get_workspace_request x)
+
+
 
 (* (\** {8. action} *\) *)
 

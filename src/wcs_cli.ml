@@ -1,10 +1,12 @@
 open Wcs_t
+open Json_util
 
 type command =
   | Cmd_nothing
   | Cmd_list
   | Cmd_create
   | Cmd_delete
+  | Cmd_get
   | Cmd_update
 
 let wcs_credential : Wcs_t.credential option ref = ref None
@@ -128,6 +130,40 @@ let delete wcs_cred =
       Format.printf "Workspace %s deleted@." id)
     !delete_ws_ids
 
+(** {6. The [get] command} *)
+
+let get_export = ref None
+let set_get_export b =
+  get_export := Some b
+
+let get_ws_ids = ref []
+
+let get_speclist =
+  [ "-export", Arg.Bool set_get_export,
+    "b Whether to include all element content in the returned data. The default value is false. ";]
+
+let get_anon_args s =
+  get_ws_ids := !get_ws_ids @ [ s ]
+
+let get wcs_cred =
+  let workspaces =
+    List.fold_left
+      (fun acc id ->
+        let req =
+          Wcs_builder.get_workspace_request ?export:!get_export id
+        in
+        let ws = Wcs.get_workspace wcs_cred req in
+        (json_of_workspace ws) :: acc)
+      [] !get_ws_ids
+  in
+  begin match workspaces with
+  | [ ws ] ->
+      Format.printf "%s"
+        (Yojson.Basic.pretty_to_string ws)
+  | workspaces ->
+      Format.printf "%s"
+        (Yojson.Basic.pretty_to_string (`List (List.rev workspaces)))
+  end
 
 (** {6. The [update] command} *)
 
@@ -178,6 +214,10 @@ let set_command cmd =
       command := Cmd_delete;
       speclist := Arg.align (delete_speclist @ !speclist);
       anon_args := delete_anon_args
+  | "get" ->
+      command := Cmd_get;
+      speclist := Arg.align (get_speclist @ !speclist);
+      anon_args := get_anon_args
   | "update" ->
       command := Cmd_update;
       speclist := Arg.align (update_speclist @ !speclist);
@@ -194,7 +234,7 @@ let () = anon_args := set_command
 let anon_args s = !anon_args s
 
 let usage =
-  Sys.argv.(0)^" -wcs-cred credentials.json (list | create | delete | update | try) [options]"
+  Sys.argv.(0)^" -wcs-cred credentials.json (list | create | get | delete | update | try) [options]"
 
 let main () =
   Arg.parse_dynamic speclist anon_args usage;
@@ -211,6 +251,7 @@ let main () =
   | Cmd_list -> list wcs_cred
   | Cmd_create -> create wcs_cred
   | Cmd_delete -> delete wcs_cred
+  | Cmd_get -> get wcs_cred
   | Cmd_update -> update wcs_cred
   end;
   ()

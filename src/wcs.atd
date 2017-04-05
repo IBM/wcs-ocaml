@@ -202,6 +202,13 @@ type create_response = {
     ?workspace_id : string nullable;
   } <ocaml field_prefix="crea_rsp_">
 
+(** {6 Types for the workspace get method }*)
+
+type get_workspace_request = {
+    workspace_id : string;
+    ?export : bool nullable;
+  } <ocaml field_prefix="get_ws_req_">
+
 
 (* (\** {6 Action} *\) *)
 (* type action = { *)

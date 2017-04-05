@@ -13,3 +13,7 @@ let list_workspaces_request
     list_ws_req_include_count = include_count;
     list_ws_req_sort = sort;
     list_ws_req_cursor = cursor; }
+
+let get_workspace_request ?export workspace_id =
+  { get_ws_req_workspace_id = workspace_id;
+    get_ws_req_export = export; }
