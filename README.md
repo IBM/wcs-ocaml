@@ -55,8 +55,8 @@ List the workspaces associated with a Conversation service instance.
 $ bin/wcs -wcs-cred credentials.json list [options]
   -page_limit n       The number of records to return in each page of results.
   -include_count b    Whether to include information about the number of records returned.
-  -sort The           attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). Supported values are name, modified, and workspace_id.
-  -cursor A           token identifying the last value from the previous page of results.
+  -sort attr          The attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). Supported values are name, modified, and workspace_id.
+  -cursor token       A token identifying the last value from the previous page of results.
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
   -no-error-recovery  Do not try to recover in case of error.
   -debug              Print debug messages.
