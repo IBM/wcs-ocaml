@@ -171,14 +171,6 @@ let get_workspace wcs_cred req =
   Wcs_j.workspace_of_string rsp
 
 
-(* XXXXXXXXXXXXXXXXXXXXXXXXX *)
-
-let message wcs_cred workspace_id req_msg =
-  let method_ = "/v1/workspaces/"^workspace_id^"/message" in
-  let req = Wcs_j.string_of_message_request req_msg in
-  let rsp = post wcs_cred method_ req in
-  Wcs_j.message_response_of_string rsp
-
 let update_workspace wcs_cred workspace_id workspace =
   assert (ws_check workspace);
   let method_ = "/v1/workspaces/"^workspace_id in
@@ -197,3 +189,10 @@ let update_workspace wcs_cred workspace_id workspace =
     end
   in
   ignore rsp
+
+let message wcs_cred workspace_id req_msg =
+  let method_ = "/v1/workspaces/"^workspace_id^"/message" in
+  let req = Wcs_j.string_of_message_request req_msg in
+  let rsp = post wcs_cred method_ req in
+  Wcs_j.message_response_of_string rsp
+

@@ -45,9 +45,21 @@ val get_workspace : credential ->
    [https://www.ibm.com/watson/developercloud/conversation/api/v1/#get_workspace]
 *)
 
+val update_workspace : credential ->
+  string -> workspace -> unit
+(**
+   [update_workspace wcs_cred ws_id ws]
+   Update an existing workspace with new or modified data.
+   [https://www.ibm.com/watson/developercloud/conversation/api/v1/#update_workspace]
+*)
+
+
+(** {6. Messages} *)
 
 val message : credential ->
   string -> message_request -> message_response
-
-val update_workspace : credential ->
-  string -> workspace -> unit
+(**
+   [message wcs_cred ws_id req]
+   Get a response to a user's input.
+   [https://www.ibm.com/watson/developercloud/conversation/api/v1/#send_message]
+*)
