@@ -205,26 +205,27 @@ let update wcs_cred =
 
 let try_context = ref `Null
 let set_try_context fname =
-  let ctx = assert false (* XXX TODO XXX *) in
+  let ctx =
+    Yojson.Basic.from_file ~fname:fname fname
+  in
   try_context := ctx
 
 let try_text = ref ""
 let set_try_text txt =
-  try_text := ""
+  try_text := txt
 
 let try_node = ref None
-let set_try_node b =
-  try_node := Some b;
-  assert false (* XXX TODO XXX *)
+let set_try_node node_id =
+  try_node := Some node_id
 
 let try_ws_id = ref None
 
 let try_speclist =
-  [ "-context", Arg.Bool set_try_context,
+  [ "-context", Arg.String set_try_context,
     "ctx.json The initial context.";
-    "-text", Arg.Bool set_try_text,
+    "-text", Arg.String set_try_text,
     "txt The initial user input.";
-    "-node", Arg.Bool set_try_node,
+    "-node", Arg.String set_try_node,
     "node_id The node where to start the conversation.";
   ]
 
