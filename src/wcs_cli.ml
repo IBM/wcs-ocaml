@@ -9,35 +9,7 @@ type command =
   | Cmd_get
   | Cmd_update
 
-let wcs_credential : Wcs_t.credential option ref = ref None
-let set_wcs_credential f =
-  let cred = Json_util.read_json_file Wcs_j.read_credential f in
-  wcs_credential := Some cred
-
-(** {6. Main command} *)
-
 let cmd_name = Sys.argv.(0)
-
-let command = ref Cmd_nothing
-
-let unset_error_recovery () =
-  Log.error_recovery := false
-
-let set_debug () =
-  Log.debug_message := true
-
-
-let speclist =
-  ref [ "-wcs-cred", Arg.String set_wcs_credential,
-        "cred.json The file containing the Watson Conversation Service credentials.";
-        "-no-error-recovery", Arg.Unit unset_error_recovery,
-        " Do not try to recover in case of error.";
-        "-debug", Arg.Unit set_debug,
-        " Print debug messages.";
-      ]
-
-let anon_args = ref (fun s -> ())
-
 
 (** {6. The [list] command} *)
 
@@ -51,7 +23,8 @@ let set_list_include_count b =
 
 let list_sort = ref None
 let set_list_sort s =
-  list_sort := Some (Wcs_j.sort_criteria_of_string (Yojson.Basic.to_string (`String s)))
+  list_sort :=
+    Some (Wcs_j.sort_criteria_of_string (Yojson.Basic.to_string (`String s)))
 
 let list_cursor = ref None
 let set_list_cursor s =
@@ -73,7 +46,7 @@ let list_anon_args s =
 
 
 let list_usage =
-  Sys.argv.(0)^" -wcs-cred credentials.json list [options]"
+  cmd_name^" -wcs-cred credentials.json list [options]"
 
 let list wcs_cred =
   let req =
@@ -87,6 +60,7 @@ let list wcs_cred =
   let rsp = Wcs.list_workspaces wcs_cred req in
   Format.printf "%s@." (Json_util.pretty_list_workspaces_response rsp)
 
+
 (** {6. The [create] command} *)
 
 let create_ws_fnames = ref []
@@ -97,7 +71,7 @@ let create_anon_args s =
   create_ws_fnames := !create_ws_fnames @ [ s ]
 
 let create_usage =
-  Sys.argv.(0)^" -wcs-cred credentials.json create [options] [workspace.json ...]"
+  cmd_name^" -wcs-cred credentials.json create [options] [workspace.json ...]"
 
 let create wcs_cred =
   List.iter
@@ -121,6 +95,7 @@ let create wcs_cred =
       Format.printf "Workspace %s: %s@." name ws_id)
     !create_ws_fnames
 
+
 (** {6. The [delete] command} *)
 
 let delete_ws_ids = ref []
@@ -132,7 +107,7 @@ let delete_anon_args s =
   delete_ws_ids := !delete_ws_ids @ [ s ]
 
 let delete_usage =
-  Sys.argv.(0)^" -wcs-cred credentials.json delete [options] [workspace_id ...]"
+  cmd_name^" -wcs-cred credentials.json delete [options] [workspace_id ...]"
 
 let delete wcs_cred =
   List.iter
@@ -140,6 +115,7 @@ let delete wcs_cred =
       Wcs.delete_workspace wcs_cred id;
       Format.printf "Workspace %s deleted@." id)
     !delete_ws_ids
+
 
 (** {6. The [get] command} *)
 
@@ -157,7 +133,7 @@ let get_anon_args s =
   get_ws_ids := !get_ws_ids @ [ s ]
 
 let get_usage =
-  Sys.argv.(0)^" -wcs-cred credentials.json get [options] [workspace_id ...]"
+  cmd_name^" -wcs-cred credentials.json get [options] [workspace_id ...]"
 
 let get wcs_cred =
   let workspaces =
@@ -179,6 +155,7 @@ let get wcs_cred =
         (Yojson.Basic.pretty_to_string (`List (List.rev workspaces)))
   end
 
+
 (** {6. The [update] command} *)
 
 let update_ws_fname = ref None
@@ -192,12 +169,19 @@ let update_speclist =
     "file The file containing the workspace identifiers.";
   ]
 
-let update_anon_args s =
-  anon_args := (fun s -> Log.warning "Wcs_cli" ("ignored argument: " ^ s));
-  update_ws_fname := Some s
+let update_anon_args =
+  let first = ref true in
+  begin fun s ->
+    if !first then begin
+      update_ws_fname := Some s;
+      first := false
+    end else begin
+      Log.warning "Wcs_cli" ("ignored argument: " ^ s)
+    end
+  end
 
 let update_usage =
-  Sys.argv.(0)^" -wcs-cred credentials.json get [options] -ws-id workspace_id workspace.json"
+  cmd_name^" -wcs-cred credentials.json get [options] -ws-id workspace_id workspace.json"
 
 let update wcs_cred =
   begin match !update_ws_id, !update_ws_fname with
@@ -212,41 +196,64 @@ let update wcs_cred =
           cmd_name
       in
       Log.error "Wcs_cli" (Some ())
-        (Arg.usage_string !speclist usage)
+        (Arg.usage_string update_speclist usage)
   end
 
 (** Select command *)
 
-let set_command cmd =
+let wcs_credential : Wcs_t.credential option ref = ref None
+let set_wcs_credential f =
+  let cred = Json_util.read_json_file Wcs_j.read_credential f in
+  wcs_credential := Some cred
+
+let command = ref Cmd_nothing
+
+let unset_error_recovery () =
+  Log.error_recovery := false
+
+let set_debug () =
+  Log.debug_message := true
+
+
+let speclist =
+  [ "-wcs-cred", Arg.String set_wcs_credential,
+    "cred.json The file containing the Watson Conversation Service credentials.";
+    "-no-error-recovery", Arg.Unit unset_error_recovery,
+    " Do not try to recover in case of error.";
+    "-debug", Arg.Unit set_debug,
+    " Print debug messages.";
+  ]
+
+let anon_args cmd =
   begin match cmd with
   | "list" ->
       command := Cmd_list;
       Arg.parse_argv Sys.argv
-        (Arg.align (list_speclist @ !speclist))
+        (Arg.align (list_speclist @ speclist))
         list_anon_args
         list_usage
   | "create" ->
       command := Cmd_create;
       Arg.parse_argv Sys.argv
-        (Arg.align (create_speclist @ !speclist))
+        (Arg.align (create_speclist @ speclist))
         create_anon_args
         create_usage
   | "delete" ->
       command := Cmd_delete;
       Arg.parse_argv Sys.argv
-        (Arg.align (delete_speclist @ !speclist))
+        (Arg.align (delete_speclist @ speclist))
         delete_anon_args
         delete_usage
   | "get" ->
       command := Cmd_get;
       Arg.parse_argv Sys.argv
-        (get_speclist @ !speclist)
+        (get_speclist @ speclist)
         get_anon_args
         get_usage
   | "update" ->
       command := Cmd_update;
       Arg.parse_argv Sys.argv
-        (Arg.align (update_speclist @ !speclist))
+        (Arg.align (update_speclist @ speclist))
         update_anon_args
         update_usage
   | _ ->
@@ -256,20 +263,16 @@ let set_command cmd =
       raise (Arg.Bad msg)
   end
 
-let () = anon_args := set_command
-
-let anon_args s = !anon_args s
-
 let usage =
-  Sys.argv.(0)^" -wcs-cred credentials.json (list | create | delete | get | update | try) [options]"
+  cmd_name^" -wcs-cred credentials.json (list | create | delete | get | update | try) [options]"
 
 let main () =
-  Arg.parse_argv Sys.argv !speclist anon_args usage;
+  Arg.parse_argv Sys.argv speclist anon_args usage;
   let wcs_cred =
     begin match !wcs_credential with
     | Some ws_cred -> ws_cred
     | _ ->
-        Arg.usage !speclist ("Option -wcs-cred is required\n"^usage);
+        Arg.usage speclist ("Option -wcs-cred is required\n"^usage);
         exit 0
     end
   in
