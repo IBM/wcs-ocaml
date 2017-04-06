@@ -47,6 +47,83 @@ The command line interface support the following commands:
   * `try` - Generic bot running in the terminal.
 
 
+### The `list` command
+
+List the workspaces associated with a Conversation service instance.
+
+```
+$ bin/wcs -wcs-cred credentials.json list [options]
+  -page_limit n       The number of records to return in each page of results.
+  -include_count b    Whether to include information about the number of records returned.
+  -sort The           attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). Supported values are name, modified, and workspace_id.
+  -cursor A           token identifying the last value from the previous page of results.
+  -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
+  -no-error-recovery  Do not try to recover in case of error.
+  -debug              Print debug messages.
+  -help               Display this list of options
+  --help              Display this list of options
+  ```
+
+
+### The `create` command
+
+Create workspaces on the Conversation service instance.
+
+```
+$ bin/wcs -wcs-cred credentials.json create [options] [workspace.json ...]
+  -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
+  -no-error-recovery  Do not try to recover in case of error.
+  -debug              Print debug messages.
+  -help               Display this list of options
+  --help              Display this list of options
+```
+
+### The `delete` command
+
+Delete workspaces from the Conversation service instance.
+
+```
+$ bin/wcs -wcs-cred credentials.json delete [options] [workspace_id ...]
+  -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
+  -no-error-recovery  Do not try to recover in case of error.
+  -debug              Print debug messages.
+  -help               Display this list of options
+  --help              Display this list of options
+```
+
+### The `get` command
+
+Get information about workspaces, optionally including all workspace contents.
+
+```
+$ bin/wcs -wcs-cred credentials.json get [options] [workspace_id ...]
+  -export b Whether to include all element content in the returned data. The default value is false.
+  -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
+  -no-error-recovery  Do not try to recover in case of error.
+  -debug  Print debug messages.
+  -help  Display this list of options
+  --help  Display this list of options
+```
+
+### The `update` command
+
+Update an existing workspace with new or modified data.
+
+```
+$ bin/wcs -wcs-cred credentials.json get [options] -ws-id workspace_id workspace.json
+  -ws-id file         The file containing the workspace identifiers.
+  -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
+  -no-error-recovery  Do not try to recover in case of error.
+  -debug              Print debug messages.
+  -help               Display this list of options
+  --help              Display this list of options
+```
+
+
+### The `try` command
+
+Generic bot running in the terminal.
+
 ## Watson Conversation Service OCaml API
 
 The interface to use Watson Conversation Service is defined in the
