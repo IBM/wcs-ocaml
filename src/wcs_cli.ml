@@ -63,9 +63,9 @@ let list_speclist =
     "-include_count", Arg.Bool set_list_include_count,
     "b Whether to include information about the number of records returned.";
     "-sort", Arg.String set_list_sort,
-    "The attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). Supported values are name, modified, and workspace_id.";
+    "attr The attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). Supported values are name, modified, and workspace_id.";
     "-cursor", Arg.String set_list_cursor,
-    "A token identifying the last value from the previous page of results.";
+    "token A token identifying the last value from the previous page of results.";
   ]
 
 let list_anon_args s =
