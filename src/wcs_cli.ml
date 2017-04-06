@@ -8,6 +8,7 @@ type command =
   | Cmd_delete
   | Cmd_get
   | Cmd_update
+  | Cmd_try
 
 let cmd_name = Sys.argv.(0)
 
@@ -127,7 +128,7 @@ let get_ws_ids = ref []
 
 let get_speclist =
   [ "-export", Arg.Bool set_get_export,
-    "b Whether to include all element content in the returned data. The default value is false. ";]
+    "b Whether to include all element content in the returned data. The default value is false.";]
 
 let get_anon_args s =
   get_ws_ids := !get_ws_ids @ [ s ]
@@ -199,6 +200,64 @@ let update wcs_cred =
         (Arg.usage_string update_speclist usage)
   end
 
+
+(** {6. The [try] command} *)
+
+let try_context = ref `Null
+let set_try_context fname =
+  let ctx = assert false (* XXX TODO XXX *) in
+  try_context := ctx
+
+let try_text = ref ""
+let set_try_text txt =
+  try_text := ""
+
+let try_node = ref None
+let set_try_node b =
+  try_node := Some b;
+  assert false (* XXX TODO XXX *)
+
+let try_ws_id = ref None
+
+let try_speclist =
+  [ "-context", Arg.Bool set_try_context,
+    "ctx.json The initial context.";
+    "-text", Arg.Bool set_try_text,
+    "txt The initial user input.";
+    "-node", Arg.Bool set_try_node,
+    "node_id The node where to start the conversation.";
+  ]
+
+let try_anon_args =
+  let first = ref true in
+  begin fun s ->
+    if !first then begin
+      try_ws_id := Some s;
+      first := false
+    end else begin
+      Log.warning "Wcs_cli" ("ignored argument: " ^ s)
+    end
+  end
+
+let try_usage =
+  cmd_name^" -wcs-cred credentials.json try [options] workspace_id"
+
+let try_ wcs_cred =
+  let ws_main_id =
+    begin match !try_ws_id with
+    | Some id -> id
+    | None ->
+        let usage =
+          Format.sprintf "%s try: workspace id required"
+            cmd_name
+        in
+        Log.error "Wcs_cli" None
+          (Arg.usage_string update_speclist usage)
+    end
+  in
+  ignore (Wcs_extra.get_value wcs_cred ws_main_id !try_context !try_text)
+
+
 (** Select command *)
 
 let wcs_credential : Wcs_t.credential option ref = ref None
@@ -256,6 +315,12 @@ let anon_args cmd =
         (Arg.align (update_speclist @ speclist))
         update_anon_args
         update_usage
+  | "try" ->
+      command := Cmd_try;
+      Arg.parse_argv Sys.argv
+        (try_speclist @ speclist)
+        try_anon_args
+        try_usage
   | _ ->
       let msg =
         Format.sprintf "'%s' is not a %s command" cmd cmd_name
@@ -283,6 +348,7 @@ let main () =
   | Cmd_delete -> delete wcs_cred
   | Cmd_get -> get wcs_cred
   | Cmd_update -> update wcs_cred
+  | Cmd_try -> try_ wcs_cred
   end;
   ()
 

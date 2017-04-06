@@ -210,11 +210,11 @@ type get_workspace_request = {
   } <ocaml field_prefix="get_ws_req_">
 
 
-(* (\** {6 Action} *\) *)
-(* type action = { *)
-(*     name : string; *)
-(*     ~agent <ocaml default="\"client\""> : string; *)
-(*     ~type_ <json name="type"> <ocaml default="\"conversation\""> : string; *)
-(*     ~parameters <ocaml default="`Null"> : json; *)
-(*     ?result_variable : string nullable; *)
-(*   } <ocaml field_prefix="act_"> *)
+(** {6 Action} *)
+type action = {
+    name : string;
+    ~agent <ocaml default="\"client\""> : string;
+    ~type_ <json name="type"> <ocaml default="\"conversation\""> : string;
+    ~parameters <ocaml default="`Null"> : json;
+    ?result_variable : string nullable;
+  } <ocaml field_prefix="act_">
