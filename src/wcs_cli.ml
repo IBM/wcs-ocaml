@@ -38,6 +38,7 @@ let speclist =
 
 let anon_args = ref (fun s -> ())
 
+
 (** {6. The [list] command} *)
 
 let list_page_limit = ref None
@@ -70,6 +71,10 @@ let list_speclist =
 let list_anon_args s =
   Log.warning "Wcs_cli" ("ignored argument: " ^ s)
 
+
+let list_usage =
+  Sys.argv.(0)^" -wcs-cred credentials.json list [options]"
+
 let list wcs_cred =
   let req =
     Wcs_builder.list_workspaces_request
@@ -90,6 +95,9 @@ let create_speclist = []
 
 let create_anon_args s =
   create_ws_fnames := !create_ws_fnames @ [ s ]
+
+let create_usage =
+  Sys.argv.(0)^" -wcs-cred credentials.json create [options] [workspace.json ...]"
 
 let create wcs_cred =
   List.iter
@@ -123,6 +131,9 @@ let delete_speclist =
 let delete_anon_args s =
   delete_ws_ids := !delete_ws_ids @ [ s ]
 
+let delete_usage =
+  Sys.argv.(0)^" -wcs-cred credentials.json delete [options] [workspace_id ...]"
+
 let delete wcs_cred =
   List.iter
     (fun id ->
@@ -144,6 +155,9 @@ let get_speclist =
 
 let get_anon_args s =
   get_ws_ids := !get_ws_ids @ [ s ]
+
+let get_usage =
+  Sys.argv.(0)^" -wcs-cred credentials.json get [options] [workspace_id ...]"
 
 let get wcs_cred =
   let workspaces =
@@ -182,6 +196,9 @@ let update_anon_args s =
   anon_args := (fun s -> Log.warning "Wcs_cli" ("ignored argument: " ^ s));
   update_ws_fname := Some s
 
+let update_usage =
+  Sys.argv.(0)^" -wcs-cred credentials.json get [options] -ws-id workspace_id workspace.json"
+
 let update wcs_cred =
   begin match !update_ws_id, !update_ws_fname with
   | Some id, Some fname ->
@@ -204,24 +221,34 @@ let set_command cmd =
   begin match cmd with
   | "list" ->
       command := Cmd_list;
-      speclist := Arg.align (list_speclist @ !speclist);
-      anon_args := list_anon_args
+      Arg.parse_argv Sys.argv
+        (Arg.align (list_speclist @ !speclist))
+        list_anon_args
+        list_usage
   | "create" ->
       command := Cmd_create;
-      speclist := Arg.align (create_speclist @ !speclist);
-      anon_args := create_anon_args
+      Arg.parse_argv Sys.argv
+        (Arg.align (create_speclist @ !speclist))
+        create_anon_args
+        create_usage
   | "delete" ->
       command := Cmd_delete;
-      speclist := Arg.align (delete_speclist @ !speclist);
-      anon_args := delete_anon_args
+      Arg.parse_argv Sys.argv
+        (Arg.align (delete_speclist @ !speclist))
+        delete_anon_args
+        delete_usage
   | "get" ->
       command := Cmd_get;
-      speclist := Arg.align (get_speclist @ !speclist);
-      anon_args := get_anon_args
+      Arg.parse_argv Sys.argv
+        (get_speclist @ !speclist)
+        get_anon_args
+        get_usage
   | "update" ->
       command := Cmd_update;
-      speclist := Arg.align (update_speclist @ !speclist);
-      anon_args := update_anon_args
+      Arg.parse_argv Sys.argv
+        (Arg.align (update_speclist @ !speclist))
+        update_anon_args
+        update_usage
   | _ ->
       let msg =
         Format.sprintf "'%s' is not a %s command" cmd cmd_name
@@ -237,7 +264,7 @@ let usage =
   Sys.argv.(0)^" -wcs-cred credentials.json (list | create | delete | get | update | try) [options]"
 
 let main () =
-  Arg.parse_dynamic speclist anon_args usage;
+  Arg.parse_argv Sys.argv !speclist anon_args usage;
   let wcs_cred =
     begin match !wcs_credential with
     | Some ws_cred -> ws_cred
@@ -260,7 +287,11 @@ let _ =
   begin try
     main ()
   with
+  | Arg.Bad msg
+  | Arg.Help msg ->
+      Format.eprintf "%s@." msg;
+      exit 0
   | Log.Error (module_name, msg) when not !Log.debug_message ->
-    Format.eprintf "%s@." msg;
-    exit 1
+      Format.eprintf "%s@." msg;
+      exit 1
   end
