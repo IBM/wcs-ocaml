@@ -1,6 +1,6 @@
-all: bin/wcs-cli
+all: bin/wcs
 
-bin/wcs-cli: src/wcs_cli
+bin/wcs: src/wcs_cli
 	mkdir -p bin
 	cp $< $@
 
@@ -14,4 +14,4 @@ clean:
 
 cleanall:
 	$(MAKE) -C src cleanall
-	rm -f bin/wcs-cli
+	rm -f bin/wcs

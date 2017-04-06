@@ -35,7 +35,7 @@ The compilation produces a command line interface for Watson
 Conversation Service in:
 
 ```
-bin/wcs-cli
+bin/wcs
 ```
 
 The command line interface support the following commands:
