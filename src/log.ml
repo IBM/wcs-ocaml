@@ -21,7 +21,8 @@ let error (module_name: string) (default: 'a option) (msg: string) : 'a =
   | _, None -> raise (Error (module_name, msg))
   end
 
-let debug_message = ref true
+let debug_message = ref false
 
 let debug (module_name: string) (msg: string) : unit =
-  Format.eprintf "[Debug%s] %s@." (column module_name) msg
+  if !debug_message then
+    Format.eprintf "[Debug%s] %s@." (column module_name) msg

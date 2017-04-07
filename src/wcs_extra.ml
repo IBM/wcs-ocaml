@@ -201,11 +201,15 @@ let rec get_value
               msg_req_intents = None;
               msg_req_output = None; }
 	in
+        Log.debug "Wcs_extra"
+          ("Request:\n"^
+           (Json_util.pretty_message_request req_msg));
 	let resp =
 	  Wcs.message wcs_cred workspace_id req_msg
 	in
-        (* Format.eprintf "XXXXX get_value: %s XXXXXXX@." *)
-        (*   (pretty_json_string (Wcs_j.string_of_message_response resp)); *)
+        Log.debug "Wcs_extra"
+          ("Response:\n"^
+           (Json_util.pretty_message_response resp));
 	List.iter
 	  (fun txt -> print_string "C: "; print_endline txt)
 	  resp.msg_rsp_output.out_text;
