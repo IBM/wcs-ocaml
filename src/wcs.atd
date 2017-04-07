@@ -170,6 +170,8 @@ type intent = {
 type output = {
     log_messages : json;
     text : string list;
+    nodes_visited : string list;
+    ?error : string nullable;
   } <ocaml field_prefix="out_">
 
 type message_request = {
