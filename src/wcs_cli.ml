@@ -256,7 +256,7 @@ let try_ wcs_cred =
           (Arg.usage_string update_speclist usage)
     end
   in
-  ignore (Wcs_extra.get_value wcs_cred ws_main_id !try_context !try_text)
+  ignore (Wcs_bot.get_value wcs_cred ws_main_id !try_context !try_text)
 
 
 (** Select command *)
