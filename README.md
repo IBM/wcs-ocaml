@@ -69,7 +69,9 @@ The path to this JSON file can be provided either with the option
 List the workspaces associated with a Conversation service instance.
 
 ```
-$ wcs list [options]
+Usage:
+  wcs list [options]
+Options:
   -page_limit n       The number of records to return in each page of results.
   -include_count b    Whether to include information about the number of records returned.
   -sort attr          The attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). Supported values are name, modified, and workspace_id.
@@ -78,7 +80,6 @@ $ wcs list [options]
   -no-error-recovery  Do not try to recover in case of error.
   -debug              Print debug messages.
   -help               Display this list of options
-  --help              Display this list of options
   ```
 
 
@@ -87,12 +88,13 @@ $ wcs list [options]
 Create workspaces on the Conversation service instance.
 
 ```
-$ wcs create [options] [workspace.json ...]
+Usage:
+  wcs create [options] [workspace.json ...]
+Options:
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
   -no-error-recovery  Do not try to recover in case of error.
   -debug              Print debug messages.
   -help               Display this list of options
-  --help              Display this list of options
 ```
 
 ### The `delete` command
@@ -100,12 +102,13 @@ $ wcs create [options] [workspace.json ...]
 Delete workspaces from the Conversation service instance.
 
 ```
-$ wcs delete [options] [workspace_id ...]
+Usage:
+  wcs delete [options] [workspace_id ...]
+Options:
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
   -no-error-recovery  Do not try to recover in case of error.
   -debug              Print debug messages.
   -help               Display this list of options
-  --help              Display this list of options
 ```
 
 ### The `get` command
@@ -113,13 +116,14 @@ $ wcs delete [options] [workspace_id ...]
 Get information about workspaces, optionally including all workspace contents.
 
 ```
-$ wcs get [options] [workspace_id ...]
+Usage:
+  wcs get [options] [workspace_id ...]
+Options:
   -export b Whether to include all element content in the returned data. The default value is false.
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
   -no-error-recovery  Do not try to recover in case of error.
   -debug  Print debug messages.
   -help  Display this list of options
-  --help  Display this list of options
 ```
 
 ### The `update` command
@@ -127,13 +131,14 @@ $ wcs get [options] [workspace_id ...]
 Update an existing workspace with new or modified data.
 
 ```
-$ wcs get [options] -ws-id workspace_id workspace.json
+Usage:
+  wcs get [options] -ws-id workspace_id workspace.json
+Options:
   -ws-id file         The file containing the workspace identifiers.
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
   -no-error-recovery  Do not try to recover in case of error.
   -debug              Print debug messages.
   -help               Display this list of options
-  --help              Display this list of options
 ```
 
 
@@ -142,7 +147,9 @@ $ wcs get [options] -ws-id workspace_id workspace.json
 Generic bot running in the terminal.
 
 ```
-$ wcs try [options] workspace_id
+Usage:
+  wcs try [options] workspace_id
+Options:
   -context ctx.json The initial context.
   -text txt The initial user input.
   -node node_id The node where to start the conversation.
@@ -150,8 +157,7 @@ $ wcs try [options] workspace_id
   -no-error-recovery  Do not try to recover in case of error.
   -debug  Print debug messages.
   -help  Display this list of options
-  --help  Display this list of options
-  ```
+```
 
 
 ## Watson Conversation Service OCaml API
