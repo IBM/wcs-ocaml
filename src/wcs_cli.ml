@@ -65,7 +65,9 @@ let list_anon_args s =
 
 
 let list_usage =
-  cmd_name^" -wcs-cred credentials.json list [options]"
+  "Usage:\n"^
+  "  "^cmd_name^" list [options]"^"\n"^
+  "Options:"
 
 let list wcs_cred =
   let req =
@@ -90,7 +92,9 @@ let create_anon_args s =
   create_ws_fnames := !create_ws_fnames @ [ s ]
 
 let create_usage =
-  cmd_name^" -wcs-cred credentials.json create [options] [workspace.json ...]"
+  "Usage:\n"^
+  "  "^cmd_name^" create [options] [workspace.json ...]\n"^
+  "Options:"
 
 let create wcs_cred =
   List.iter
@@ -126,7 +130,9 @@ let delete_anon_args s =
   delete_ws_ids := !delete_ws_ids @ [ s ]
 
 let delete_usage =
-  cmd_name^" -wcs-cred credentials.json delete [options] [workspace_id ...]"
+  "Usage:\n"^
+  "  "^cmd_name^" delete [options] [workspace_id ...]\n"^
+  "Options:"
 
 let delete wcs_cred =
   List.iter
@@ -152,7 +158,9 @@ let get_anon_args s =
   get_ws_ids := !get_ws_ids @ [ s ]
 
 let get_usage =
-  cmd_name^" -wcs-cred credentials.json get [options] [workspace_id ...]"
+  "Usage:\n"^
+  "  "^cmd_name^" get [options] [workspace_id ...]\n"^
+  "Options:"
 
 let get wcs_cred =
   let workspaces =
@@ -200,7 +208,9 @@ let update_anon_args =
   end
 
 let update_usage =
-  cmd_name^" -wcs-cred credentials.json get [options] -ws-id workspace_id workspace.json"
+  "Usage:\n"^
+  "  "^cmd_name^" get [options] -ws-id workspace_id workspace.json\n"^
+  "Options:"
 
 let update wcs_cred =
   begin match !update_ws_id, !update_ws_fname with
@@ -259,7 +269,9 @@ let try_anon_args =
   end
 
 let try_usage =
-  cmd_name^" -wcs-cred credentials.json try [options] workspace_id"
+  "Usage:\n"^
+  "  "^cmd_name^" try [options] workspace_id\n"^
+  "Options:"
 
 let try_ wcs_cred =
   let ws_main_id =
@@ -302,7 +314,7 @@ let speclist =
     " Print debug messages.";
   ]
 
-let anon_args cmd =
+let set_command cmd =
   begin match cmd with
   | "list" ->
       command := Cmd_list;
@@ -347,16 +359,48 @@ let anon_args cmd =
       raise (Arg.Bad msg)
   end
 
+let anon_args s =
+  begin try
+    set_command s
+  with
+  | Arg.Bad msg
+  | Arg.Help msg ->
+      Format.eprintf "%s@." msg;
+      exit 0
+  end
+
 let usage =
-  cmd_name^" -wcs-cred credentials.json (list | create | delete | get | update | try) [options]"
+  "Usage:\n"^
+  "  "^cmd_name^" (list | create | delete | get | update | try) [options]\n"^
+  "\n"^
+  "Available Commands:\n"^
+  "  list    List the workspaces associated with a Conversation service instance.\n"^
+  "  create  Create workspaces on the Conversation service instance.\n"^
+  "  delete  Delete workspaces from the Conversation service instance.\n"^
+  "  get     Get information about workspaces, optionally including all workspace contents.\n"^
+  "  update  Update an existing workspace with new or modified data.\n"^
+  "  try     Generic bot running in the terminal.\n"^
+  "\n"^
+  "Options:"
+
 
 let main () =
-  Arg.parse_argv Sys.argv speclist anon_args usage;
+  let () =
+    begin try
+      let cred_file = Sys.getenv "WCS_CRED" in
+      set_wcs_credential cred_file
+    with
+    | Not_found -> ()
+    | exn ->
+        Log.error "Wcs_cli" (Some ()) ("WCS_CRED: "^(Printexc.to_string exn))
+    end
+  in
+  Arg.parse speclist anon_args usage;
   let wcs_cred =
     begin match !wcs_credential with
     | Some ws_cred -> ws_cred
     | _ ->
-        Arg.usage speclist ("Option -wcs-cred is required\n"^usage);
+        Arg.usage speclist ("Option -wcs-cred or WCS_CRED environment variable is required\n"^usage);
         exit 0
     end
   in
@@ -375,10 +419,6 @@ let _ =
   begin try
     main ()
   with
-  | Arg.Bad msg
-  | Arg.Help msg ->
-      Format.eprintf "%s@." msg;
-      exit 0
   | Log.Error (module_name, msg) when not !Log.debug_message ->
       Format.eprintf "%s@." msg;
       exit 1
