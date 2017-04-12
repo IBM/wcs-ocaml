@@ -54,8 +54,8 @@ structure:
 ```js
 {
   "url": "https://gateway.watsonplatform.net/conversation/api",
-  "password": "passwd",
-  "username": "user-name"
+  "password": "PASSWORD",
+  "username": "USERNAME"
 }
 ```
 
@@ -132,7 +132,7 @@ Update an existing workspace with new or modified data.
 
 ```
 Usage:
-  wcs get [options] -ws-id workspace_id workspace.json
+  wcs update [options] -ws-id workspace_id workspace.json
 Options:
   -ws-id file         The file containing the workspace identifiers.
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.

@@ -209,7 +209,7 @@ let update_anon_args =
 
 let update_usage =
   "Usage:\n"^
-  "  "^cmd_name^" get [options] -ws-id workspace_id workspace.json\n"^
+  "  "^cmd_name^" update [options] -ws-id workspace_id workspace.json\n"^
   "Options:"
 
 let update wcs_cred =
