@@ -66,7 +66,7 @@ type workspace_response = {
     created : string nullable;
     updated : string nullable;
     workspace_id : string;
-  }
+  } <ocaml field_prefix="ws_rsp_">
 (** A workspace metadata. *)
 
 type pagination_response = {
@@ -74,7 +74,7 @@ type pagination_response = {
     ?next_url : string nullable;
     ?total : int nullable;
     ?matched : int nullable;
-  }
+  } <ocaml field_prefix="pag_">
 (** Pagination information *)
 
 type list_workspaces_request = {

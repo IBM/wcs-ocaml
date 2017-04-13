@@ -49,6 +49,10 @@ let list_cursor = ref None
 let set_list_cursor s =
   list_cursor := Some s
 
+let list_short = ref false
+let set_list_short () =
+  list_short := true
+
 let list_speclist =
   [ "-page_limit", Arg.Int set_list_page_limit,
     "n The number of records to return in each page of results.";
@@ -58,6 +62,8 @@ let list_speclist =
     "attr The attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). Supported values are name, modified, and workspace_id.";
     "-cursor", Arg.String set_list_cursor,
     "token A token identifying the last value from the previous page of results.";
+    "-short", Arg.Unit set_list_short,
+    " Display ony workspace ids and names.";
   ]
 
 let list_anon_args s =
@@ -79,8 +85,22 @@ let list wcs_cred =
       ()
   in
   let rsp = Wcs.list_workspaces wcs_cred req in
-  Format.printf "%s@." (Json_util.pretty_list_workspaces_response rsp)
-
+  begin match !list_short with
+  | false ->
+      Format.printf "%s@." (Json_util.pretty_list_workspaces_response rsp)
+  | true ->
+      List.iter
+        (fun ws ->
+          let name =
+            begin match ws.ws_rsp_name with
+            | Some n -> n
+            | None -> ""
+            end
+          in
+          Format.printf "%s %s@."
+            ws.ws_rsp_workspace_id name)
+        rsp.list_ws_rsp_workspaces
+  end
 
 (** {6. The [create] command} *)
 
@@ -316,7 +336,8 @@ let speclist =
 
 let set_command cmd =
   begin match cmd with
-  | "list" ->
+  | "list" | "ls" ->
+      if cmd = "ls" then set_list_short ();
       command := Cmd_list;
       Arg.parse_argv Sys.argv
         (Arg.align (list_speclist @ speclist))
@@ -328,7 +349,7 @@ let set_command cmd =
         (Arg.align (create_speclist @ speclist))
         create_anon_args
         create_usage
-  | "delete" ->
+  | "delete" | "rm" ->
       command := Cmd_delete;
       Arg.parse_argv Sys.argv
         (Arg.align (delete_speclist @ speclist))

@@ -77,11 +77,14 @@ Options:
   -include_count b    Whether to include information about the number of records returned.
   -sort attr          The attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). Supported values are name, modified, and workspace_id.
   -cursor token       A token identifying the last value from the previous page of results.
+  -short              Display ony workspace ids and names.
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
   -no-error-recovery  Do not try to recover in case of error.
   -debug              Print debug messages.
   -help               Display this list of options
   ```
+
+The command `ls` is a synonym for the command `list -short`.
 
 
 ### The `create` command
@@ -111,6 +114,9 @@ Options:
   -debug              Print debug messages.
   -help               Display this list of options
 ```
+
+The command `rm` is a synonym for the command `delete`.
+
 
 ### The `get` command
 
