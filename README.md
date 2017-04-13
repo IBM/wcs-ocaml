@@ -49,7 +49,8 @@ The command line interface support the following commands:
 
 All commands require to get the Watson Conversation Service
 credentials. They should be stored in a JSON file with the following
-structure:
+structure
+([getting credentials](https://www.ibm.com/watson/developercloud/doc/common/getting-started-credentials.html)):
 
 ```js
 {
