@@ -22,7 +22,7 @@
    Based on the documentation available at:
    https://www.ibm.com/watson/developercloud/conversation/api/v1/
 
-   Version 2017-02-03.
+   Version 2017-04-21.
 *)
 
 

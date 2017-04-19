@@ -19,7 +19,7 @@
 open Lwt
 open Wcs_t
 
-let version = "version=2017-02-03"
+let version = "version=2017-04-21"
 
 (** {6. Check workspaces} *)
 
