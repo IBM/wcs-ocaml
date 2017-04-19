@@ -63,7 +63,7 @@ let list_speclist =
     "-cursor", Arg.String set_list_cursor,
     "token A token identifying the last value from the previous page of results.";
     "-short", Arg.Unit set_list_short,
-    " Display ony workspace ids and names.";
+    " Display ony workspace ids and names (set by default by the ls command).";
   ]
 
 let list_anon_args s =
@@ -72,7 +72,7 @@ let list_anon_args s =
 
 let list_usage =
   "Usage:\n"^
-  "  "^cmd_name^" list [options]"^"\n"^
+  "  "^cmd_name^" (list | ls) [options]"^"\n"^
   "Options:"
 
 let list wcs_cred =
@@ -392,7 +392,7 @@ let anon_args s =
 
 let usage =
   "Usage:\n"^
-  "  "^cmd_name^" (list | create | delete | get | update | try) [options]\n"^
+  "  "^cmd_name^" ((list | ls) | create | (delete | rm) | get | update | try) [options]\n"^
   "\n"^
   "Available Commands:\n"^
   "  list    List the workspaces associated with a Conversation service instance.\n"^
