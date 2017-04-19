@@ -139,9 +139,8 @@ Update an existing workspace with new or modified data.
 
 ```
 Usage:
-  wcs update [options] -ws-id workspace_id workspace.json
+  wcs update [options] workspace.json workspace_id
 Options:
-  -ws-id file         The file containing the workspace identifiers.
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
   -no-error-recovery  Do not try to recover in case of error.
   -debug              Print debug messages.

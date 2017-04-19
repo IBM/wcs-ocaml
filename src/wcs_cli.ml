@@ -208,28 +208,24 @@ let get wcs_cred =
 let update_ws_fname = ref None
 
 let update_ws_id = ref None
-let set_update_ws_id id =
-  update_ws_id := Some id
 
 let update_speclist =
-  [ "-ws-id", Arg.String set_update_ws_id,
-    "file The file containing the workspace identifiers.";
-  ]
+  [ ]
 
 let update_anon_args =
-  let first = ref true in
+  let cpt = ref 0 in
   begin fun s ->
-    if !first then begin
-      update_ws_fname := Some s;
-      first := false
-    end else begin
-      Log.warning "Wcs_cli" ("ignored argument: " ^ s)
+    incr cpt;
+    begin match !cpt with
+    | 1 -> update_ws_fname := Some s
+    | 2 -> update_ws_id := Some s
+    | _ -> Log.warning "Wcs_cli" ("ignored argument: " ^ s)
     end
   end
 
 let update_usage =
   "Usage:\n"^
-  "  "^cmd_name^" update [options] -ws-id workspace_id workspace.json\n"^
+  "  "^cmd_name^" update [options] workspace.json workspace_id\n"^
   "Options:"
 
 let update wcs_cred =
@@ -241,7 +237,7 @@ let update wcs_cred =
       Wcs.update_workspace wcs_cred id ws
   | _ ->
       let usage =
-        Format.sprintf "%s update: workspace id and workspace file required"
+        Format.sprintf "%s update: workspace file and workspace id required"
           cmd_name
       in
       Log.error "Wcs_cli" (Some ())
