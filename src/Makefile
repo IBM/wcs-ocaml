@@ -29,12 +29,17 @@ GENERATED= wcs_t.ml \
 
 all: $(MAIN)
 
-.PHONY: $(MAIN).$(TARGET)
+.PHONY: $(MAIN).$(TARGET) wcslib.cmxa
 
 $(MAIN): $(MAIN).$(TARGET)
 	cp _build/$< $@
 
 $(MAIN).$(TARGET): $(GENERATED)
+	$(OCAMLBUILD) \
+		-use-ocamlfind \
+		-pkg atdgen -pkg cohttp.lwt $@
+
+wcslib.cmxa: $(GENERATED)
 	$(OCAMLBUILD) \
 		-use-ocamlfind \
 		-pkg atdgen -pkg cohttp.lwt $@
