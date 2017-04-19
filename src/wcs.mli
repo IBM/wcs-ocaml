@@ -28,6 +28,8 @@
 
 open Wcs_t
 
+val version : string
+
 (** {6. Workspaces} *)
 
 val list_workspaces : credential ->

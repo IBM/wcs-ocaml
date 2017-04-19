@@ -320,10 +320,14 @@ let unset_error_recovery () =
 let set_debug () =
   Log.debug_message := true
 
+let print_version () =
+  Format.printf "Watson Conversation Service API %s@." Wcs.version
 
 let speclist =
   [ "-wcs-cred", Arg.String set_wcs_credential,
     "cred.json The file containing the Watson Conversation Service credentials.";
+    "-version", Arg.Unit print_version,
+    " Print the Watson Conversation API version number used.";
     "-no-error-recovery", Arg.Unit unset_error_recovery,
     " Do not try to recover in case of error.";
     "-debug", Arg.Unit set_debug,

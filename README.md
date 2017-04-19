@@ -79,6 +79,7 @@ Options:
   -cursor token       A token identifying the last value from the previous page of results.
   -short              Display ony workspace ids and names.
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
+  -version            Print the Watson Conversation API version number used.
   -no-error-recovery  Do not try to recover in case of error.
   -debug              Print debug messages.
   -help               Display this list of options
@@ -96,6 +97,7 @@ Usage:
   wcs create [options] [workspace.json ...]
 Options:
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
+  -version            Print the Watson Conversation API version number used.
   -no-error-recovery  Do not try to recover in case of error.
   -debug              Print debug messages.
   -help               Display this list of options
@@ -110,6 +112,7 @@ Usage:
   wcs delete [options] [workspace_id ...]
 Options:
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
+  -version            Print the Watson Conversation API version number used.
   -no-error-recovery  Do not try to recover in case of error.
   -debug              Print debug messages.
   -help               Display this list of options
@@ -128,6 +131,7 @@ Usage:
 Options:
   -export b Whether to include all element content in the returned data. The default value is false.
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
+  -version            Print the Watson Conversation API version number used.
   -no-error-recovery  Do not try to recover in case of error.
   -debug  Print debug messages.
   -help  Display this list of options
@@ -142,6 +146,7 @@ Usage:
   wcs update [options] workspace.json workspace_id
 Options:
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
+  -version            Print the Watson Conversation API version number used.
   -no-error-recovery  Do not try to recover in case of error.
   -debug              Print debug messages.
   -help               Display this list of options
@@ -160,6 +165,7 @@ Options:
   -text txt The initial user input.
   -node node_id The node where to start the conversation.
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
+  -version            Print the Watson Conversation API version number used.
   -no-error-recovery  Do not try to recover in case of error.
   -debug  Print debug messages.
   -help  Display this list of options
