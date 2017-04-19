@@ -181,24 +181,40 @@ let updateNodeName (f:string->string) (x:Wcs_t.dialog_node) =
 let getNodeName (x:Wcs_t.dialog_node) =
   x.node_dialog_node
 
-let fix_sibling nodes =
-  let tbl = Hashtbl.create 7 in
+let fix_links nodes =
+  let parent_child_tbl = Hashtbl.create 7 in
+  let node_tbl = Hashtbl.create 7 in
   List.map
     (fun node ->
       let node =
-        begin try
-          let previous_sibling = Hashtbl.find tbl node.node_parent in
-          begin match node.node_previous_sibling with
-          | None ->
+        begin match node.node_parent, node.node_previous_sibling with
+        | Some _, Some _ -> node
+        | Some _, None
+        | None, None ->
+            begin try
+              let previous_sibling =
+                Hashtbl.find parent_child_tbl node.node_parent
+              in
               { node with
                 node_previous_sibling = Some previous_sibling.node_dialog_node }
-          | Some _ -> node
-          end
-        with Not_found ->
-          node
+            with Not_found ->
+              node
+            end
+        | None, Some previous_sibling_name ->
+            begin try
+              let previous_sibling =
+                Hashtbl.find node_tbl previous_sibling_name
+              in
+              { node with
+                node_parent = previous_sibling.node_parent }
+            with Not_found ->
+              assert false;
+              node
+            end
         end
       in
-      Hashtbl.add tbl node.node_parent node;
+      Hashtbl.add parent_child_tbl node.node_parent node;
+      Hashtbl.add node_tbl node.node_dialog_node node;
       node)
     nodes
 
@@ -227,7 +243,7 @@ let workspace
     ws_language = language;
     ws_metadata = metadata;
     ws_counterexamples = counterexamples;
-    ws_dialog_nodes = fix_sibling dialog_nodes;
+    ws_dialog_nodes = fix_links dialog_nodes;
     ws_entities = entities;
     ws_intents = intents;
     ws_created = created;
