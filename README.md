@@ -161,14 +161,14 @@ Generic bot running in the terminal.
 Usage:
   wcs try [options] workspace_id
 Options:
-  -context ctx.json The initial context.
-  -text txt The initial user input.
-  -node node_id The node where to start the conversation.
+  -context ctx.json   The initial context.
+  -text txt           The initial user input.
+  -node node_id       The node where to start the conversation.
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
   -version            Print the Watson Conversation API version number used.
   -no-error-recovery  Do not try to recover in case of error.
-  -debug  Print debug messages.
-  -help  Display this list of options
+  -debug              Print debug messages.
+  -help               Display this list of options
 ```
 
 
