@@ -302,7 +302,10 @@ let try_ wcs_cred =
           (Arg.usage_string update_speclist usage)
     end
   in
-  ignore (Wcs_bot.get_value wcs_cred ws_main_id !try_context !try_text)
+  let matcher rsp =
+    Context.get_return rsp.msg_rsp_context
+  in
+  ignore (Wcs_bot.get_value ~matcher wcs_cred ws_main_id !try_context !try_text)
 
 
 (** Select command *)
