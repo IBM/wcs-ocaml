@@ -129,12 +129,12 @@ Get information about workspaces, optionally including all workspace contents.
 Usage:
   wcs get [options] [workspace_id ...]
 Options:
-  -export b Whether to include all element content in the returned data. The default value is false.
+  -export             To include all element content in the returned data.
   -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
   -version            Print the Watson Conversation API version number used.
   -no-error-recovery  Do not try to recover in case of error.
-  -debug  Print debug messages.
-  -help  Display this list of options
+  -debug              Print debug messages.
+  -help               Display this list of options
 ```
 
 ### The `update` command

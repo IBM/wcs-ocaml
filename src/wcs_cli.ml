@@ -165,14 +165,14 @@ let delete wcs_cred =
 (** {6. The [get] command} *)
 
 let get_export = ref None
-let set_get_export b =
-  get_export := Some b
+let set_get_export () =
+  get_export := Some true
 
 let get_ws_ids = ref []
 
 let get_speclist =
-  [ "-export", Arg.Bool set_get_export,
-    "b Whether to include all element content in the returned data. The default value is false.";]
+  [ "-export", Arg.Unit set_get_export,
+    " To include all element content in the returned data.";]
 
 let get_anon_args s =
   get_ws_ids := !get_ws_ids @ [ s ]
@@ -361,7 +361,7 @@ let set_command cmd =
   | "get" ->
       command := Cmd_get;
       Arg.parse_argv Sys.argv
-        (get_speclist @ speclist)
+        (Arg.align (get_speclist @ speclist))
         get_anon_args
         get_usage
   | "update" ->
@@ -373,7 +373,7 @@ let set_command cmd =
   | "try" ->
       command := Cmd_try;
       Arg.parse_argv Sys.argv
-        (try_speclist @ speclist)
+        (Arg.align (try_speclist @ speclist))
         try_anon_args
         try_usage
   | _ ->
