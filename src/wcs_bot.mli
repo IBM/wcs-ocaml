@@ -23,12 +23,6 @@ val before_default : message_request -> message_request
 val after_default : message_response -> message_response
 val user_input_default : unit -> string
 val matcher_default : message_response -> 'a option
-val call :
-  ?bypass:(string -> (bool * json) option) ->
-  ?before:(message_request -> message_request) ->
-  ?after:(message_response -> message_response) ->
-  ?user_input:(unit -> string) ->
-  credential -> action -> string * json
 
 val get_value :
   ?bypass:(string -> (bool * 'a) option) ->
@@ -36,11 +30,20 @@ val get_value :
   ?after:(message_response -> message_response) ->
   ?user_input:(unit -> string) ->
   ?matcher:(message_response -> 'a option) ->
-  credential -> string -> json -> string -> string * 'a
+  credential -> string -> json -> string -> string option * 'a
+
 
 val exec :
   ?bypass:(string -> (bool * json) option) ->
   ?before:(message_request -> message_request) ->
   ?after:(message_response -> message_response) ->
   ?user_input:(unit -> string) ->
-  credential -> string -> json -> string -> string * json
+  credential -> string -> json -> string -> string option * json
+(**
+   [exec cred ws_id ctx_init txt_init] executes the workspace [ws_id]
+   with the initial context [ctx_init] and the initial input text
+   [txt_init]. The execution is completed when the field [return] is
+   defined in the context.  The return value is the last input string
+   if the field [skip_user_input] is defined and thevalue of the field
+   [return].
+ *)

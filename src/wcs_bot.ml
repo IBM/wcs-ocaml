@@ -45,12 +45,12 @@ let rec call
     ?(user_input=user_input_default)
     (wcs_cred: credential)
     (act: action)
-    : string * json =
+    : string option * json =
   let rec loop ctx txt =
     begin match bypass txt with
     | Some (skip_user_input, x) ->
-        if skip_user_input then (txt, x)
-        else ("", x)
+        if skip_user_input then (Some txt, x)
+        else (None, x)
     | None ->
 	let req_msg =
           before
@@ -90,18 +90,22 @@ let rec call
                     end
                   in
                   ctx, txt)
-                (ctx, txt) acts
-          | ctx, None -> ctx, txt
+                (ctx, Some txt) acts
+          | ctx, None -> ctx, Some txt
           end
         in
         let ctx, skip_user_input = Context.take_skip_user_input ctx in
 	begin match Context.get_return resp.msg_rsp_context with
 	| Some v ->
             if skip_user_input then (txt, v)
-            else ("", v)
+            else (None, v)
 	| None ->
             let txt =
-              if skip_user_input then txt
+              if skip_user_input then
+                begin match txt with
+                | Some txt -> txt
+                | None -> ""
+                end
               else user_input ()
             in
             loop ctx txt
@@ -136,12 +140,12 @@ let rec get_value
     (workspace_id: string)
     (ctx_init: json)
     (txt_init: string)
-    : string * 'a =
+    : string option * 'a =
   let rec loop ctx txt =
     begin match bypass txt with
     | Some (skip_user_input, x) ->
-        if skip_user_input then (txt, x)
-        else ("", x)
+        if skip_user_input then (Some txt, x)
+        else (None, x)
     | None ->
 	let req_msg =
           before
@@ -185,18 +189,22 @@ let rec get_value
                     end
                   in
                   ctx, txt)
-                (ctx, txt) acts
-          | ctx, None -> ctx, txt
+                (ctx, Some txt) acts
+          | ctx, None -> ctx, Some txt
           end
         in
         let ctx, skip_user_input = Context.take_skip_user_input ctx in
 	begin match matcher resp with
 	| Some v ->
             if skip_user_input then (txt, v)
-            else ("", v)
+            else (None , v)
 	| None ->
             let txt =
-              if skip_user_input then txt
+              if skip_user_input then
+                begin match txt with
+                | Some txt -> txt
+                | None -> ""
+                end
               else user_input ()
             in
             loop ctx txt
@@ -215,7 +223,7 @@ let exec
     (workspace_id: string)
     (ctx_init: json)
     (txt_init: string)
-    : string * json =
+    : string option * json =
   let matcher rsp = Context.get_return rsp.msg_rsp_context in
   get_value
     ~bypass
