@@ -75,12 +75,6 @@ val dialog_node :
   ?created:string ->
     unit -> dialog_node
 
-val setNodeParent : Wcs_t.dialog_node option -> Wcs_t.dialog_node -> Wcs_t.dialog_node
-val setNodeParentIfNone : Wcs_t.dialog_node option -> Wcs_t.dialog_node -> Wcs_t.dialog_node
-
-val updateNodeName : (string -> string) -> Wcs_t.dialog_node -> Wcs_t.dialog_node
-val getNodeName : Wcs_t.dialog_node -> string
-
 val workspace :
   string ->
   ?description:string ->

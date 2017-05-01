@@ -143,7 +143,9 @@ let dialog_node
     | Some text, None -> Some (mk_output text)
     | None, Some output -> Some output
     | Some _, Some _ ->
-        raise (Failure "dialog_node: ~text and ~output cannot be present simlutanously")
+        Log.error "Ws_builder"
+          (Some None)
+          "dialog_node: ~text and ~output cannot be present simlutanously"
     end
   in
   let go_to =
@@ -152,7 +154,9 @@ let dialog_node
     | Some (node, selector), None -> Some (mk_go_to node ~selector ())
     | None, Some (node_id, selector) -> Some (mk_go_to_id node_id ~selector ())
     | Some _, Some _ ->
-        raise (Failure "dialog_node: ~go_to and ~go_to_id cannot be present simlutanously")
+        Log.error "Ws_builder"
+          (Some None)
+          "dialog_node: ~go_to and ~go_to_id cannot be present simlutanously"
     end
   in
   { node_dialog_node = dialog_node;
@@ -167,19 +171,6 @@ let dialog_node
     node_created = created;
     node_child_input_kind = None; }
 
-let setNodeParent parent (x:Wcs_t.dialog_node) =
-   {x with node_parent = omap (fun (node:Wcs_t.dialog_node) -> node.node_dialog_node) parent}
-
-let setNodeParentIfNone parent (x:Wcs_t.dialog_node) =
-  match x.node_parent with
-    | Some _ -> x
-    | None -> {x with node_parent = omap (fun (node:Wcs_t.dialog_node) -> node.node_dialog_node) parent}
-
-let updateNodeName (f:string->string) (x:Wcs_t.dialog_node) =
-  {x with node_dialog_node = f (x.node_dialog_node)}
-
-let getNodeName (x:Wcs_t.dialog_node) =
-  x.node_dialog_node
 
 let fix_links nodes =
   let parent_child_tbl = Hashtbl.create 7 in
@@ -208,7 +199,6 @@ let fix_links nodes =
               { node with
                 node_parent = previous_sibling.node_parent }
             with Not_found ->
-              assert false;
               node
             end
         end
