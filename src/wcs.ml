@@ -28,8 +28,10 @@ let ws_check ws =
     let tbl = Hashtbl.create 7 in
     List.iter
       (fun node ->
-        if Hashtbl.mem tbl node.node_dialog_node then
-          raise (Failure ("Multiple nodes with name "^node.node_dialog_node));
+        if Hashtbl.mem tbl node.node_dialog_node then begin
+          Log.error "Wcs" (Some ())
+            ("Multiple nodes with name "^node.node_dialog_node)
+        end;
         Hashtbl.add tbl node.node_dialog_node true)
       nodes
   in

@@ -26,7 +26,10 @@ let set (ctx: json) (lbl: string) (v: json) : json =
   begin match ctx with
   | `Null -> `Assoc [ lbl, v ]
   | `Assoc l -> `Assoc ((lbl, v) :: (List.remove_assoc lbl l))
-  | _ -> raise (Failure "Unable to add a property to a non-object value")
+  | _ ->
+      Log.error "Context"
+        (Some ctx)
+        "Unable to add a property to a non-object value"
   end
 
 let take (ctx: json) (lbl: string) : json * json option =
