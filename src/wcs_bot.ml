@@ -204,3 +204,26 @@ let rec get_value
     end
   in
   loop ctx_init txt_init
+
+
+let exec
+    ?(bypass=bypass_default)
+    ?(before=before_default)
+    ?(after=after_default)
+    ?(user_input=user_input_default)
+    (wcs_cred: credential)
+    (workspace_id: string)
+    (ctx_init: json)
+    (txt_init: string)
+    : string * json =
+  let matcher rsp = Context.get_return rsp.msg_rsp_context in
+  get_value
+    ~bypass
+    ~before
+    ~after
+    ~user_input
+    ~matcher
+    wcs_cred
+    workspace_id
+    ctx_init
+    txt_init

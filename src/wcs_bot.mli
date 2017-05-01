@@ -37,3 +37,10 @@ val get_value :
   ?user_input:(unit -> string) ->
   ?matcher:(message_response -> 'a option) ->
   credential -> string -> json -> string -> string * 'a
+
+val exec :
+  ?bypass:(string -> (bool * json) option) ->
+  ?before:(message_request -> message_request) ->
+  ?after:(message_response -> message_response) ->
+  ?user_input:(unit -> string) ->
+  credential -> string -> json -> string -> string * json
