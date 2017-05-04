@@ -15,9 +15,7 @@ An easy way to get set up on most platforms is to use the OCaml
 package manager (https://opam.ocaml.org). Once opam is installed, you
 can just add the corresponding libraries:
 ```
-opam install ocamlfind
-opam install ocamlbuild
-opam install atdgen
+opam install ocamlfind ocamlbuild atdgen
 opam install lwt ssl cohttp
 ```
 
