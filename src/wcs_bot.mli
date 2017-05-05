@@ -22,6 +22,20 @@ val before_default : message_request -> message_request
 val after_default : message_response -> message_response
 val user_input_default : unit -> string
 
+val interpret :
+  ?before:(message_request -> message_request) ->
+  ?after:(message_response -> message_response) ->
+  credential ->
+  string -> message_request -> string * message_response * json option
+(**
+   [interpret cred ws_id msg_req] executes a complet conversation turn
+   (including skip_user_input and calls) on the workspace id [ws_id]
+   with the message request [msg_req]. The resulut is composed of the
+   workspace id for the next conversation turn, the message response
+   and the value of the field [return] in the context if it is
+   defined.
+*)
+
 
 val exec :
   ?before:(message_request -> message_request) ->
