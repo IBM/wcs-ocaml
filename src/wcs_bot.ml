@@ -38,6 +38,141 @@ let matcher_default (msg_resp: message_response) : 'a option =
   None
 
 
+let interpret
+    ?(before=before_default)
+    ?(after=after_default)
+    (wcs_cred: credential)
+    : (string -> message_request -> string * message_response * json option) =
+  let rec interpret
+      (ws_id: string)
+      (req_msg: message_request)
+      : string * message_response * json option =
+    let req_msg = before req_msg in
+    Log.debug "Wcs_extra"
+      ("Request:\n"^
+       (Json_util.pretty_message_request req_msg));
+    let resp =
+      Wcs.message wcs_cred ws_id req_msg
+    in
+    Log.debug "Wcs_extra"
+      ("Response:\n"^
+       (Json_util.pretty_message_response resp));
+    let resp = after resp in
+    List.iter
+      (fun txt -> print_string "C: "; print_endline txt)
+      resp.msg_rsp_output.out_text;
+    let ctx = resp.msg_rsp_context in
+    begin match Context.take_actions ctx with
+    | ctx, Some [ act ] ->
+        let k =
+          { act_name = ws_id;
+            act_agent = "client";
+            act_type_= "conversation";
+            act_parameters = Context.set `Null "context" ctx;
+            act_result_variable = act.act_result_variable; }
+        in
+        let act_ctx =
+          begin match Context.get act.act_parameters "context" with
+          | None -> `Null
+          | Some ctx -> ctx
+          end
+        in
+        let act_parameters =
+          Context.set act.act_parameters "context"
+            (Context.set_continuation act_ctx k)
+        in
+        let act = { act with act_parameters = act_parameters } in
+        interpret_action act
+    | ctx, Some (_ :: _ :: _) ->
+        assert false (* XXX TODO XXX *)
+    | ctx, Some []
+    | ctx, None ->
+        let ctx, skip_user_input = Context.take_skip_user_input ctx in
+        begin match Context.get_return ctx with
+        | Some v ->
+            begin match Context.get_continuation ctx with
+            | Some k ->
+                let k_txt =
+                  if skip_user_input then
+                    req_msg.msg_req_input.in_text
+                  else
+                    ""
+                in
+                let k_ctx =
+                  begin match Context.get k.act_parameters "context" with
+                  | Some ctx -> ctx
+                  | None -> `Null
+                  end
+                in
+                let k_ctx =
+                  begin match k.act_result_variable with
+                  | None -> k_ctx
+                  | Some lbl ->
+                      let prefix = String.sub lbl 0 8 in
+                      let var = String.sub lbl 8 (String.length lbl - 8) in
+                      assert (prefix = "context.");
+                      Context.set k_ctx var v
+                  end
+                in
+                let k_ctx, k_skip_user_input =
+                  Context.take_skip_user_input k_ctx
+                in
+                if k_skip_user_input then
+                  let k_parameters =
+                    Context.set
+                      (Context.set_string k.act_parameters "text" k_txt)
+                      "context" k_ctx
+                  in
+                  let k = { k with act_parameters = k_parameters } in
+                  interpret_action k
+                else
+                  let k_resp =
+                    { resp with msg_rsp_context = k_ctx }
+                  in
+                  (k.act_name, k_resp, Context.get_return k_ctx)
+            | None ->
+                (ws_id, resp, Some v)
+            end
+        | None ->
+            if skip_user_input then
+              interpret
+                ws_id
+                { req_msg with msg_req_context = Some ctx; }
+            else
+              (ws_id, { resp with msg_rsp_context = ctx }, None)
+        end
+    end
+
+  and interpret_action act =
+    begin match act.act_agent, act.act_type_ with
+    | "client", "conversation" ->
+        let ctx =
+          begin match Context.get act.act_parameters "context" with
+          | None -> `Null
+          | Some ctx -> ctx
+          end
+        in
+        let txt =
+          begin match Context.get_string act.act_parameters "text" with
+          | None -> ""
+          | Some s -> s
+          end
+        in
+        let req_msg =
+          { msg_req_input = { in_text = txt };
+            msg_req_alternate_intents = false;
+            msg_req_context = Some ctx;
+            msg_req_entities = None;
+            msg_req_intents = None;
+            msg_req_output = None; }
+        in
+        interpret act.act_name req_msg
+    | _ -> assert false
+  end
+  in
+  interpret
+
+
 let rec call
     ?(bypass=bypass_default)
     ?(before=before_default)
@@ -214,6 +349,28 @@ let rec get_value
   loop ctx_init txt_init
 
 
+(* let exec *)
+(*     ?(bypass=bypass_default) *)
+(*     ?(before=before_default) *)
+(*     ?(after=after_default) *)
+(*     ?(user_input=user_input_default) *)
+(*     (wcs_cred: credential) *)
+(*     (workspace_id: string) *)
+(*     (ctx_init: json) *)
+(*     (txt_init: string) *)
+(*     : string option * json = *)
+(*   let matcher rsp = Context.get_return rsp.msg_rsp_context in *)
+(*   get_value *)
+(*     ~bypass *)
+(*     ~before *)
+(*     ~after *)
+(*     ~user_input *)
+(*     ~matcher *)
+(*     wcs_cred *)
+(*     workspace_id *)
+(*     ctx_init *)
+(*     txt_init *)
+
 let exec
     ?(bypass=bypass_default)
     ?(before=before_default)
@@ -223,15 +380,26 @@ let exec
     (workspace_id: string)
     (ctx_init: json)
     (txt_init: string)
-    : string option * json =
-  let matcher rsp = Context.get_return rsp.msg_rsp_context in
-  get_value
-    ~bypass
-    ~before
-    ~after
-    ~user_input
-    ~matcher
-    wcs_cred
-    workspace_id
-    ctx_init
-    txt_init
+    : json =
+  let interpret =
+    interpret ~before ~after wcs_cred
+  in
+  let rec loop ws_id ctx txt =
+    let req =
+      { msg_req_input = { in_text = txt };
+        msg_req_alternate_intents = false;
+        msg_req_context = Some ctx;
+        msg_req_entities = None;
+        msg_req_intents = None;
+        msg_req_output = None; }
+    in
+    let ws_id, rsp, return = interpret ws_id req in
+    begin match return with
+    | Some v -> v
+    | None ->
+        let txt = user_input () in
+        let ctx = rsp.msg_rsp_context in
+        loop ws_id ctx txt
+    end
+  in
+  loop workspace_id ctx_init txt_init

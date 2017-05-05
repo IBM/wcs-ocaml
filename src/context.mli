@@ -33,6 +33,10 @@ val take_actions : json -> json * action list option
 val push_action : json -> action -> json
 val pop_action : json -> json * action option
 
+val set_continuation : json -> action -> json
+val get_continuation : json -> action option
+val take_continuation : json -> json * action option
+
 val set_return : json -> json -> json
 val get_return : json -> json option
 

@@ -38,12 +38,11 @@ val exec :
   ?before:(message_request -> message_request) ->
   ?after:(message_response -> message_response) ->
   ?user_input:(unit -> string) ->
-  credential -> string -> json -> string -> string option * json
+  credential -> string -> json -> string -> json
 (**
    [exec cred ws_id ctx_init txt_init] executes the workspace [ws_id]
    with the initial context [ctx_init] and the initial input text
    [txt_init]. The execution is completed when the field [return] is
-   defined in the context.  The return value is the last input string
-   if the field [skip_user_input] is defined and thevalue of the field
+   defined in the context.  The return value is the value of the field
    [return].
  *)

@@ -85,13 +85,15 @@ let take_actions (ctx: json) : json * action list option =
       begin try
         ctx', Some (List.map action_of_yojson acts)
       with _ ->
-        Format.eprintf "[WARNING] illed formed actions:\n%s@."
-          (Yojson.Basic.pretty_to_string (`List acts));
+        Log.warning "Context"
+          (Format.sprintf "illed formed actions:\n%s@."
+             (Yojson.Basic.pretty_to_string (`List acts)));
         ctx, None
       end
   | _, Some o ->
-      Format.eprintf "[WARNING] illed formed actions:\n%s@."
-        (Yojson.Basic.pretty_to_string o);
+      Log.warning "Context"
+        (Format.sprintf "illed formed actions:\n%s@."
+           (Yojson.Basic.pretty_to_string o));
       ctx, None
   | _, None ->
       ctx, None
@@ -111,6 +113,29 @@ let pop_action (ctx: json) : json * action option =
       set_actions ctx' acts, Some act
   | _ -> ctx, None
   end
+
+(** {6. Continuation} *)
+
+let set_continuation (ctx: json) (k: action) : json =
+  set ctx "continuation" (yojson_of_action k)
+
+let take_continuation (ctx: json) : json * action option =
+  begin match take ctx "continuation" with
+  | ctx', Some act ->
+      begin try
+        ctx', Some (action_of_yojson act)
+      with _ ->
+        Log.warning "Context"
+          (Format.sprintf "illed formed continuation:\n%s@."
+             (Yojson.Basic.pretty_to_string act));
+        ctx, None
+      end
+  | _ -> ctx, None
+  end
+
+let get_continuation (ctx: json) : action option =
+  let _, act = take_continuation ctx in
+  act
 
 
 (** {6. Return} *)
