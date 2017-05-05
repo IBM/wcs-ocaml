@@ -249,11 +249,17 @@ let update wcs_cred =
 
 let try_context = ref `Null
 let set_try_context fname =
-  let ctx =
-    Yojson.Basic.from_file ~fname:fname fname
-  in
-  try_context := ctx
-
+  begin try
+    let ctx =
+      Yojson.Basic.from_file ~fname:fname fname
+    in
+    try_context := ctx
+  with
+  | exn ->
+      Log.error "Wcs_cli" (Some ())
+        ("Unable to read the context file "^fname^": "^
+         Printexc.to_string exn)
+  end
 let try_text = ref ""
 let set_try_text txt =
   try_text := txt
