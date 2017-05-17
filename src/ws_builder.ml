@@ -16,6 +16,9 @@
  * limitations under the License.
  *)
 
+
+(** Workspace builder *)
+
 open Wcs_t
 
 let omap f o =

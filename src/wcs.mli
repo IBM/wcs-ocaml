@@ -30,7 +30,7 @@ open Wcs_t
 
 val version : string
 
-(** {6. Workspaces} *)
+(** {6 Workspaces} *)
 
 val list_workspaces : credential ->
   list_workspaces_request -> list_workspaces_response
@@ -74,7 +74,7 @@ val update_workspace : credential ->
 *)
 
 
-(** {6. Messages} *)
+(** {6 Messages} *)
 
 val message : credential ->
   string -> message_request -> message_response

@@ -16,6 +16,8 @@
  * limitations under the License.
  *)
 
+(** Json utilities. *)
+
 open Wcs_t
 
 
@@ -49,7 +51,7 @@ val take : json -> string -> json * json option
  *)
 
 
-(** {8. The ["skip_user_input"] field} *)
+(** {8 The ["skip_user_input"] field} *)
 
 val set_skip_user_input : json -> bool -> json
 (**
@@ -64,7 +66,7 @@ val take_skip_user_input : json -> json * bool
  *)
 
 
-(** {8. The ["actions"] field} *)
+(** {8 The ["actions"] field} *)
 
 val set_actions : json -> action list -> json
 (**
@@ -92,7 +94,7 @@ val pop_action : json -> json * action option
  *)
 
 
-(** {8. The ["continuation"] field} *)
+(** {8 The ["continuation"] field} *)
 
 val set_continuation : json -> action -> json
 (**
@@ -113,7 +115,7 @@ val take_continuation : json -> json * action option
  *)
 
 
-(** {8. The ["return"] field} *)
+(** {8 The ["return"] field} *)
 
 val set_return : json -> json -> json
 (**
@@ -128,7 +130,7 @@ val get_return : json -> json option
  *)
 
 
-(** {8. Boolean fields} *)
+(** {8 Boolean fields} *)
 
 val set_bool : json -> string -> bool -> json
 (**
@@ -141,7 +143,7 @@ val get_bool : json -> string -> bool option
    [get_bool o x] gets the value of the field [x] of the object [o].
  *)
 
-(** {8. String fields} *)
+(** {8 String fields} *)
 
 val set_string : json -> string -> string -> json
 (**

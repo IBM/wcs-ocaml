@@ -16,13 +16,21 @@
  * limitations under the License.
  *)
 
+(**
+   Logging utility.
+*)
+
+(** {6 Errors} *)
+
 exception Error of string * string
+(** Exception raise in case of error. It is associated with the module
+    name and the error message.
+ *)
 
 val error_recovery : bool ref
 (** Set if we should avoid to fail in case of error. *)
 
 val error : string -> 'a option -> string -> 'a
-
 (** [error module_name default msg] raises [Error]. If a default value
     is provided and [error_recovery] is [true], it returns the value
     instead of raising the exception [Error]. In this case, the error
@@ -34,10 +42,15 @@ val print_error : string -> string -> unit
     prefixed with the module name [module_name].
 *)
 
+(** {6 Warnings} *)
+
 val warning : string -> string -> unit
 (** [warning module_name msg] prints the warning message [msg] prefixed
     with the module name [module_name].
  *)
+
+
+(** {6 Debug messages} *)
 
 val debug_message : bool ref
 (** Set if we should display debug. *)
