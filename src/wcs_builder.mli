@@ -16,10 +16,28 @@
  * limitations under the License.
  *)
 
+
+(** Wcs data structure constructors. *)
+
 open Wcs_t
 
+val list_workspaces_request :
+  ?page_limit:int ->
+  ?include_count:bool ->
+  ?sort:sort_criteria ->
+  ?cursor:string ->
+    unit -> list_workspaces_request
+
+val get_workspace_request :
+  ?export:bool ->
+  string ->
+  get_workspace_request
+
+
 val example :
-  string -> ?created:string -> unit -> intent_example
+  string ->
+  ?created:string ->
+    unit -> intent_example
 
 val intent :
   string ->
