@@ -149,7 +149,7 @@ let delete wcs_cred method_ =
 let list_workspaces wcs_cred req =
   let method_ = "/v1/workspaces" in
   let params =
-    parameters_of_json (Json_util.json_of_list_workspaces_request req)
+    parameters_of_json (Wcs_json.json_of_list_workspaces_request req)
   in
   let rsp = get wcs_cred method_ params in
   Wcs_j.list_workspaces_response_of_string rsp

@@ -17,7 +17,6 @@
  *)
 
 open Wcs_t
-open Json_util
 
 type command =
   | Cmd_nothing
@@ -87,7 +86,7 @@ let list wcs_cred =
   let rsp = Wcs.list_workspaces wcs_cred req in
   begin match !list_short with
   | false ->
-      Format.printf "%s@." (Json_util.pretty_list_workspaces_response rsp)
+      Format.printf "%s@." (Wcs_json.pretty_list_workspaces_response rsp)
   | true ->
       List.iter
         (fun ws ->
@@ -120,7 +119,7 @@ let create wcs_cred =
   List.iter
     (fun fname ->
       let ws =
-        Json_util.read_json_file Wcs_j.read_workspace fname
+        Json.read_json_file Wcs_j.read_workspace fname
       in
       let rsp = Wcs.create_workspace wcs_cred ws in
       let name =
@@ -190,7 +189,7 @@ let get wcs_cred =
           Wcs_builder.get_workspace_request ?export:!get_export id
         in
         let ws = Wcs.get_workspace wcs_cred req in
-        (json_of_workspace ws) :: acc)
+        (Wcs_json.json_of_workspace ws) :: acc)
       [] !get_ws_ids
   in
   begin match workspaces with
@@ -232,7 +231,7 @@ let update wcs_cred =
   begin match !update_ws_id, !update_ws_fname with
   | Some id, Some fname ->
       let ws =
-        Json_util.read_json_file Wcs_j.read_workspace fname
+        Json.read_json_file Wcs_j.read_workspace fname
       in
       Wcs.update_workspace wcs_cred id ws
   | _ ->
@@ -315,7 +314,7 @@ let try_ wcs_cred =
 
 let wcs_credential : Wcs_t.credential option ref = ref None
 let set_wcs_credential f =
-  let cred = Json_util.read_json_file Wcs_j.read_credential f in
+  let cred = Json.read_json_file Wcs_j.read_credential f in
   wcs_credential := Some cred
 
 let command = ref Cmd_nothing

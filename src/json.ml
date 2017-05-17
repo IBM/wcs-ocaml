@@ -18,6 +18,24 @@
 
 open Wcs_t
 
+let read_json_file reader f =
+  begin try
+    let lexstate = Yojson.init_lexer ~fname:f () in
+    let ch = open_in f in
+    let lexbuf = Lexing.from_channel ch in
+    let json = reader lexstate lexbuf in
+    close_in ch;
+    json
+  with
+  | Yojson.Json_error err ->
+      Log.error "Json_util" None
+        ("Unable to parse file "^f^": "^err)
+  | exn ->
+      Log.error "Json_util" None
+        ("Unable to read file "^f^": "^(Printexc.to_string exn))
+  end
+
+
 (** {6. Utils} *)
 
 let null : json = `Null
@@ -27,7 +45,7 @@ let set (ctx: json) (lbl: string) (v: json) : json =
   | `Null -> `Assoc [ lbl, v ]
   | `Assoc l -> `Assoc ((lbl, v) :: (List.remove_assoc lbl l))
   | _ ->
-      Log.error "Context"
+      Log.error "Json"
         (Some ctx)
         "Unable to add a property to a non-object value"
   end
@@ -85,13 +103,13 @@ let take_actions (ctx: json) : json * action list option =
       begin try
         ctx', Some (List.map action_of_yojson acts)
       with _ ->
-        Log.warning "Context"
+        Log.warning "Json"
           (Format.sprintf "illed formed actions:\n%s@."
              (Yojson.Basic.pretty_to_string (`List acts)));
         ctx, None
       end
   | _, Some o ->
-      Log.warning "Context"
+      Log.warning "Json"
         (Format.sprintf "illed formed actions:\n%s@."
            (Yojson.Basic.pretty_to_string o));
       ctx, None
@@ -125,7 +143,7 @@ let take_continuation (ctx: json) : json * action option =
       begin try
         ctx', Some (action_of_yojson act)
       with _ ->
-        Log.warning "Context"
+        Log.warning "Json"
           (Format.sprintf "illed formed continuation:\n%s@."
              (Yojson.Basic.pretty_to_string act));
         ctx, None
