@@ -17,7 +17,7 @@
  *)
 
 (**
-   Watson Conversation Service API
+   Watson Conversation Service API.
 
    Based on the documentation available at:
    https://www.ibm.com/watson/developercloud/conversation/api/v1/

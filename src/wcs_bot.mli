@@ -16,7 +16,7 @@
  * limitations under the License.
  *)
 
-(** Generic bot runtime *)
+(** Generic bot runtime. *)
 
 open Wcs_t
 

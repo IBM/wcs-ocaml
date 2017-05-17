@@ -17,7 +17,7 @@
  *)
 
 
-(** Conversion of Wcs data structures to JSON *)
+(** Conversion of Wcs data structures to JSON. *)
 
 (** {6 workspace_response} *)
 
