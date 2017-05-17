@@ -1,4 +1,4 @@
-module Mk = Ws_builder
+module Mk = Wcs_builder
 
 let intent_help =
   Mk.intent "help"
