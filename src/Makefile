@@ -27,7 +27,11 @@ GENERATED= wcs_t.ml \
 	   wcs_j.ml \
 	   wcs_j.mli
 
-all: $(MAIN) wcslib.cma wcslib.cmxa
+all: $(MAIN) lib doc
+
+lib: wcslib.cma wcslib.cmxa
+
+doc: wcs.docdir/index.html
 
 .PHONY: $(MAIN).$(TARGET) wcslib.cma wcslib.cmxa
 
@@ -45,6 +49,11 @@ wcslib.cma: $(GENERATED)
 		-pkg atdgen -pkg cohttp.lwt $@
 
 wcslib.cmxa: $(GENERATED)
+	$(OCAMLBUILD) \
+		-use-ocamlfind \
+		-pkg atdgen -pkg cohttp.lwt $@
+
+wcs.docdir/index.html: $(GENERATED)
 	$(OCAMLBUILD) \
 		-use-ocamlfind \
 		-pkg atdgen -pkg cohttp.lwt $@
