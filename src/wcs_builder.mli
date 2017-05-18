@@ -85,9 +85,12 @@ val go_to_id :
 
 val output : string -> output_def
 
+type node_type = Response_condition
+
 val dialog_node :
   string ->
   ?description:string ->
+  ?type_: node_type ->
   ?conditions:string ->
   ?parent:dialog_node ->
   ?previous_sibling:dialog_node ->
@@ -100,6 +103,18 @@ val dialog_node :
   ?created:string ->
   unit ->
   dialog_node
+
+val response_condition :
+  parent:dialog_node ->
+  ?description:string ->
+  ?conditions:string ->
+  ?previous_sibling:dialog_node ->
+  ?text:string ->
+  ?output:output_def ->
+  ?context:json ->
+  ?metadata:json ->
+  ?created:string ->
+     unit -> dialog_node
 
 val workspace :
   string ->

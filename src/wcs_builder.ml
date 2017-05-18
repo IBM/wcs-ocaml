@@ -14,7 +14,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *)
+*)
 
 open Wcs_t
 
@@ -23,6 +23,10 @@ let omap f o =
   | None -> None
   | Some x -> Some (f x)
   end
+
+let new_id = 
+  let cpt = ref 0 in
+  fun () -> incr cpt; "node_"^(string_of_int !cpt)
 
 let list_workspaces_request
     (* ?version *)
@@ -133,9 +137,17 @@ let output (* XX TODO : handle multiple outputs *)
 
 let mk_output = output (* alias to avoid hiding *)
 
+type node_type = Response_condition
+
+let string_of_node_type t = 
+  begin match t with
+  | Response_condition -> "response_condition"
+  end 
+
 let dialog_node
     dialog_node
     ?description
+    ?type_
     ?(conditions="true")
     ?parent
     ?previous_sibling
@@ -148,6 +160,12 @@ let dialog_node
     ?created
     ()
   : dialog_node =
+  let node_type =
+    begin match type_ with
+    | None -> None
+    | Some t -> Some (string_of_node_type t)
+    end 
+  in
   let parent_id =
     omap (fun node -> node.node_dialog_node) parent
   in
@@ -178,6 +196,7 @@ let dialog_node
   in
   { node_dialog_node = dialog_node;
     node_description = description;
+    node_type_ = node_type;
     node_conditions = Some conditions;
     node_parent = parent_id;
     node_previous_sibling = previous_sibling_id;
@@ -187,6 +206,14 @@ let dialog_node
     node_go_to = go_to;
     node_created = created;
     node_child_input_kind = None; }
+
+let response_condition ~parent =
+  dialog_node (new_id ())
+    ~type_: Response_condition
+    ~parent:parent
+    ?go_to: None (* Not yet implemented*)
+    ?go_to_id: None (* Not yet implemented*)
+
 
 
 let fix_links nodes =

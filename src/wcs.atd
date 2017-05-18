@@ -138,6 +138,7 @@ type output_def = json
 
 type dialog_node = {
     dialog_node : string;
+    ?type_ <json name="type"> : string nullable;
     ?description : string nullable;
     ?conditions : string nullable;
     ?parent : string nullable;
