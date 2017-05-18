@@ -184,7 +184,7 @@ let dialog_node
 
 let response_condition ~parent =
   dialog_node (new_id ())
-    ~type_: Response_condition
+    ~type_: Node_response_condition
     ~parent:parent
     ?go_to: None (* Not yet implemented*)
     ?go_to_id: None (* Not yet implemented*)

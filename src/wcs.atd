@@ -145,7 +145,10 @@ type output_def = json
 <doc text="Type of outputs of a dialog node.">
 
 type dialog_node_type = [
-  | Response_condition <json name="response_condition">
+  | Node_response_condition <json name="response_condition">
+  | Node_frame <json name="frame">
+  | Node_event_handler <json name="event_handler">
+  | Node_slot <json name="slot">
 ] <ocaml repr="classic">
 <doc text="Dialog node type.">
 
