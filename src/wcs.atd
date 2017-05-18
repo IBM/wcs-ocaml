@@ -16,17 +16,18 @@
  * limitations under the License.
  *)
 
-(**
+<doc text="Watson Conversation Service data structures.
+
    Data srcutures used in Watson Conversation Service.
 
    Based on the documentation available at:
    https://www.ibm.com/watson/developercloud/conversation/api/v1/
 
    Version 2017-04-21.
-*)
+">
 
 type json <ocaml module="Json_t"> = abstract
-(** Type of arbitraty JSON values. *)
+<doc text="Type of arbitraty JSON values.">
 
 (** {6 Credentials} *)
 
@@ -36,12 +37,12 @@ type credential = {
     password : string;
     username : string;
   } <ocaml field_prefix="cred_">
-(** Watson Conversation Service credentials. *)
+<doc text="Watson Conversation Service credentials.">
 
 type version = [
   | V_2017_04_21
   ] (* <ocaml repr="classic"> *)
-(** Supported versions *)
+<doc text="Supported versions">
 
 (** {6 Workspaces } *)
 
@@ -56,7 +57,7 @@ type sort_criteria = [
   | Sort_modified_decr <json name="-modified">
   | Sort_workspace_id_decr <json name="-workspace_id">
   ] (* <ocaml repr="classic"> *)
-(** Sorting criteria for list of workspaces. *)
+<doc text="Sorting criteria for list of workspaces.">
 
 type workspace_response = {
     name : string nullable;
@@ -67,7 +68,7 @@ type workspace_response = {
     updated : string nullable;
     workspace_id : string;
   } <ocaml field_prefix="ws_rsp_">
-(** A workspace metadata. *)
+<doc text="A workspace metadata.">
 
 type pagination_response = {
     ?refresh_url : string nullable;
@@ -75,7 +76,7 @@ type pagination_response = {
     ?total : int nullable;
     ?matched : int nullable;
   } <ocaml field_prefix="pag_">
-(** Pagination information *)
+<doc text="Pagination information">
 
 type list_workspaces_request = {
     (* ~version <ocaml default="`V_2017_04_21"> : version; *)
@@ -84,19 +85,19 @@ type list_workspaces_request = {
     ?sort : sort_criteria nullable;
     ?cursor : string nullable;
   } <ocaml field_prefix="list_ws_req_">
-(** Request the list of workspaces. *)
+<doc text="Request the list of workspaces.">
 
 type list_workspaces_response = {
     workspaces : workspace_response list;
     pagination : pagination_response;
   } <ocaml field_prefix="list_ws_rsp_">
-(** Response to the list of workspaces request. *)
+<doc text="Response to the list of workspaces request.">
 
 type intent_example = {
     text : string;
     ?created : string nullable;
   } <ocaml field_prefix="ex_">
-(** Type of intent examples. *)
+<doc text="Type of intent examples.">
 
 type intent_def = {
     intent : string;
@@ -104,7 +105,7 @@ type intent_def = {
     ~examples : intent_example list;
     ?created : string nullable;
   } <ocaml field_prefix="i_def_">
-(** Type of intent definitions. *)
+<doc text="Type of intent definitions.">
 
 type entity_value = {
     value : string;
@@ -112,7 +113,7 @@ type entity_value = {
     ~synonyms : string list;
     ?created : string nullable;
   } <ocaml field_prefix="e_">
-(** Type of entity values. *)
+<doc text="Type of entity values.">
 
 type entity_def = {
     entity : string;
@@ -123,17 +124,17 @@ type entity_def = {
     ~values : entity_value list;
     ?created : string nullable;
   } <ocaml field_prefix="e_def_">
-(** Type of entity definitions. *)
+<doc text="Type of entity definitions.">
 
 type go_to = {
     ~return <ocaml default="false"> : bool;
     selector : string;
     dialog_node : string;
   } <ocaml field_prefix="goto_">
-(** Type of goto definitions. *)
+<doc text="Type of goto definitions.">
 
 type output_def = json
-(** Type of outputs of a dialog node. *)
+<doc text="Type of outputs of a dialog node.">
 
 type dialog_node = {
     dialog_node : string;
@@ -148,7 +149,7 @@ type dialog_node = {
     ?child_input_kind : string nullable;
     ?created : string nullable;
   } <ocaml field_prefix="node_">
-(** Type of dialog nodes. *)
+<doc text="Type of dialog nodes.">
 
 type workspace = {
     name : string nullable;
@@ -165,7 +166,7 @@ type workspace = {
     ?modified_by : string nullable;
     ?workspace_id : string nullable;
   } <ocaml field_prefix="ws_">
-(** Type of workspaces *)
+<doc text="Type of workspaces">
 
 
 (** {6 Types for the [message] method} *)
@@ -210,7 +211,7 @@ type message_response = {
     output : output;
   } <ocaml field_prefix="msg_rsp_">
 
-(** {6 Types for the workspace creation method }*)
+(** {6 Types for the workspace creation method } *)
 
 type create_response = {
     ?name : string nullable;
@@ -222,7 +223,7 @@ type create_response = {
     ?workspace_id : string nullable;
   } <ocaml field_prefix="crea_rsp_">
 
-(** {6 Types for the workspace get method }*)
+(** {6 Types for the workspace get method } *)
 
 type get_workspace_request = {
     workspace_id : string;
@@ -231,6 +232,7 @@ type get_workspace_request = {
 
 
 (** {6 Action} *)
+
 type action = {
     name : string;
     ~agent <ocaml default="\"client\""> : string;
