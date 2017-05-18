@@ -128,9 +128,9 @@ type entity_def = {
 <doc text="Type of entity definitions.">
 
 type selector = [
-  | User_input <json name="user_input">
-  | Condition <json name="condition">
-  | Body <json name="body">
+  | Goto_user_input <json name="user_input">
+  | Goto_condition <json name="condition">
+  | Goto_body <json name="body">
 ] <ocaml repr="classic">
 <doc text="Goto selector.">
 
