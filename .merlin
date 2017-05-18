@@ -2,4 +2,4 @@ S src
 
 B src/_build
 
-PKG yojson
+PKG yojson cohttp lwt
