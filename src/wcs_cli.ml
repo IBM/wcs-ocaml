@@ -90,14 +90,14 @@ let list wcs_cred =
   | true ->
       List.iter
         (fun ws ->
-          let name =
-            begin match ws.ws_rsp_name with
-            | Some n -> n
-            | None -> ""
-            end
-          in
-          Format.printf "%s %s@."
-            ws.ws_rsp_workspace_id name)
+           let name =
+             begin match ws.ws_rsp_name with
+             | Some n -> n
+             | None -> ""
+             end
+           in
+           Format.printf "%s %s@."
+             ws.ws_rsp_workspace_id name)
         rsp.list_ws_rsp_workspaces
   end
 
@@ -118,23 +118,23 @@ let create_usage =
 let create wcs_cred =
   List.iter
     (fun fname ->
-      let ws =
-        Json.read_json_file Wcs_j.read_workspace fname
-      in
-      let rsp = Wcs.create_workspace wcs_cred ws in
-      let name =
-        begin match rsp.crea_rsp_name with
-        | Some name -> name
-        | None -> "?"
-        end
-      in
-      let ws_id =
-        begin match rsp.crea_rsp_workspace_id with
-        | Some id -> id
-        | None -> "?"
-        end
-      in
-      Format.printf "Workspace %s: %s@." name ws_id)
+       let ws =
+         Json.read_json_file Wcs_j.read_workspace fname
+       in
+       let rsp = Wcs.create_workspace wcs_cred ws in
+       let name =
+         begin match rsp.crea_rsp_name with
+         | Some name -> name
+         | None -> "?"
+         end
+       in
+       let ws_id =
+         begin match rsp.crea_rsp_workspace_id with
+         | Some id -> id
+         | None -> "?"
+         end
+       in
+       Format.printf "Workspace %s: %s@." name ws_id)
     !create_ws_fnames
 
 
@@ -156,8 +156,8 @@ let delete_usage =
 let delete wcs_cred =
   List.iter
     (fun id ->
-      Wcs.delete_workspace wcs_cred id;
-      Format.printf "Workspace %s deleted@." id)
+       Wcs.delete_workspace wcs_cred id;
+       Format.printf "Workspace %s deleted@." id)
     !delete_ws_ids
 
 
@@ -185,11 +185,11 @@ let get wcs_cred =
   let workspaces =
     List.fold_left
       (fun acc id ->
-        let req =
-          Wcs_builder.get_workspace_request ?export:!get_export id
-        in
-        let ws = Wcs.get_workspace wcs_cred req in
-        (Wcs_json.json_of_workspace ws) :: acc)
+         let req =
+           Wcs_builder.get_workspace_request ?export:!get_export id
+         in
+         let ws = Wcs.get_workspace wcs_cred req in
+         (Wcs_json.json_of_workspace ws) :: acc)
       [] !get_ws_ids
   in
   begin match workspaces with

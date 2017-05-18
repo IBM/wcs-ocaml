@@ -28,11 +28,11 @@ let ws_check ws =
     let tbl = Hashtbl.create 7 in
     List.iter
       (fun node ->
-        if Hashtbl.mem tbl node.node_dialog_node then begin
-          Log.error "Wcs" (Some ())
-            ("Multiple nodes with name "^node.node_dialog_node)
-        end;
-        Hashtbl.add tbl node.node_dialog_node true)
+         if Hashtbl.mem tbl node.node_dialog_node then begin
+           Log.error "Wcs" (Some ())
+             ("Multiple nodes with name "^node.node_dialog_node)
+         end;
+         Hashtbl.add tbl node.node_dialog_node true)
       nodes
   in
   check_node_names ws.ws_dialog_nodes;
@@ -53,10 +53,10 @@ let parameters_of_json (o: json) : string =
   | `Assoc l ->
       List.fold_left
         (fun params (x, v) ->
-          begin match v with
-          | `String s -> "&"^x^"="^s
-          | _ -> "&"^x^"="^(Yojson.Basic.to_string o)
-          end)
+           begin match v with
+           | `String s -> "&"^x^"="^s
+           | _ -> "&"^x^"="^(Yojson.Basic.to_string o)
+           end)
         "" l
   | _ ->
       Log.error "Wcs" (Some "")
@@ -78,16 +78,16 @@ let post wcs_cred method_ req =
   in
   let data = ((Cohttp.Body.of_string req) :> Cohttp_lwt_body.t) in
   let call =
-    Cohttp_lwt_unix.Client.post ~body:data ~headers uri >>= fun (resp, body) ->
+    Cohttp_lwt_unix.Client.post ~body:data ~headers uri >>= (fun (resp, body) ->
       let code = resp |> Cohttp.Response.status |> Cohttp.Code.code_of_status in
-      body |> Cohttp_lwt_body.to_string >|= fun body ->
+      body |> Cohttp_lwt_body.to_string >|= (fun body ->
         begin match code with
         | 200 | 201 -> body
         | _ ->
             Log.error
               "Wcs" None
               (Format.sprintf "[POST %s] %d: %s" method_ code body)
-        end
+        end))
   in
   let rsp = Lwt_main.run call in
   rsp
@@ -103,16 +103,16 @@ let get wcs_cred method_ params =
     h
   in
   let call =
-    Cohttp_lwt_unix.Client.get ~headers uri >>= fun (resp, body) ->
+    Cohttp_lwt_unix.Client.get ~headers uri >>= (fun (resp, body) ->
       let code = resp |> Cohttp.Response.status |> Cohttp.Code.code_of_status in
-      body |> Cohttp_lwt_body.to_string >|= fun body ->
+      body |> Cohttp_lwt_body.to_string >|= (fun body ->
         begin match code with
         | 200 -> body
         | _ ->
             Log.error
               "Wcs" None
               (Format.sprintf "[GET %s] %d: %s" method_ code body)
-        end
+        end))
   in
   let rsp = Lwt_main.run call in
   rsp
@@ -129,16 +129,16 @@ let delete wcs_cred method_ =
     h
   in
   let call =
-    Cohttp_lwt_unix.Client.delete ~headers uri >>= fun (resp, body) ->
+    Cohttp_lwt_unix.Client.delete ~headers uri >>= (fun (resp, body) ->
       let code = resp |> Cohttp.Response.status |> Cohttp.Code.code_of_status in
-      body |> Cohttp_lwt_body.to_string >|= fun body ->
+      body |> Cohttp_lwt_body.to_string >|= (fun body ->
         begin match code with
         | 200 | 201 -> body
         | _ ->
             Log.error
               "Wcs" None
               (Format.sprintf "[DELETE %s] %d: %s" method_ code body)
-        end
+        end))
   in
   let rsp = Lwt_main.run call in
   rsp

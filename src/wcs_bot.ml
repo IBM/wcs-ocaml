@@ -36,11 +36,11 @@ let interpret
     ?(before=before_default)
     ?(after=after_default)
     (wcs_cred: credential)
-    : (string -> message_request -> string * message_response * json option) =
+  : (string -> message_request -> string * message_response * json option) =
   let rec interpret
       (ws_id: string)
       (req_msg: message_request)
-      : string * message_response * json option =
+    : string * message_response * json option =
     let req_msg = before req_msg in
     Log.debug "Wcs_extra"
       ("Request:\n"^
@@ -162,7 +162,7 @@ let interpret
         in
         interpret act.act_name req_msg
     | _ -> assert false
-  end
+    end
   in
   interpret
 
@@ -175,7 +175,7 @@ let exec
     (workspace_id: string)
     (ctx_init: json)
     (txt_init: string)
-    : json =
+  : json =
   let interpret =
     interpret ~before ~after wcs_cred
   in

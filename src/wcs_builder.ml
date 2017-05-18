@@ -31,7 +31,7 @@ let list_workspaces_request
     ?sort
     ?cursor
     ()
-    : list_workspaces_request =
+  : list_workspaces_request =
   { (* list_ws_req_version = version; *)
     list_ws_req_page_limit = page_limit;
     list_ws_req_include_count = include_count;
@@ -46,8 +46,7 @@ let example
     example
     ?created
     ()
-    : intent_example
-    =
+  : intent_example =
   { ex_text = example;
     ex_created = created; }
 
@@ -57,7 +56,7 @@ let intent
     ?(examples=[])
     ?created
     ()
-    : intent_def =
+  : intent_def =
   { i_def_intent = intent;
     i_def_description = description;
     i_def_examples = List.map (fun s -> example s ()) examples;
@@ -69,7 +68,7 @@ let value
     ?(synonyms=[])
     ?created
     ()
-    : entity_value =
+  : entity_value =
   { e_value = value;
     e_metadata = metadata;
     e_synonyms = synonyms;
@@ -83,7 +82,7 @@ let entity
     ?(values=[])
     ?created
     ()
-    : entity_def =
+  : entity_def =
   { e_def_entity = entity;
     e_def_description = metadata;
     e_def_source = source;
@@ -108,7 +107,7 @@ let go_to
     ?(return=false)
     ~selector
     ()
-    : go_to =
+  : go_to =
   { goto_return = return;
     goto_selector = string_of_selector selector;
     goto_dialog_node = node.node_dialog_node; }
@@ -120,7 +119,7 @@ let go_to_id
     ?(return=false)
     ~selector
     ()
-    : go_to =
+  : go_to =
   { goto_return = return;
     goto_selector = string_of_selector selector;
     goto_dialog_node = node_id; }
@@ -129,7 +128,7 @@ let mk_go_to_id = go_to_id (* alias to avoid hiding *)
 
 let output (* XX TODO : handle multiple outputs *)
     text
-    : output_def =
+  : output_def =
   (`Assoc [ "text", `String text ])
 
 let mk_output = output (* alias to avoid hiding *)
@@ -148,7 +147,7 @@ let dialog_node
     ?go_to_id
     ?created
     ()
-    : dialog_node =
+  : dialog_node =
   let parent_id =
     omap (fun node -> node.node_dialog_node) parent
   in
@@ -195,35 +194,35 @@ let fix_links nodes =
   let node_tbl = Hashtbl.create 7 in
   List.map
     (fun node ->
-      let node =
-        begin match node.node_parent, node.node_previous_sibling with
-        | Some _, Some _ -> node
-        | Some _, None
-        | None, None ->
-            begin try
-              let previous_sibling =
-                Hashtbl.find parent_child_tbl node.node_parent
-              in
-              { node with
-                node_previous_sibling = Some previous_sibling.node_dialog_node }
-            with Not_found ->
-              node
-            end
-        | None, Some previous_sibling_name ->
-            begin try
-              let previous_sibling =
-                Hashtbl.find node_tbl previous_sibling_name
-              in
-              { node with
-                node_parent = previous_sibling.node_parent }
-            with Not_found ->
-              node
-            end
-        end
-      in
-      Hashtbl.add parent_child_tbl node.node_parent node;
-      Hashtbl.add node_tbl node.node_dialog_node node;
-      node)
+       let node =
+         begin match node.node_parent, node.node_previous_sibling with
+         | Some _, Some _ -> node
+         | Some _, None
+         | None, None ->
+             begin try
+               let previous_sibling =
+                 Hashtbl.find parent_child_tbl node.node_parent
+               in
+               { node with
+                 node_previous_sibling = Some previous_sibling.node_dialog_node }
+             with Not_found ->
+               node
+             end
+         | None, Some previous_sibling_name ->
+             begin try
+               let previous_sibling =
+                 Hashtbl.find node_tbl previous_sibling_name
+               in
+               { node with
+                 node_parent = previous_sibling.node_parent }
+             with Not_found ->
+               node
+             end
+         end
+       in
+       Hashtbl.add parent_child_tbl node.node_parent node;
+       Hashtbl.add node_tbl node.node_dialog_node node;
+       node)
     nodes
 
 
@@ -242,7 +241,7 @@ let workspace
     ?modified_by
     ?workspace_id
     ()
-    : workspace =
+  : workspace =
   let counterexamples =
     List.map (fun s -> example s ()) counterexamples
   in
@@ -261,6 +260,6 @@ let workspace
     ws_workspace_id = workspace_id; }
 
 let sys_number : entity_def =
- entity "sys-number"
+  entity "sys-number"
     ~source: "system.entities"
     ()

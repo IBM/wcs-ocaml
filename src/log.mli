@@ -25,7 +25,7 @@
 exception Error of string * string
 (** Exception raise in case of error. It is associated with the module
     name and the error message.
- *)
+*)
 
 val error_recovery : bool ref
 (** Set if we should avoid to fail in case of error. *)
@@ -35,7 +35,7 @@ val error : string -> 'a option -> string -> 'a
     is provided and [error_recovery] is [true], it returns the value
     instead of raising the exception [Error]. In this case, the error
     message is printed.
- *)
+*)
 
 val print_error : string -> string -> unit
 (** [print_error module_name msg] prints the error message [msg]
@@ -47,7 +47,7 @@ val print_error : string -> string -> unit
 val warning : string -> string -> unit
 (** [warning module_name msg] prints the warning message [msg] prefixed
     with the module name [module_name].
- *)
+*)
 
 
 (** {6 Debug messages} *)
@@ -58,4 +58,4 @@ val debug_message : bool ref
 val debug : string -> string -> unit
 (** [debug module_name msg] prints the debug message [msg] prefixed
     with the module name [module_name].
- *)
+*)

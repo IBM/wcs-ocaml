@@ -26,7 +26,8 @@ val list_workspaces_request :
   ?include_count:bool ->
   ?sort:sort_criteria ->
   ?cursor:string ->
-    unit -> list_workspaces_request
+  unit ->
+  list_workspaces_request
 
 val get_workspace_request :
   ?export:bool ->
@@ -37,21 +38,24 @@ val get_workspace_request :
 val example :
   string ->
   ?created:string ->
-    unit -> intent_example
+  unit ->
+  intent_example
 
 val intent :
   string ->
   ?description:string ->
   ?examples:string list ->
   ?created:string ->
-    unit -> intent_def
+  unit ->
+  intent_def
 
 val value :
   string ->
   ?metadata:json ->
   ?synonyms:string list ->
   ?created:string ->
-    unit -> entity_value
+  unit ->
+  entity_value
 
 val entity :
   string ->
@@ -60,7 +64,8 @@ val entity :
   ?open_list:bool ->
   ?values:(string * string list) list ->
   ?created:string ->
-    unit -> entity_def
+  unit ->
+  entity_def
 
 type selector = User_input | Condition | Body
 
@@ -68,13 +73,15 @@ val go_to :
   dialog_node ->
   ?return:bool ->
   selector:selector ->
-    unit -> go_to
+  unit ->
+  go_to
 
 val go_to_id :
   string ->
   ?return:bool ->
   selector:selector ->
-    unit -> go_to
+  unit ->
+  go_to
 
 val output : string -> output_def
 
@@ -91,7 +98,8 @@ val dialog_node :
   ?go_to:dialog_node * selector ->
   ?go_to_id:string * selector ->
   ?created:string ->
-    unit -> dialog_node
+  unit ->
+  dialog_node
 
 val workspace :
   string ->
@@ -107,6 +115,7 @@ val workspace :
   ?created_by:string ->
   ?modified_by:string ->
   ?workspace_id:string ->
-    unit -> workspace
+  unit ->
+  workspace
 
 val sys_number : entity_def
