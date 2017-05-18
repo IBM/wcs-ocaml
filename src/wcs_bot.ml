@@ -33,13 +33,13 @@ let user_input_default () =
 
 
 let interpret
-    ?(before=before_default)
-    ?(after=after_default)
-    (wcs_cred: credential)
+      ?(before=before_default)
+      ?(after=after_default)
+      (wcs_cred: credential)
   : (string -> message_request -> string * message_response * json option) =
   let rec interpret
-      (ws_id: string)
-      (req_msg: message_request)
+            (ws_id: string)
+            (req_msg: message_request)
     : string * message_response * json option =
     let req_msg = before req_msg in
     Log.debug "Wcs_extra"
@@ -168,13 +168,13 @@ let interpret
 
 
 let exec
-    ?(before=before_default)
-    ?(after=after_default)
-    ?(user_input=user_input_default)
-    (wcs_cred: credential)
-    (workspace_id: string)
-    (ctx_init: json)
-    (txt_init: string)
+      ?(before=before_default)
+      ?(after=after_default)
+      ?(user_input=user_input_default)
+      (wcs_cred: credential)
+      (workspace_id: string)
+      (ctx_init: json)
+      (txt_init: string)
   : json =
   let interpret =
     interpret ~before ~after wcs_cred

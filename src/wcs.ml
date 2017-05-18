@@ -215,4 +215,3 @@ let message wcs_cred workspace_id req_msg =
   let req = Wcs_j.string_of_message_request req_msg in
   let rsp = post wcs_cred method_ req in
   Wcs_j.message_response_of_string rsp
-

@@ -1,3 +1,5 @@
+JaneStreet
+
 # match_clause=INT (default=2)
 #     Indentation for clauses inside a pattern-match (after arrows).
 #
@@ -34,3 +36,10 @@ strict_with=always
 #         )
 
 max_indent = 2
+
+# strict_comments=BOOL (default=false)
+#     In-comment indentation is normally preserved, as long as it
+#     respects the left margin or the comments starts with a newline.
+#     Setting this to `true' forces alignment within comments. Lines
+#     starting with `*' are always aligned
+strict_comments = false

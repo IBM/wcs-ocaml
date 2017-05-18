@@ -29,12 +29,12 @@ let new_id =
   fun () -> incr cpt; "node_"^(string_of_int !cpt)
 
 let list_workspaces_request
-    (* ?version *)
-    ?page_limit
-    ?include_count
-    ?sort
-    ?cursor
-    ()
+      (* ?version *)
+      ?page_limit
+      ?include_count
+      ?sort
+      ?cursor
+      ()
   : list_workspaces_request =
   { (* list_ws_req_version = version; *)
     list_ws_req_page_limit = page_limit;
@@ -47,19 +47,19 @@ let get_workspace_request ?export workspace_id =
     get_ws_req_export = export; }
 
 let example
-    example
-    ?created
-    ()
+      example
+      ?created
+      ()
   : intent_example =
   { ex_text = example;
     ex_created = created; }
 
 let intent
-    intent
-    ?description
-    ?(examples=[])
-    ?created
-    ()
+      intent
+      ?description
+      ?(examples=[])
+      ?created
+      ()
   : intent_def =
   { i_def_intent = intent;
     i_def_description = description;
@@ -67,11 +67,11 @@ let intent
     i_def_created = created; }
 
 let value
-    value
-    ?metadata
-    ?(synonyms=[])
-    ?created
-    ()
+      value
+      ?metadata
+      ?(synonyms=[])
+      ?created
+      ()
   : entity_value =
   { e_value = value;
     e_metadata = metadata;
@@ -79,13 +79,13 @@ let value
     e_created = created; }
 
 let entity
-    entity
-    ?metadata
-    ?source
-    ?open_list
-    ?(values=[])
-    ?created
-    ()
+      entity
+      ?metadata
+      ?source
+      ?open_list
+      ?(values=[])
+      ?created
+      ()
   : entity_def =
   { e_def_entity = entity;
     e_def_description = metadata;
@@ -95,10 +95,10 @@ let entity
     e_def_created = created;  }
 
 let go_to
-    node
-    ?(return=false)
-    ~selector
-    ()
+      node
+      ?(return=false)
+      ~selector
+      ()
   : go_to =
   { goto_return = return;
     goto_selector = selector;
@@ -107,10 +107,10 @@ let go_to
 let mk_go_to = go_to (* alias to avoid hiding *)
 
 let go_to_id
-    node_id
-    ?(return=false)
-    ~selector
-    ()
+      node_id
+      ?(return=false)
+      ~selector
+      ()
   : go_to =
   { goto_return = return;
     goto_selector = selector;
@@ -119,27 +119,27 @@ let go_to_id
 let mk_go_to_id = go_to_id (* alias to avoid hiding *)
 
 let output (* XX TODO : handle multiple outputs *)
-    text
+      text
   : output_def =
   (`Assoc [ "text", `String text ])
 
 let mk_output = output (* alias to avoid hiding *)
 
 let dialog_node
-    dialog_node
-    ?description
-    ?type_
-    ?(conditions="true")
-    ?parent
-    ?previous_sibling
-    ?text
-    ?output
-    ?context
-    ?metadata
-    ?go_to
-    ?go_to_id
-    ?created
-    ()
+      dialog_node
+      ?description
+      ?type_
+      ?(conditions="true")
+      ?parent
+      ?previous_sibling
+      ?text
+      ?output
+      ?context
+      ?metadata
+      ?go_to
+      ?go_to_id
+      ?created
+      ()
   : dialog_node =
   let parent_id =
     omap (fun node -> node.node_dialog_node) parent
@@ -226,20 +226,20 @@ let fix_links nodes =
     nodes
 
 let workspace
-    name
-    ?description
-    ?language
-    ?metadata
-    ?(counterexamples=[])
-    ?(dialog_nodes=[])
-    ?(entities=[])
-    ?(intents=[])
-    ?created
-    ?modified
-    ?created_by
-    ?modified_by
-    ?workspace_id
-    ()
+      name
+      ?description
+      ?language
+      ?metadata
+      ?(counterexamples=[])
+      ?(dialog_nodes=[])
+      ?(entities=[])
+      ?(intents=[])
+      ?created
+      ?modified
+      ?created_by
+      ?modified_by
+      ?workspace_id
+      ()
   : workspace =
   let counterexamples =
     List.map (fun s -> example s ()) counterexamples
