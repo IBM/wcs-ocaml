@@ -16,7 +16,7 @@ package manager (https://opam.ocaml.org). Once opam is installed, you
 can just add the corresponding libraries:
 ```
 opam install ocamlfind ocamlbuild atdgen
-opam install lwt ssl cohttp
+opam install lwt ssl tls cohttp
 ```
 
 ### Compiling
