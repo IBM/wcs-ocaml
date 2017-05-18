@@ -152,6 +152,14 @@ type dialog_node_type = [
 ] <ocaml repr="classic">
 <doc text="Dialog node type.">
 
+type dialog_node_event_name = [
+  | Evt_focus <json name="focus">
+  | Evt_input <json name="input">
+  | Evt_nomatch <json name="nomatch">
+  | Evt_filled <json name="filled">
+  | Evt_generic <json name="generic">
+]
+
 type dialog_node = {
     dialog_node : string;
     ?type_ <json name="type"> : dialog_node_type nullable;
@@ -165,6 +173,8 @@ type dialog_node = {
     ?go_to : go_to nullable;
     ?child_input_kind : string nullable;
     ?created : string nullable;
+    ?event_name : dialog_node_event_name nullable;
+    ?variable : string nullable;
   } <ocaml field_prefix="node_">
 <doc text="Type of dialog nodes.">
 

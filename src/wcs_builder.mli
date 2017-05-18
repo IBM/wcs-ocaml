@@ -96,6 +96,8 @@ val dialog_node :
   ?go_to:dialog_node * selector ->
   ?go_to_id:string * selector ->
   ?created:string ->
+  ?event_name: dialog_node_event_name ->
+  ?variable: string ->
   unit ->
   dialog_node
 

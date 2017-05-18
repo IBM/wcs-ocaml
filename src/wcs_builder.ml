@@ -139,6 +139,8 @@ let dialog_node
       ?go_to
       ?go_to_id
       ?created
+      ?event_name
+      ?variable
       ()
   : dialog_node =
   let parent_id =
@@ -180,7 +182,9 @@ let dialog_node
     node_metadata = metadata;
     node_go_to = go_to;
     node_created = created;
-    node_child_input_kind = None; }
+    node_child_input_kind = None;
+    node_event_name = event_name;
+    node_variable = variable; }
 
 let response_condition ~parent =
   dialog_node (new_id ())
@@ -188,6 +192,8 @@ let response_condition ~parent =
     ~parent:parent
     ?go_to: None (* Not yet implemented*)
     ?go_to_id: None (* Not yet implemented*)
+    ?event_name: None
+    ?variable: None
 
 let fix_links nodes =
   let parent_child_tbl = Hashtbl.create 7 in
