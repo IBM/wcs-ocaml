@@ -34,7 +34,6 @@ val get_workspace_request :
   string ->
   get_workspace_request
 
-
 val example :
   string ->
   ?created:string ->
@@ -67,8 +66,6 @@ val entity :
   unit ->
   entity_def
 
-type selector = User_input | Condition | Body
-
 val go_to :
   dialog_node ->
   ?return:bool ->
@@ -85,12 +82,10 @@ val go_to_id :
 
 val output : string -> output_def
 
-type node_type = Response_condition
-
 val dialog_node :
   string ->
   ?description:string ->
-  ?type_: node_type ->
+  ?type_: dialog_node_type ->
   ?conditions:string ->
   ?parent:dialog_node ->
   ?previous_sibling:dialog_node ->
@@ -114,7 +109,7 @@ val response_condition :
   ?context:json ->
   ?metadata:json ->
   ?created:string ->
-     unit -> dialog_node
+  unit -> dialog_node
 
 val workspace :
   string ->

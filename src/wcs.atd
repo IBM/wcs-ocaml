@@ -59,6 +59,7 @@ type sort_criteria = [
   ] (* <ocaml repr="classic"> *)
 <doc text="Sorting criteria for list of workspaces.">
 
+
 type workspace_response = {
     name : string nullable;
     description : string nullable;
@@ -126,9 +127,16 @@ type entity_def = {
   } <ocaml field_prefix="e_def_">
 <doc text="Type of entity definitions.">
 
+type selector = [
+  | User_input <json name="user_input">
+  | Condition <json name="condition">
+  | Body <json name="body">
+] <ocaml repr="classic">
+<doc text="Goto selector.">
+
 type go_to = {
     ~return <ocaml default="false"> : bool;
-    selector : string;
+    selector : selector;
     dialog_node : string;
   } <ocaml field_prefix="goto_">
 <doc text="Type of goto definitions.">
@@ -136,9 +144,14 @@ type go_to = {
 type output_def = json
 <doc text="Type of outputs of a dialog node.">
 
+type dialog_node_type = [
+  | Response_condition <json name="response_condition">
+] <ocaml repr="classic">
+<doc text="Dialog node type.">
+
 type dialog_node = {
     dialog_node : string;
-    ?type_ <json name="type"> : string nullable;
+    ?type_ <json name="type"> : dialog_node_type nullable;
     ?description : string nullable;
     ?conditions : string nullable;
     ?parent : string nullable;

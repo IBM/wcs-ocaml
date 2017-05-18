@@ -24,7 +24,7 @@ let omap f o =
   | Some x -> Some (f x)
   end
 
-let new_id = 
+let new_id =
   let cpt = ref 0 in
   fun () -> incr cpt; "node_"^(string_of_int !cpt)
 
@@ -94,18 +94,6 @@ let entity
     e_def_values = List.map (fun (v, syn) -> value v ~synonyms:syn ()) values;
     e_def_created = created;  }
 
-type selector =
-  | User_input
-  | Condition
-  | Body
-
-let string_of_selector selector =
-  begin match selector with
-  | User_input -> "user_input"
-  | Condition -> "condition"
-  | Body -> "body"
-  end
-
 let go_to
     node
     ?(return=false)
@@ -113,7 +101,7 @@ let go_to
     ()
   : go_to =
   { goto_return = return;
-    goto_selector = string_of_selector selector;
+    goto_selector = selector;
     goto_dialog_node = node.node_dialog_node; }
 
 let mk_go_to = go_to (* alias to avoid hiding *)
@@ -125,7 +113,7 @@ let go_to_id
     ()
   : go_to =
   { goto_return = return;
-    goto_selector = string_of_selector selector;
+    goto_selector = selector;
     goto_dialog_node = node_id; }
 
 let mk_go_to_id = go_to_id (* alias to avoid hiding *)
@@ -136,13 +124,6 @@ let output (* XX TODO : handle multiple outputs *)
   (`Assoc [ "text", `String text ])
 
 let mk_output = output (* alias to avoid hiding *)
-
-type node_type = Response_condition
-
-let string_of_node_type t = 
-  begin match t with
-  | Response_condition -> "response_condition"
-  end 
 
 let dialog_node
     dialog_node
@@ -160,12 +141,6 @@ let dialog_node
     ?created
     ()
   : dialog_node =
-  let node_type =
-    begin match type_ with
-    | None -> None
-    | Some t -> Some (string_of_node_type t)
-    end 
-  in
   let parent_id =
     omap (fun node -> node.node_dialog_node) parent
   in
@@ -196,7 +171,7 @@ let dialog_node
   in
   { node_dialog_node = dialog_node;
     node_description = description;
-    node_type_ = node_type;
+    node_type_ = type_;
     node_conditions = Some conditions;
     node_parent = parent_id;
     node_previous_sibling = previous_sibling_id;
@@ -213,8 +188,6 @@ let response_condition ~parent =
     ~parent:parent
     ?go_to: None (* Not yet implemented*)
     ?go_to_id: None (* Not yet implemented*)
-
-
 
 let fix_links nodes =
   let parent_child_tbl = Hashtbl.create 7 in
@@ -251,7 +224,6 @@ let fix_links nodes =
        Hashtbl.add node_tbl node.node_dialog_node node;
        node)
     nodes
-
 
 let workspace
     name
