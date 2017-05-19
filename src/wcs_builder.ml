@@ -272,12 +272,60 @@ let sys_number : entity_def =
 
 (** {6 Tree modifications} *)
 
-let add_node
-      (dialog_nodes: dialog_node list)
-      (n: dialog_node)
-      (parent: dialog_node option)
-      (previous_sibling: dialog_node option)
-  : dialog_node list
-  =
-  assert false (* XXX TODO XXX *)
+let get_root tree
+  : dialog_node option =
+  begin try
+    Some
+      (List.find
+         (fun x -> (x.node_parent == None) && (x.node_previous_sibling == None))
+         tree)
+  with Not_found ->
+    None
+  end
 
+let extract_root tree
+  : dialog_node * dialog_node list =
+  let root = get_root tree in
+  match root with
+  | None ->
+      Log.error "Wcs_builder" None
+        "extract_root: No root found in tree"
+  | Some root ->
+      let rl, nl = List.partition (fun x -> (x = root)) tree in
+      match rl with
+      | [r] -> r, nl
+      | rh::rt ->
+          Log.error "Wcs_builder" (Some (rh, nl))
+            "extract_root: found more than one root in tree"
+      | _ -> assert false
+
+let  get_name  =
+  omap (fun x -> x.node_dialog_node)
+
+let add_node
+      dialog_nodes
+      dialog_node
+      parent
+      previous_sibling
+  : dialog_node list =
+  let node =
+    { dialog_node with
+      node_parent = get_name parent;
+      node_previous_sibling = get_name previous_sibling; }
+  in
+  List.fold_left
+    (fun a n ->
+       if n.node_previous_sibling = get_name previous_sibling
+       then { n with node_previous_sibling = Some node.node_dialog_node; } :: a
+       else n :: a)
+    [node]
+    dialog_nodes
+
+let add_tree
+      dialog_nodes
+      tree
+      parent
+      previous_sibling
+  : dialog_node list =
+  let r, nl = extract_root tree in
+  (add_node dialog_nodes r parent previous_sibling) @ nl
