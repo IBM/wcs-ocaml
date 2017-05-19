@@ -51,4 +51,4 @@ type node = {
 
 (** Type of dialog trees. *)
 type dialog =
-  | D of node * dialog list
+  | D of (node * dialog) list

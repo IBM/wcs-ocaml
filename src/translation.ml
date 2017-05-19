@@ -65,26 +65,21 @@ let dialog_node_of_node (n : node) : dialog_node list =
   in
   root :: children
 
-let get_root tree =
-  List.find
-    (fun dn -> dn.node_parent == None && dn.node_previous_sibling == None)
-    tree
-
 let dialog_nodes_of_dialog (d: dialog) : dialog_node list =
   let rec compile d =
     begin match d with
-    | D (n, children) ->
-        let dialog_nodes =
-          List.fold_right
-            (fun n_child acc ->
-               let dn_child_tree = compile n_child in
-               let dn_child = get_root dn_child_tree in
-               Wcs_builder.add_tree dn_child_tree acc None (Some dn_child))
-            children []
-        in
-        let dn_tree = dialog_node_of_node n in
-        let root = get_root dn_tree in
-        Wcs_builder.add_tree dn_tree dialog_nodes (Some root) None
+    | D [] -> []
+    | D l ->
+        List.fold_right
+          (fun (n, d) acc ->
+             let children = compile d in
+             let dn_tree = dialog_node_of_node n in
+             let root = Wcs_builder.get_root dn_tree in
+             let dn_tree =
+               Wcs_builder.add_tree dn_tree children root None
+             in
+             Wcs_builder.add_tree dn_tree acc None root)
+          l []
     end
   in
   compile d

@@ -147,3 +147,10 @@ val add_tree:
     there was already a node at this postion, it becomes the last
     sibling of the root of [subtree].
 *)
+
+(** {Tree access} *)
+
+val get_root : dialog_node list -> dialog_node option
+(** [get_root tree] return the root of the dialog tree [tree]. It
+    returns [None] if the tree is empty.
+*)
