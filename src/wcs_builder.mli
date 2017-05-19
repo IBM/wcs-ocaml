@@ -147,3 +147,14 @@ val add_node:
     [previous_sibling] in [dialog_nodes] becomes the next sibling of
     [n].
 *)
+
+val add_tree:
+      dialog_node list ->
+      (dialog_node * dialog_node list) ->
+      dialog_node option ->
+      dialog_node option ->
+      dialog_node list
+(** [add_tree dialog_nodes tree parent previous_sibling] add the tree [tree] in
+    the dialog [dialog_nodes] with the parent [parent] and previous
+    sibling [previous_sibling].
+*)
