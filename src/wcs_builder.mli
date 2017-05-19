@@ -135,26 +135,15 @@ val sys_number : entity_def
 
 (** {6 Tree modification} *)
 
-val add_node:
-      dialog_node list ->
-      dialog_node ->
-      dialog_node option ->
-      dialog_node option ->
-      dialog_node list
-(** [add_node dialog_nodes n parent previous_sibling] add node [n] in
-    the dialog [dialog_nodes] with the parent [parent] and previous
-    sibling [previous_sibling]. The existing next sibling of
-    [previous_sibling] in [dialog_nodes] becomes the next sibling of
-    [n].
-*)
-
 val add_tree:
       dialog_node list ->
-      (dialog_node * dialog_node list) ->
+      dialog_node list ->
       dialog_node option ->
       dialog_node option ->
       dialog_node list
-(** [add_tree dialog_nodes tree parent previous_sibling] add the tree [tree] in
-    the dialog [dialog_nodes] with the parent [parent] and previous
-    sibling [previous_sibling].
+(** [add_tree tree subtree parent previous_sibling] add the tree
+    [subtree] in the dialog [tree]. The root of [subtree] is attached
+    at the position defined with [parent] and [previous_sibling]. If
+    there was already a node at this postion, it becomes the last
+    sibling of the root of [subtree].
 *)
