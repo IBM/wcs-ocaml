@@ -285,21 +285,21 @@ let get_root tree
 
 let extract_root tree
   : dialog_node * dialog_node list =
-  let root = get_root tree in
-  match root with
+  begin match get_root tree with
   | None ->
       Log.error "Wcs_builder" None
         "extract_root: No root found in tree"
   | Some root ->
-      let rl, nl = List.partition (fun x -> (x = root)) tree in
-      match rl with
+      let rl, nl = List.partition (fun x -> x = root) tree in
+      begin match rl with
       | [r] -> r, nl
       | rh::rt ->
           Log.error "Wcs_builder" (Some (rh, nl))
             "extract_root: found more than one root in tree"
       | _ -> assert false
-
-let  get_name  =
+      end
+  end
+let get_name  =
   omap (fun x -> x.node_dialog_node)
 
 let add_node
@@ -314,11 +314,13 @@ let add_node
       node_previous_sibling = get_name previous_sibling; }
   in
   List.fold_left
-    (fun a n ->
+    (fun acc n ->
        if n.node_previous_sibling = get_name previous_sibling
-       then { n with node_previous_sibling = Some node.node_dialog_node; } :: a
-       else n :: a)
-    [node]
+       then
+         { n with node_previous_sibling = Some node.node_dialog_node; } :: acc
+       else
+         n :: acc)
+    [ node ]
     dialog_nodes
 
 let add_tree
