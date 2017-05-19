@@ -268,3 +268,16 @@ let sys_number : entity_def =
   entity "sys-number"
     ~source: "system.entities"
     ()
+
+
+(** {6 Tree modifications} *)
+
+let add_node
+      (dialog_nodes: dialog_node list)
+      (n: dialog_node)
+      (parent: dialog_node)
+      (previous_sibling: dialog_node)
+
+  =
+  assert false (* XXX TODO XXX *)
+

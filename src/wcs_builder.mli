@@ -131,3 +131,16 @@ val workspace :
   workspace
 
 val sys_number : entity_def
+
+
+(** {6 Tree modification} *)
+
+val add_node:
+      dialog_node list ->
+      dialog_node ->
+      dialog_node ->
+      dialog_node ->
+      dialog_node list
+(**
+   [add_node dialog_nodes n parent previous_sibling]
+*)
