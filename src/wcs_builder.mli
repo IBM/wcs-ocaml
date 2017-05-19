@@ -138,8 +138,8 @@ val sys_number : entity_def
 val add_node:
       dialog_node list ->
       dialog_node ->
-      dialog_node ->
-      dialog_node ->
+      dialog_node option ->
+      dialog_node option ->
       dialog_node list
 (** [add_node dialog_nodes n parent previous_sibling] add node [n] in
     the dialog [dialog_nodes] with the parent [parent] and previous
