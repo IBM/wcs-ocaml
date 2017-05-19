@@ -277,28 +277,12 @@ let get_root tree
   begin try
     Some
       (List.find
-         (fun x -> (x.node_parent == None) && (x.node_previous_sibling == None))
+         (fun x -> x.node_parent == None && x.node_previous_sibling == None)
          tree)
   with Not_found ->
     None
   end
 
-let extract_root tree
-  : dialog_node * dialog_node list =
-  begin match get_root tree with
-  | None ->
-      Log.error "Wcs_builder" None
-        "extract_root: No root found in tree"
-  | Some root ->
-      let rl, nl = List.partition (fun x -> x = root) tree in
-      begin match rl with
-      | [r] -> r, nl
-      | rh::rt ->
-          Log.error "Wcs_builder" (Some (rh, nl))
-            "extract_root: found more than one root in tree"
-      | _ -> assert false
-      end
-  end
 let get_name  =
   omap (fun x -> x.node_dialog_node)
 
@@ -313,15 +297,31 @@ let add_node
       node_parent = get_name parent;
       node_previous_sibling = get_name previous_sibling; }
   in
-  List.fold_left
-    (fun acc n ->
-       if n.node_previous_sibling = get_name previous_sibling
-       then
-         { n with node_previous_sibling = Some node.node_dialog_node; } :: acc
-       else
-         n :: acc)
-    [ node ]
-    dialog_nodes
+  let dialog_nodes =
+    List.map
+      (fun n ->
+         if n.node_previous_sibling = get_name previous_sibling
+         then
+           { n with node_previous_sibling = Some node.node_dialog_node; }
+         else n)
+      dialog_nodes
+  in
+  node :: dialog_nodes
+
+let last_root_sibling dialog_nodes =
+  begin try
+    Some
+      (List.find
+         (fun x ->
+            x.node_parent == None
+            && not (List.exists
+                      (fun y ->
+                         (Some x.node_dialog_node = y.node_previous_sibling))
+                      dialog_nodes))
+         dialog_nodes)
+  with Not_found ->
+    None
+  end
 
 let add_tree
       dialog_nodes
@@ -329,11 +329,25 @@ let add_tree
       parent
       previous_sibling
   : dialog_node list =
-  let r, nl = extract_root tree in
-  (add_node dialog_nodes r parent previous_sibling) @
-  List.map
-    (fun x ->
-       if x.node_parent = None then
-         {x with node_parent = get_name parent; }
-       else
-         x) nl
+  let last = last_root_sibling tree in
+  let dialog_nodes =
+    List.map
+      (fun n ->
+         if n.node_previous_sibling = get_name previous_sibling
+         then { n with node_previous_sibling = get_name last; }
+         else n)
+      dialog_nodes in
+  let tree =
+    List.map
+      (fun n ->
+         begin match n.node_parent, n.node_previous_sibling with
+         | None, None ->
+             {n with node_parent = get_name parent;
+                     node_previous_sibling = get_name previous_sibling;}
+         | None, Some _ ->
+             {n with node_parent = get_name parent; }
+         | _ -> n
+         end)
+      tree
+  in
+  dialog_nodes @ tree
