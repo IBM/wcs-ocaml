@@ -308,32 +308,14 @@ let add_node
   in
   node :: dialog_nodes
 
-let last_root_sibling dialog_nodes =
-  begin try
-    Some
-      (List.find
-         (fun x ->
-            let x_is_previous_sibling =
-              List.exists
-                (fun y -> Some x.node_dialog_node = y.node_previous_sibling)
-                dialog_nodes
-            in
-            x.node_parent == None && not x_is_previous_sibling)
-         dialog_nodes)
-  with Not_found ->
-    None
-  end
-
-(* OR *)
-
-let last_root_sibling dialog_nodes =
+let last_sibling dialog_node dialog_nodes =
   let is_last_sibling x =
     let x_is_previous_sibling =
       List.exists
         (fun y -> Some x.node_dialog_node = y.node_previous_sibling)
         dialog_nodes
     in
-    x.node_parent == None && not x_is_previous_sibling
+    x.node_parent == dialog_node.node_parent && not x_is_previous_sibling
   in
   begin try
     Some (List.find is_last_sibling dialog_nodes)
@@ -341,14 +323,22 @@ let last_root_sibling dialog_nodes =
     None
   end
 
-
 let add_tree
       dialog_nodes
       tree
       parent
       previous_sibling
   : dialog_node list =
-  let last = last_root_sibling tree in
+  let root =
+    begin match get_root tree with
+    | Some root -> root
+    | None ->
+        Log.error "Ws_builder"
+          None
+          "add_tree: tree has no root"
+    end
+  in
+  let last = last_sibling root tree in
   let dialog_nodes =
     List.map
       (fun n ->
