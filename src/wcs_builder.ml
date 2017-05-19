@@ -275,9 +275,9 @@ let sys_number : entity_def =
 let add_node
       (dialog_nodes: dialog_node list)
       (n: dialog_node)
-      (parent: dialog_node)
-      (previous_sibling: dialog_node)
-
+      (parent: dialog_node option)
+      (previous_sibling: dialog_node option)
+  : dialog_node list
   =
   assert false (* XXX TODO XXX *)
 
