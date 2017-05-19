@@ -313,15 +313,34 @@ let last_root_sibling dialog_nodes =
     Some
       (List.find
          (fun x ->
-            x.node_parent == None
-            && not (List.exists
-                      (fun y ->
-                         (Some x.node_dialog_node = y.node_previous_sibling))
-                      dialog_nodes))
+            let x_is_previous_sibling =
+              List.exists
+                (fun y -> Some x.node_dialog_node = y.node_previous_sibling)
+                dialog_nodes
+            in
+            x.node_parent == None && not x_is_previous_sibling)
          dialog_nodes)
   with Not_found ->
     None
   end
+
+(* OR *)
+
+let last_root_sibling dialog_nodes =
+  let is_last_sibling x =
+    let x_is_previous_sibling =
+      List.exists
+        (fun y -> Some x.node_dialog_node = y.node_previous_sibling)
+        dialog_nodes
+    in
+    x.node_parent == None && not x_is_previous_sibling
+  in
+  begin try
+    Some (List.find is_last_sibling dialog_nodes)
+  with Not_found ->
+    None
+  end
+
 
 let add_tree
       dialog_nodes
@@ -336,7 +355,8 @@ let add_tree
          if n.node_previous_sibling = get_name previous_sibling
          then { n with node_previous_sibling = get_name last; }
          else n)
-      dialog_nodes in
+      dialog_nodes
+  in
   let tree =
     List.map
       (fun n ->
