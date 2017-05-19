@@ -330,4 +330,5 @@ let add_tree
       previous_sibling
   : dialog_node list =
   let r, nl = extract_root tree in
-  (add_node dialog_nodes r parent previous_sibling) @ nl
+  (add_node dialog_nodes r parent previous_sibling) @
+  List.map (fun x -> if x.node_parent = None then {x with node_parent = get_name parent; } else x) nl
