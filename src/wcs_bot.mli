@@ -43,6 +43,7 @@ val exec :
   ?before:(message_request -> message_request) ->
   ?after:(message_response -> message_response) ->
   ?user_input:(unit -> string) ->
+  ?output:(string -> unit) ->
   credential ->
   string -> json -> string -> json
 (**

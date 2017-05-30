@@ -31,6 +31,9 @@ let user_input_default () =
   print_string "H: "; flush stdout;
   input_line stdin
 
+let output_default txt =
+  print_string "C: "; print_endline txt
+
 
 let interpret
       ?(before=before_default)
@@ -52,9 +55,6 @@ let interpret
       ("Response:\n"^
        (Wcs_json.pretty_message_response resp));
     let resp = after resp in
-    List.iter
-      (fun txt -> print_string "C: "; print_endline txt)
-      resp.msg_rsp_output.out_text;
     let ctx = resp.msg_rsp_context in
     begin match Json.take_actions ctx with
     | ctx, Some [ act ] ->
@@ -166,11 +166,11 @@ let interpret
   in
   interpret
 
-
 let exec
       ?(before=before_default)
       ?(after=after_default)
       ?(user_input=user_input_default)
+      ?(output=output_default)
       (wcs_cred: credential)
       (workspace_id: string)
       (ctx_init: json)
@@ -189,6 +189,7 @@ let exec
         msg_req_output = None; }
     in
     let ws_id, rsp, return = interpret ws_id req in
+      List.iter output rsp.msg_rsp_output.out_text;
     begin match return with
     | Some v -> v
     | None ->

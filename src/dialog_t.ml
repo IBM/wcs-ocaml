@@ -18,14 +18,14 @@
 
 open Wcs_t
 
-(** Tyoe of a condtional response *)
+(** Type of a condtional response *)
 type response = {
   r_conditions : string option;
   r_output : output_def option;
   r_context : json option;
 }
 
-(** Tyoe of a slot *)
+(** Type of a slot *)
 type slot = {
   s_prompt : output_def;
   s_conditions : string;
