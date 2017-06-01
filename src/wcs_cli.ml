@@ -42,7 +42,8 @@ let set_list_include_count b =
 let list_sort = ref None
 let set_list_sort s =
   list_sort :=
-    Some (Wcs_j.sort_criteria_of_string (Yojson.Basic.to_string (`String s)))
+    Some (Wcs_j.sort_workspace_criteria_of_string
+            (Yojson.Basic.to_string (`String s)))
 
 let list_cursor = ref None
 let set_list_cursor s =

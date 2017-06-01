@@ -23,7 +23,7 @@
    Based on the documentation available at:
    https://www.ibm.com/watson/developercloud/conversation/api/v1/
 
-   Version 2017-04-21.
+   Version 2017-05-26.
 ">
 
 type json <ocaml module="Json_t"> = abstract
@@ -40,7 +40,7 @@ type credential = {
 <doc text="Watson Conversation Service credentials.">
 
 type version = [
-  | V_2017_04_21
+  | V_2017_05_26
   ] (* <ocaml repr="classic"> *)
 <doc text="Supported versions">
 
@@ -49,11 +49,11 @@ type version = [
 
 (** {8 List workspaces} *)
 
-type sort_criteria = [
+type sort_workspace_criteria = [
   | Sort_name_incr <json name="name">
   | Sort_modified_incr <json name="modified">
   | Sort_workspace_id_incr <json name="workspace_id">
-  | Sort_name_incr_decr <json name="-name">
+  | Sort_name_decr <json name="-name">
   | Sort_modified_decr <json name="-modified">
   | Sort_workspace_id_decr <json name="-workspace_id">
   ] (* <ocaml repr="classic"> *)
@@ -80,10 +80,10 @@ type pagination_response = {
 <doc text="Pagination information">
 
 type list_workspaces_request = {
-    (* ~version <ocaml default="`V_2017_04_21"> : version; *)
+    (* ~version <ocaml default="`V_2017_05_26"> : version; *)
     ?page_limit : int nullable;
     ?include_count : bool nullable;
-    ?sort : sort_criteria nullable;
+    ?sort : sort_workspace_criteria nullable;
     ?cursor : string nullable;
   } <ocaml field_prefix="list_ws_req_">
 <doc text="Request the list of workspaces.">

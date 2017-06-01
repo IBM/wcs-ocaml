@@ -24,7 +24,7 @@ open Wcs_t
 val list_workspaces_request :
   ?page_limit:int ->
   ?include_count:bool ->
-  ?sort:sort_criteria ->
+  ?sort:sort_workspace_criteria ->
   ?cursor:string ->
   unit ->
   list_workspaces_request
