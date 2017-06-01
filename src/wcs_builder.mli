@@ -130,6 +130,16 @@ val workspace :
   unit ->
   workspace
 
+
+val logs_request :
+  ?filter: string ->
+  ?sort:sort_logs_criteria ->
+  ?page_limit:int ->
+  ?cursor:string ->
+  unit ->
+  logs_request
+
+
 val sys_number : entity_def
 
 

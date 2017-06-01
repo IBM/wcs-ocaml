@@ -267,3 +267,33 @@ type action = {
     ~parameters <ocaml default="`Null"> : json;
     ?result_variable : string nullable;
   } <ocaml field_prefix="act_">
+
+
+(** {6 Logs} *)
+
+type sort_logs_criteria = [
+  | Sort_request_timestamp_incr <json name="request_timestamp">
+  | Sort_request_timestamp_decr <json name="-name">
+  ] (* <ocaml repr="classic"> *)
+<doc text="Sorting criteria for logs.">
+
+type log_entry = {
+    request : message_request;
+    response : message_response;
+    log_id : string;
+    request_timestamp : string;
+    response_timestamp : string;
+  } <ocaml field_prefix="log_">
+
+type logs_request = {
+    ?filter : string nullable;
+    ?sort : sort_logs_criteria nullable;
+    ?page_limit : int nullable;
+    ?cursor : string nullable;
+  } <ocaml field_prefix="logs_">
+<doc text="Request for the list the events from the log of a workspace.">
+
+type logs_response = {
+    logs : log_entry list;
+    pagination : pagination_response;
+  } <ocaml field_prefix="logs_rsp_">

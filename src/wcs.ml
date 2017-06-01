@@ -215,3 +215,14 @@ let message wcs_cred workspace_id req_msg =
   let req = Wcs_j.string_of_message_request req_msg in
   let rsp = post wcs_cred method_ req in
   Wcs_j.message_response_of_string rsp
+
+
+(** {6 Logs} *)
+
+let logs wcs_cred workspace_id req =
+  let method_ = "/v1/workspaces/"^workspace_id^"/logs" in
+  let params =
+    parameters_of_json (Wcs_json.json_of_logs_request req)
+  in
+  let rsp = get wcs_cred method_ params in
+  Wcs_j.logs_response_of_string rsp

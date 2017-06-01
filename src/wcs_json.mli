@@ -151,3 +151,22 @@ val pretty_create_response : create_response -> string
 val json_of_get_workspace_request : get_workspace_request -> json
 
 val pretty_get_workspace_request : get_workspace_request -> string
+
+
+(** {6 log_entry} *)
+
+val json_of_log_entry : log_entry -> json
+
+val pretty_log_entry : log_entry -> string
+
+(** {6 logs_request} *)
+
+val json_of_logs_request : logs_request -> json
+
+val pretty_logs_request : logs_request -> string
+
+(** {6 logs_response} *)
+
+val json_of_logs_response : logs_response -> json
+
+val pretty_logs_response : logs_response -> string

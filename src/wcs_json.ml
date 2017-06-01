@@ -198,3 +198,29 @@ let pretty_get_workspace_request x =
 (* let pretty_action x = *)
 (*   Yojson.Basic.pretty_to_string (json_of_action x) *)
 
+(** {6 log_entry} *)
+
+let json_of_log_entry x =
+  Yojson.Basic.from_string (Wcs_j.string_of_log_entry x)
+
+let pretty_log_entry x =
+  Yojson.Basic.pretty_to_string (json_of_log_entry x)
+
+
+(** {6 logs_request} *)
+
+let json_of_logs_request x =
+  Yojson.Basic.from_string (Wcs_j.string_of_logs_request x)
+
+let pretty_logs_request x =
+  Yojson.Basic.pretty_to_string (json_of_logs_request x)
+
+
+(** {6 logs_response} *)
+
+let json_of_logs_response x =
+  Yojson.Basic.from_string (Wcs_j.string_of_logs_response x)
+
+let pretty_logs_response x =
+  Yojson.Basic.pretty_to_string (json_of_logs_response x)
+

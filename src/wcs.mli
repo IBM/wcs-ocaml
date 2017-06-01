@@ -83,3 +83,9 @@ val message : credential ->
    Get a response to a user's input.
    [https://www.ibm.com/watson/developercloud/conversation/api/v1/#send_message]
 *)
+
+
+(** {6 Logs} *)
+
+val logs : credential ->
+  string -> logs_request -> logs_response

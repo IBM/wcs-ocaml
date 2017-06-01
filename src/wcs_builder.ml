@@ -264,6 +264,22 @@ let workspace
     ws_modified_by = modified_by;
     ws_workspace_id = workspace_id; }
 
+
+let logs_request
+      (* ?version *)
+      ?filter
+      ?sort
+      ?page_limit
+      ?cursor
+      ()
+  : logs_request =
+  { logs_filter = filter;
+    logs_sort = sort;
+    logs_page_limit = page_limit;
+    logs_cursor = cursor; }
+
+
+
 let sys_number : entity_def =
   entity "sys-number"
     ~source: "system.entities"

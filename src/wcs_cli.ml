@@ -25,6 +25,7 @@ type command =
   | Cmd_delete
   | Cmd_get
   | Cmd_update
+  | Cmd_logs
   | Cmd_try
 
 let cmd_name = Sys.argv.(0)
@@ -245,6 +246,78 @@ let update wcs_cred =
   end
 
 
+(** {6. The [logs] command} *)
+
+let logs_ws_id = ref None
+
+let logs_filter = ref None
+let set_logs_filter b =
+  logs_filter := Some b
+
+let logs_sort = ref None
+let set_logs_sort s =
+  logs_sort :=
+    Some (Wcs_j.sort_logs_criteria_of_string
+            (Yojson.Basic.to_string (`String s)))
+
+let logs_page_limit = ref None
+let set_logs_page_limit n =
+  logs_page_limit := Some n
+
+let logs_cursor = ref None
+let set_logs_cursor s =
+  logs_cursor := Some s
+
+let logs_speclist =
+  [ "-filter", Arg.String set_logs_filter,
+    "s A cacheable parameter that limits the results to those matching the specified filter.";
+    "-page_limit", Arg.Int set_logs_page_limit,
+    "n The number of records to return in each page of results.";
+    "-sort", Arg.String set_logs_sort,
+    "attr The attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). Supported values are name, modified, and workspace_id.";
+    "-cursor", Arg.String set_logs_cursor,
+    "token A token identifying the last value from the previous page of results.";
+  ]
+
+let logs_anon_args =
+  let cpt = ref 0 in
+  begin fun s ->
+    incr cpt;
+    begin match !cpt with
+    | 1 -> logs_ws_id := Some s
+    | _ -> Log.warning "Wcs_cli" ("ignored argument: " ^ s)
+    end
+  end
+
+
+let logs_usage =
+  "Usage:\n"^
+  "  "^cmd_name^" logs [options]"^"\n"^
+  "Options:"
+
+let logs wcs_cred =
+  begin match !logs_ws_id with
+  | Some id ->
+      let req =
+        Wcs_builder.logs_request
+          ?filter:!logs_filter
+          ?sort:!logs_sort
+          ?page_limit:!logs_page_limit
+          ?cursor:!logs_cursor
+          ()
+      in
+      let rsp = Wcs.logs wcs_cred id req in
+      Format.printf "%s@." (Wcs_json.pretty_logs_response rsp)
+  | _ ->
+      let usage =
+        Format.sprintf "%s logs: workspace id required"
+          cmd_name
+      in
+      Log.error "Wcs_cli" (Some ())
+        (Arg.usage_string update_speclist usage)
+  end
+
+
 (** {6. The [try] command} *)
 
 let try_context = ref `Null
@@ -373,6 +446,12 @@ let set_command cmd =
         (Arg.align (update_speclist @ speclist))
         update_anon_args
         update_usage
+  | "logs" ->
+      command := Cmd_logs;
+      Arg.parse_argv Sys.argv
+        (Arg.align (logs_speclist @ speclist))
+        logs_anon_args
+        logs_usage
   | "try" ->
       command := Cmd_try;
       Arg.parse_argv Sys.argv
@@ -398,7 +477,7 @@ let anon_args s =
 
 let usage =
   "Usage:\n"^
-  "  "^cmd_name^" ((list | ls) | create | (delete | rm) | get | update | try) [options]\n"^
+  "  "^cmd_name^" ((list | ls) | create | (delete | rm) | get | update | logs | try) [options]\n"^
   "\n"^
   "Available Commands:\n"^
   "  list    List the workspaces associated with a Conversation service instance.\n"^
@@ -406,6 +485,7 @@ let usage =
   "  delete  Delete workspaces from the Conversation service instance.\n"^
   "  get     Get information about workspaces, optionally including all workspace contents.\n"^
   "  update  Update an existing workspace with new or modified data.\n"^
+  "  logs    List the events from the log of a workspace.\n"^
   "  try     Generic bot running in the terminal.\n"^
   "\n"^
   "Options:"
@@ -438,6 +518,7 @@ let main () =
   | Cmd_delete -> delete wcs_cred
   | Cmd_get -> get wcs_cred
   | Cmd_update -> update wcs_cred
+  | Cmd_logs -> logs wcs_cred
   | Cmd_try -> try_ wcs_cred
   end;
   ()
