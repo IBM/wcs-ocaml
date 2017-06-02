@@ -47,6 +47,7 @@ type node = {
   n_metadata : json option;
   n_go_to : go_to option;
   n_created : string option;
+  n_updated : string option;
 }
 
 (** Type of dialog trees. *)

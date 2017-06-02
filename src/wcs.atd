@@ -97,6 +97,7 @@ type list_workspaces_response = {
 type intent_example = {
     text : string;
     ?created : string nullable;
+    ?updated : string nullable;
   } <ocaml field_prefix="ex_">
 <doc text="Type of intent examples.">
 
@@ -105,6 +106,7 @@ type intent_def = {
     ?description : string nullable;
     ~examples : intent_example list;
     ?created : string nullable;
+    ?updated : string nullable;
   } <ocaml field_prefix="i_def_">
 <doc text="Type of intent definitions.">
 
@@ -113,17 +115,21 @@ type entity_value = {
     ?metadata : json nullable;
     ~synonyms : string list;
     ?created : string nullable;
+    ?updated : string nullable;
   } <ocaml field_prefix="e_">
 <doc text="Type of entity values.">
 
 type entity_def = {
     entity : string;
     ?description : string nullable;
+    ?metadata : json nullable;
     (* ?type : string nullable; *)
     ?source : string nullable;
     ?open_list : bool option;
     ~values : entity_value list;
     ?created : string nullable;
+    ?updated : string nullable;
+    ?fuzzy_match : bool option;
   } <ocaml field_prefix="e_def_">
 <doc text="Type of entity definitions.">
 
@@ -173,10 +179,19 @@ type dialog_node = {
     ?go_to : go_to nullable;
     ?child_input_kind : string nullable;
     ?created : string nullable;
+    ?updated : string nullable;
     ?event_name : dialog_node_event_name nullable;
     ?variable : string nullable;
   } <ocaml field_prefix="node_">
 <doc text="Type of dialog nodes.">
+
+type workspace_status = [
+  | Ws_non_existent <json name="Non Existent">
+  | Ws_training <json name="Training">
+  | Ws_failed <json name="Failed">
+  | Ws_available <json name="Available">
+  | Ws_unavailable <json name="Unavailable">
+]
 
 type workspace = {
     name : string nullable;
@@ -188,10 +203,12 @@ type workspace = {
     ~entities : entity_def list;
     ~intents : intent_def list;
     ?created : string nullable;
+    ?updated : string nullable;
     ?modified : string nullable;
     ?created_by : string nullable;
     ?modified_by : string nullable;
     ?workspace_id : string nullable;
+    ?status : workspace_status nullable;
   } <ocaml field_prefix="ws_">
 <doc text="Type of workspaces">
 
@@ -202,10 +219,16 @@ type input = {
     text : string;
   } <ocaml field_prefix="in_">
 
+type context = {
+    conversation_id : string;
+    system : json;
+  } <ocaml field_prefix="ctx_">
+
 type entity = {
     entity : string;
-    location : json;
+    location : int list;
     value : string;
+    confidence : float;
   } <ocaml field_prefix="e_">
 
 type intent = {
@@ -213,8 +236,13 @@ type intent = {
     confidence : float;
   } <ocaml field_prefix="i_">
 
+type log_message = {
+    level : string;
+    msg : string;
+  } <ocaml field_prefix="log_msg__">
+
 type output = {
-    log_messages : json;
+    log_messages : log_message list;
     text : string list;
     nodes_visited : string list;
     ?error : string nullable;
@@ -242,11 +270,11 @@ type message_response = {
 
 type create_response = {
     ?name : string nullable;
-    ?created : string nullable;
-    ?updated : string nullable;
+    ?description : string nullable;
     ?language : string nullable;
     ?metadata : string nullable;
-    ?description : string nullable;
+    ?created : string nullable;
+    ?updated : string nullable;
     ?workspace_id : string nullable;
   } <ocaml field_prefix="crea_rsp_">
 

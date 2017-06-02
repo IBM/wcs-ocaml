@@ -49,50 +49,62 @@ let get_workspace_request ?export workspace_id =
 let example
       example
       ?created
+      ?updated
       ()
   : intent_example =
   { ex_text = example;
-    ex_created = created; }
+    ex_created = created;
+    ex_updated = updated; }
 
 let intent
       intent
       ?description
       ?(examples=[])
       ?created
+      ?updated
       ()
   : intent_def =
   { i_def_intent = intent;
     i_def_description = description;
     i_def_examples = List.map (fun s -> example s ()) examples;
-    i_def_created = created; }
+    i_def_created = created;
+    i_def_updated = updated; }
 
 let value
       value
       ?metadata
       ?(synonyms=[])
       ?created
+      ?updated
       ()
   : entity_value =
   { e_value = value;
     e_metadata = metadata;
     e_synonyms = synonyms;
-    e_created = created; }
+    e_created = created;
+    e_updated = updated; }
 
 let entity
       entity
+      ?description
       ?metadata
       ?source
       ?open_list
       ?(values=[])
       ?created
+      ?updated
+      ?fuzzy_match
       ()
   : entity_def =
   { e_def_entity = entity;
-    e_def_description = metadata;
+    e_def_description = description;
+    e_def_metadata = metadata;
     e_def_source = source;
     e_def_open_list = open_list;
     e_def_values = List.map (fun (v, syn) -> value v ~synonyms:syn ()) values;
-    e_def_created = created;  }
+    e_def_created = created;
+    e_def_updated = updated;
+    e_def_fuzzy_match = fuzzy_match;  }
 
 let go_to
       node
@@ -139,6 +151,7 @@ let dialog_node
       ?go_to
       ?go_to_id
       ?created
+      ?updated
       ?event_name
       ?variable
       ()
@@ -182,6 +195,7 @@ let dialog_node
     node_metadata = metadata;
     node_go_to = go_to;
     node_created = created;
+    node_updated = updated;
     node_child_input_kind = None;
     node_event_name = event_name;
     node_variable = variable; }
@@ -241,10 +255,12 @@ let workspace
       ?(entities=[])
       ?(intents=[])
       ?created
+      ?updated
       ?modified
       ?created_by
       ?modified_by
       ?workspace_id
+      ?status
       ()
   : workspace =
   let counterexamples =
@@ -259,10 +275,12 @@ let workspace
     ws_entities = entities;
     ws_intents = intents;
     ws_created = created;
+    ws_updated = updated;
     ws_modified = modified;
     ws_created_by = created_by;
     ws_modified_by = modified_by;
-    ws_workspace_id = workspace_id; }
+    ws_workspace_id = workspace_id;
+    ws_status = status; }
 
 
 let logs_request

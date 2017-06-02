@@ -37,6 +37,7 @@ val get_workspace_request :
 val example :
   string ->
   ?created:string ->
+  ?updated:string ->
   unit ->
   intent_example
 
@@ -45,6 +46,7 @@ val intent :
   ?description:string ->
   ?examples:string list ->
   ?created:string ->
+  ?updated:string ->
   unit ->
   intent_def
 
@@ -53,16 +55,20 @@ val value :
   ?metadata:json ->
   ?synonyms:string list ->
   ?created:string ->
+  ?updated:string ->
   unit ->
   entity_value
 
 val entity :
   string ->
-  ?metadata:string ->
+  ?description:string ->
+  ?metadata:json ->
   ?source:string ->
   ?open_list:bool ->
   ?values:(string * string list) list ->
   ?created:string ->
+  ?updated:string ->
+  ?fuzzy_match:bool ->
   unit ->
   entity_def
 
@@ -96,6 +102,7 @@ val dialog_node :
   ?go_to:dialog_node * selector ->
   ?go_to_id:string * selector ->
   ?created:string ->
+  ?updated:string ->
   ?event_name: dialog_node_event_name ->
   ?variable: string ->
   unit ->
@@ -111,6 +118,7 @@ val response_condition :
   ?context:json ->
   ?metadata:json ->
   ?created:string ->
+  ?updated:string ->
   unit -> dialog_node
 
 val workspace :
@@ -123,10 +131,12 @@ val workspace :
   ?entities:entity_def list ->
   ?intents:intent_def list ->
   ?created:string ->
+  ?updated:string ->
   ?modified:string ->
   ?created_by:string ->
   ?modified_by:string ->
   ?workspace_id:string ->
+  ?status:workspace_status ->
   unit ->
   workspace
 

@@ -33,6 +33,7 @@ let dialog_node_of_node (n : node) : dialog_node list =
       node_go_to = n.n_go_to;
       node_child_input_kind = None;
       node_created = n.n_created;
+      node_updated = n.n_updated;
       node_event_name = None;
       node_variable = None; }
   in
