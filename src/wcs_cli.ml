@@ -477,16 +477,16 @@ let anon_args s =
 
 let usage =
   "Usage:\n"^
-  "  "^cmd_name^" ((list | ls) | create | (delete | rm) | get | update | logs | try) [options]\n"^
+  "  "^cmd_name^" command [options]\n"^
   "\n"^
   "Available Commands:\n"^
-  "  list    List the workspaces associated with a Conversation service instance.\n"^
-  "  create  Create workspaces on the Conversation service instance.\n"^
-  "  delete  Delete workspaces from the Conversation service instance.\n"^
-  "  get     Get information about workspaces, optionally including all workspace contents.\n"^
-  "  update  Update an existing workspace with new or modified data.\n"^
-  "  logs    List the events from the log of a workspace.\n"^
-  "  try     Generic bot running in the terminal.\n"^
+  "  list|ls    List the workspaces associated with a Conversation service instance.\n"^
+  "  create     Create workspaces on the Conversation service instance.\n"^
+  "  delete|rm  Delete workspaces from the Conversation service instance.\n"^
+  "  get        Get information about workspaces, optionally including all workspace contents.\n"^
+  "  update     Update an existing workspace with new or modified data.\n"^
+  "  logs       List the events from the log of a workspace.\n"^
+  "  try        Generic bot running in the terminal.\n"^
   "\n"^
   "Options:"
 
