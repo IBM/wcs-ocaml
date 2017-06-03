@@ -150,6 +150,26 @@ Options:
   -help               Display this list of options
 ```
 
+### The `logs` command
+
+List the events from the log of a workspace.
+
+```
+Usage:
+  wcs logs [options]
+Options:
+  -filter s           A cacheable parameter that limits the results to those matching the specified filter.
+  -page_limit n       The number of records to return in each page of results.
+  -sort attr          The attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). The only supported value is request_timestamp.
+  -cursor token       A token identifying the last value from the previous page of results.
+  -wcs-cred cred.json The file containing the Watson Conversation Service credentials.
+  -version            Print the Watson Conversation API version number used.
+  -no-error-recovery  Do not try to recover in case of error.
+  -debug              Print debug messages.
+  -help               Display this list of options
+  --help              Display this list of options
+```
+
 
 ### The `try` command
 

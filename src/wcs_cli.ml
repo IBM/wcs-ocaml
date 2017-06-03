@@ -274,7 +274,7 @@ let logs_speclist =
     "-page_limit", Arg.Int set_logs_page_limit,
     "n The number of records to return in each page of results.";
     "-sort", Arg.String set_logs_sort,
-    "attr The attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). Supported values are name, modified, and workspace_id.";
+    "attr The attribute by which returned results will be sorted. To reverse the sort order, prefix the value with a minus sign (-). The only supported value is request_timestamp.";
     "-cursor", Arg.String set_logs_cursor,
     "token A token identifying the last value from the previous page of results.";
   ]
