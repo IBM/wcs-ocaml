@@ -272,7 +272,7 @@ type create_response = {
     ?name : string nullable;
     ?description : string nullable;
     ?language : string nullable;
-    ?metadata : string nullable;
+    ?metadata : json nullable;
     ?created : string nullable;
     ?updated : string nullable;
     ?workspace_id : string nullable;

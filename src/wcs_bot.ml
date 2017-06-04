@@ -45,13 +45,13 @@ let interpret
             (req_msg: message_request)
     : string * message_response * json option =
     let req_msg = before req_msg in
-    Log.debug "Wcs_extra"
+    Log.debug "Wcs_bot"
       ("Request:\n"^
        (Wcs_json.pretty_message_request req_msg));
     let resp =
       Wcs.message wcs_cred ws_id req_msg
     in
-    Log.debug "Wcs_extra"
+    Log.debug "Wcs_bot"
       ("Response:\n"^
        (Wcs_json.pretty_message_response resp));
     let resp = after resp in
