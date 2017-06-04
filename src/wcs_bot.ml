@@ -56,6 +56,7 @@ let interpret
        (Wcs_json.pretty_message_response resp));
     let resp = after resp in
     let ctx = resp.msg_rsp_context in
+    let output = resp.msg_rsp_output in
     begin match Json.take_actions ctx with
     | ctx, Some [ act ] ->
         let k =
@@ -76,7 +77,7 @@ let interpret
             (Json.set_continuation act_ctx k)
         in
         let act = { act with act_parameters = act_parameters } in
-        interpret_action act
+        interpret_action act output
     | ctx, Some (_ :: _ :: _) ->
         assert false (* XXX TODO XXX *)
     | ctx, Some []
@@ -118,7 +119,7 @@ let interpret
                       "context" k_ctx
                   in
                   let k = { k with act_parameters = k_parameters } in
-                  interpret_action k
+                  interpret_action k output
                 else
                   let k_resp =
                     { resp with msg_rsp_context = k_ctx }
@@ -131,13 +132,16 @@ let interpret
             if skip_user_input then
               interpret
                 ws_id
-                { req_msg with msg_req_context = Some ctx; }
+                { req_msg with
+                  msg_req_context = Some ctx;
+                  msg_req_output = Some output;
+                }
             else
               (ws_id, { resp with msg_rsp_context = ctx }, None)
         end
     end
 
-  and interpret_action act =
+  and interpret_action act output =
     begin match act.act_agent, act.act_type_ with
     | "client", "conversation" ->
         let ctx =
@@ -158,7 +162,7 @@ let interpret
             msg_req_context = Some ctx;
             msg_req_entities = None;
             msg_req_intents = None;
-            msg_req_output = None; }
+            msg_req_output = Some output; }
         in
         interpret act.act_name req_msg
     | _ -> assert false
