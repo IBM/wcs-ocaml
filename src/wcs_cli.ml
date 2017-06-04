@@ -196,10 +196,10 @@ let get wcs_cred =
   in
   begin match workspaces with
   | [ ws ] ->
-      Format.printf "%s"
+      Format.printf "%s@."
         (Yojson.Basic.pretty_to_string ws)
   | workspaces ->
-      Format.printf "%s"
+      Format.printf "%s@."
         (Yojson.Basic.pretty_to_string (`List (List.rev workspaces)))
   end
 
