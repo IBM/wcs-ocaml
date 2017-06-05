@@ -156,7 +156,7 @@ List the events from the log of a workspace.
 
 ```
 Usage:
-  wcs logs [options]
+  wcs logs [options] [workspace_id ...]
 Options:
   -filter s           A cacheable parameter that limits the results to those matching the specified filter.
   -page_limit n       The number of records to return in each page of results.
@@ -167,7 +167,6 @@ Options:
   -no-error-recovery  Do not try to recover in case of error.
   -debug              Print debug messages.
   -help               Display this list of options
-  --help              Display this list of options
 ```
 
 

@@ -248,7 +248,7 @@ let update wcs_cred =
 
 (** {6. The [logs] command} *)
 
-let logs_ws_id = ref None
+let logs_ws_ids = ref []
 
 let logs_filter = ref None
 let set_logs_filter b =
@@ -279,43 +279,28 @@ let logs_speclist =
     "token A token identifying the last value from the previous page of results.";
   ]
 
-let logs_anon_args =
-  let cpt = ref 0 in
-  begin fun s ->
-    incr cpt;
-    begin match !cpt with
-    | 1 -> logs_ws_id := Some s
-    | _ -> Log.warning "Wcs_cli" ("ignored argument: " ^ s)
-    end
-  end
-
+let logs_anon_args s =
+  logs_ws_ids := !logs_ws_ids @ [s]
 
 let logs_usage =
   "Usage:\n"^
-  "  "^cmd_name^" logs [options]"^"\n"^
+  "  "^cmd_name^" logs [options] [workspace_id ...]"^"\n"^
   "Options:"
 
 let logs wcs_cred =
-  begin match !logs_ws_id with
-  | Some id ->
-      let req =
-        Wcs_builder.logs_request
-          ?filter:!logs_filter
-          ?sort:!logs_sort
-          ?page_limit:!logs_page_limit
-          ?cursor:!logs_cursor
-          ()
-      in
-      let rsp = Wcs.logs wcs_cred id req in
-      Format.printf "%s@." (Wcs_json.pretty_logs_response rsp)
-  | _ ->
-      let usage =
-        Format.sprintf "%s logs: workspace id required"
-          cmd_name
-      in
-      Log.error "Wcs_cli" (Some ())
-        (Arg.usage_string update_speclist usage)
-  end
+  List.iter
+    (fun id ->
+       let req =
+         Wcs_builder.logs_request
+           ?filter:!logs_filter
+           ?sort:!logs_sort
+           ?page_limit:!logs_page_limit
+           ?cursor:!logs_cursor
+           ()
+       in
+       let rsp = Wcs.logs wcs_cred id req in
+       Format.printf "%s@." (Wcs_json.pretty_logs_response rsp))
+    !logs_ws_ids
 
 
 (** {6. The [try] command} *)
