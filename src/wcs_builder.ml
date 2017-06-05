@@ -194,6 +194,7 @@ let dialog_node
     node_context = context;
     node_metadata = metadata;
     node_go_to = go_to;
+    node_next_step = None; (* XXX TODO XXX *)
     node_created = created;
     node_updated = updated;
     node_child_input_kind = None;
