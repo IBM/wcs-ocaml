@@ -25,11 +25,16 @@ bin/wcs: _build/default/wcscli/wcs_cli.exe
 _build/default/wcscli/wcs_cli.exe:
 	$(JBUILDER) build wcscli/wcs_cli.exe
 
+tests:
+	$(JBUILDER) runtest
+
 clean:
 	rm -rf _build *.install
 
 cleanall: clean
-	rm -f *~
+	rm -f *~ \
+		wcscli/.merlin wcslib/.merlin examples/.merlin
+
 
 .PHONY: all clean cleanall \
 	 bin/wcs _build/default/wcscli/wcs_cli.exe
