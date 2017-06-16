@@ -7,7 +7,7 @@ OCaml SDK and command line interface for the Watson Conversation Service
 To build from source, you will need:
 - OCaml 4.04 or later (http://ocaml.org/) along with the following libraries:
   - ocamlfind, a library manager (http://projects.camlcity.org/projects/findlib.html)
-  - ocamlbuild, a build system (https://github.com/ocaml/ocamlbuild)
+  - jbuilder, a build system (https://github.com/janestreet/jbuilder)
   - atdgen, a json parser generator (https://github.com/mjambon/atdgen)
   - cohttp, HTTPS client (https://github.com/mirage/ocaml-cohttp)
 
@@ -15,7 +15,7 @@ An easy way to get set up on most platforms is to use the OCaml
 package manager (https://opam.ocaml.org). Once opam is installed, you
 can just add the corresponding libraries:
 ```
-opam install ocamlfind ocamlbuild atdgen
+opam install ocamlfind jbuilder atdgen
 opam install lwt ssl tls cohttp
 ```
 

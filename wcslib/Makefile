@@ -17,13 +17,8 @@
 
 JBUILDER ?= jbuilder
 
-all: bin/wcs
-
-bin/wcs: _build/default/wcscli/wcs_cli.exe
-	cp $(<) $(@)
-
-_build/default/wcscli/wcs_cli.exe:
-	$(JBUILDER) build wcscli/wcs_cli.exe
+all:
+	$(JBUILDER) build
 
 clean:
 	rm -rf _build *.install
@@ -31,5 +26,5 @@ clean:
 cleanall: clean
 	rm -f *~
 
-.PHONY: all clean cleanall \
-	 bin/wcs _build/default/wcscli/wcs_cli.exe
+.PHONY: all clean cleanall
+

@@ -16,6 +16,7 @@
  * limitations under the License.
  *)
 
+open Wcslib
 open Wcs_t
 
 type command =
