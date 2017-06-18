@@ -20,6 +20,7 @@ JBUILDER ?= jbuilder
 all: bin/wcs
 
 bin/wcs: _build/default/wcscli/wcs_cli.exe
+	mkdir -p bin
 	cp $(<) $(@)
 
 _build/default/wcscli/wcs_cli.exe:
