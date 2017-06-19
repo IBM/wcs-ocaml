@@ -86,6 +86,18 @@ val go_to_id :
   unit ->
   go_to
 
+val next_step :
+  dialog_node ->
+  selector:selector ->
+  unit ->
+  next_step
+
+val next_step_id :
+  string ->
+  selector:selector ->
+  unit ->
+  next_step
+
 val output : string -> output_def
 
 val dialog_node :
@@ -101,6 +113,8 @@ val dialog_node :
   ?metadata:json ->
   ?go_to:dialog_node * selector ->
   ?go_to_id:string * selector ->
+  ?next_step:dialog_node * selector ->
+  ?next_step_id:string * selector ->
   ?created:string ->
   ?updated:string ->
   ?event_name: dialog_node_event_name ->

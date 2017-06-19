@@ -130,6 +130,30 @@ let go_to_id
 
 let mk_go_to_id = go_to_id (* alias to avoid hiding *)
 
+
+let next_step
+      node
+      ~selector
+      ()
+  : next_step =
+  { next_behavior = "jump_to";
+    next_selector = selector;
+    next_dialog_node = node.node_dialog_node; }
+
+let mk_next_step = next_step (* alias to avoid hiding *)
+
+let next_step_id
+      node_id
+      ~selector
+      ()
+  : next_step =
+  { next_behavior = "jump_to";
+    next_selector = selector;
+    next_dialog_node = node_id; }
+
+let mk_next_step_id = next_step_id (* alias to avoid hiding *)
+
+
 let output (* XX TODO : handle multiple outputs *)
       text
   : output_def =
@@ -150,6 +174,8 @@ let dialog_node
       ?metadata
       ?go_to
       ?go_to_id
+      ?next_step
+      ?next_step_id
       ?created
       ?updated
       ?event_name
@@ -184,6 +210,19 @@ let dialog_node
           "dialog_node: ~go_to and ~go_to_id cannot be present simlutanously"
     end
   in
+  let next_step =
+    begin match next_step, next_step_id with
+    | None, None -> None
+    | Some (node, selector), None ->
+        Some (mk_next_step node ~selector ())
+    | None, Some (node_id, selector) ->
+        Some (mk_next_step_id node_id ~selector ())
+    | Some _, Some _ ->
+        Log.error "Ws_builder"
+          (Some None)
+          "dialog_node: ~next_step and ~next_step_id cannot be present simlutanously"
+    end
+  in
   { node_dialog_node = dialog_node;
     node_description = description;
     node_type_ = type_;
@@ -194,7 +233,7 @@ let dialog_node
     node_context = context;
     node_metadata = metadata;
     node_go_to = go_to;
-    node_next_step = None; (* XXX TODO XXX *)
+    node_next_step = next_step;
     node_created = created;
     node_updated = updated;
     node_child_input_kind = None;
@@ -207,6 +246,8 @@ let response_condition ~parent =
     ~parent:parent
     ?go_to: None (* Not yet implemented*)
     ?go_to_id: None (* Not yet implemented*)
+    ?next_step: None (* Not yet implemented*)
+    ?next_step_id: None (* Not yet implemented*)
     ?event_name: None
     ?variable: None
 

@@ -51,13 +51,13 @@ let mk_prompt prompt_txt help_txt =
     Mk.dialog_node "Help"
       ~conditions: "#help"
       ~text: help_txt
-      ~go_to: (prompt, Goto_body)
+      ~next_step: (prompt, Goto_body)
       ()
   in
   let default =
     Mk.dialog_node "Default"
       ~text: "I don't understand what you say."
-      ~go_to: (help, Goto_body)
+      ~next_step: (help, Goto_body)
       ()
   in
   [ prompt; help; default; ]
