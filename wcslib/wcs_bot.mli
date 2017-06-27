@@ -32,7 +32,7 @@ val interpret :
 (**
    [interpret cred ws_id msg_req] executes a complet conversation turn
    (including skip_user_input and calls) on the workspace id [ws_id]
-   with the message request [msg_req]. The resulut is composed of the
+   with the message request [msg_req]. The result is composed of the
    workspace id for the next conversation turn, the message response
    and the value of the field [return] in the context if it is
    defined.
