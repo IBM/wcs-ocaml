@@ -36,6 +36,9 @@ cleanall: clean
 	rm -f *~ \
 		wcscli/.merlin wcslib/.merlin examples/.merlin
 
+realcleanall: cleanall
+	rm -f bin/wcs
+
 
 .PHONY: all clean cleanall \
 	 bin/wcs _build/default/wcscli/wcs_cli.exe
