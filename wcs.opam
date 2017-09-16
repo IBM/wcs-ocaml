@@ -1,0 +1,31 @@
+opam-version: "1.2"
+name: "wcs"
+version: "1.0.0"
+maintainer: [
+  "Louis Mandel <lmandel@us.ibm.com>"
+]
+authors: [
+  "Guillaume Baudart"
+  "Louis Mandel"
+  "Jérôme Siméon"
+]
+homepage: "https://github.com/IBM/wcs-ocaml"
+bug-reports: "https://github.com/IBM/wcs-ocaml/issues"
+license: "Apache License 2.0"
+dev-repo: "https://github.com/IBM/wcs-ocaml.git"
+
+build: [
+  [ "make" "bin/wcs" ]
+]
+build-test: [ [ "make" "tests" ] ]
+
+depends: [
+  "ocamlfind"
+  "jbuilder"
+  "atdgen"
+  "lwt"
+  "ssl"
+  "tls"
+  "cohttp"
+]
+available: [ocaml-version >= "4.02.0" & compiler != "4.02.1+BER"]
