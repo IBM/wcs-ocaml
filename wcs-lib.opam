@@ -1,5 +1,5 @@
 opam-version: "1.2"
-name: "wcs"
+name: "wcs-lib"
 version: "1.0.0"
 maintainer: [
   "Louis Mandel <lmandel@us.ibm.com>"
@@ -15,7 +15,8 @@ license: "Apache License 2.0"
 dev-repo: "https://github.com/IBM/wcs-ocaml.git"
 
 build: [
-  [ "make" "bin/wcs" ]
+  ["jbuilder" "subst" "-p" name "--name" name] {pinned}
+  ["jbuilder" "build" "-p" name "-j" jobs]
 ]
 build-test: [ [ "make" "tests" ] ]
 
@@ -27,6 +28,5 @@ depends: [
   "ssl"
   "tls"
   "cohttp"
-  "wcs-lib"
 ]
 available: [ocaml-version >= "4.02.0" & compiler != "4.02.1+BER"]
