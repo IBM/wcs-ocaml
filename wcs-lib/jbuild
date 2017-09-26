@@ -16,6 +16,19 @@
 
 (jbuild_version 1)
 
-(executable
- ((name wcs_cli)
-  (libraries (wcslib))))
+
+(library
+ ((name        wcs_lib)
+  (public_name wcs-lib)
+  (synopsis "Watson Conversation Service Library")
+  (libraries (atdgen cohttp.lwt))))
+
+(rule
+ ((targets (wcs_j.ml wcs_j.mli))
+  (deps    (wcs.atd))
+  (action  (run atdgen -j -j-std ${<}))))
+
+(rule
+ ((targets (wcs_t.ml wcs_t.mli))
+  (deps    (wcs.atd))
+  (action  (run atdgen -t ${<}))))

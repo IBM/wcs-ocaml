@@ -36,7 +36,7 @@ clean:
 
 cleanall: clean
 	rm -f *~ \
-		wcscli/.merlin wcslib/.merlin examples/.merlin
+		wcs-cli/.merlin wcs-lib/.merlin examples/.merlin
 
 realcleanall: cleanall
 	rm -f bin/wcs
