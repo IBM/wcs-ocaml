@@ -18,7 +18,7 @@
 JBUILDER ?= jbuilder
 
 all:
-	$(JBUILDER) build
+	$(JBUILDER) build @install
 
 clean:
 	rm -rf _build *.install
