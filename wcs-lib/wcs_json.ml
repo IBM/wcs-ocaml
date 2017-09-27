@@ -91,13 +91,13 @@ let pretty_entity_def x =
   Yojson.Basic.pretty_to_string (json_of_entity_def x)
 
 
-(** {6 go_to} *)
+(** {6 next_step} *)
 
-let json_of_go_to x =
-  Yojson.Basic.from_string (Wcs_j.string_of_go_to x)
+let json_of_next_step x =
+  Yojson.Basic.from_string (Wcs_j.string_of_next_step x)
 
-let pretty_go_to x =
-  Yojson.Basic.pretty_to_string (json_of_go_to x)
+let pretty_next_step x =
+  Yojson.Basic.pretty_to_string (json_of_next_step x)
 
 
 (** {6 output_def} *)

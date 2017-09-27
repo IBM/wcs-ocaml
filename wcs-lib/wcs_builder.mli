@@ -72,20 +72,6 @@ val entity :
   unit ->
   entity_def
 
-val go_to :
-  dialog_node ->
-  ?return:bool ->
-  selector:selector ->
-  unit ->
-  go_to
-
-val go_to_id :
-  string ->
-  ?return:bool ->
-  selector:selector ->
-  unit ->
-  go_to
-
 val next_step :
   dialog_node ->
   selector:selector ->
@@ -111,8 +97,6 @@ val dialog_node :
   ?output:output_def ->
   ?context:json ->
   ?metadata:json ->
-  ?go_to:dialog_node * selector ->
-  ?go_to_id:string * selector ->
   ?next_step:dialog_node * selector ->
   ?next_step_id:string * selector ->
   ?created:string ->

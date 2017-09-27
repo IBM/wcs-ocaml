@@ -106,31 +106,6 @@ let entity
     e_def_updated = updated;
     e_def_fuzzy_match = fuzzy_match;  }
 
-let go_to
-      node
-      ?(return=false)
-      ~selector
-      ()
-  : go_to =
-  { goto_return = return;
-    goto_selector = selector;
-    goto_dialog_node = node.node_dialog_node; }
-
-let mk_go_to = go_to (* alias to avoid hiding *)
-
-let go_to_id
-      node_id
-      ?(return=false)
-      ~selector
-      ()
-  : go_to =
-  { goto_return = return;
-    goto_selector = selector;
-    goto_dialog_node = node_id; }
-
-let mk_go_to_id = go_to_id (* alias to avoid hiding *)
-
-
 let next_step
       node
       ~selector
@@ -172,8 +147,6 @@ let dialog_node
       ?output
       ?context
       ?metadata
-      ?go_to
-      ?go_to_id
       ?next_step
       ?next_step_id
       ?created
@@ -199,17 +172,6 @@ let dialog_node
           "dialog_node: ~text and ~output cannot be present simlutanously"
     end
   in
-  let go_to =
-    begin match go_to, go_to_id with
-    | None, None -> None
-    | Some (node, selector), None -> Some (mk_go_to node ~selector ())
-    | None, Some (node_id, selector) -> Some (mk_go_to_id node_id ~selector ())
-    | Some _, Some _ ->
-        Log.error "Ws_builder"
-          (Some None)
-          "dialog_node: ~go_to and ~go_to_id cannot be present simlutanously"
-    end
-  in
   let next_step =
     begin match next_step, next_step_id with
     | None, None -> None
@@ -232,7 +194,6 @@ let dialog_node
     node_output = output;
     node_context = context;
     node_metadata = metadata;
-    node_go_to = go_to;
     node_next_step = next_step;
     node_created = created;
     node_updated = updated;
@@ -244,8 +205,6 @@ let response_condition ~parent =
   dialog_node (new_id ())
     ~type_: Node_response_condition
     ~parent:parent
-    ?go_to: None (* Not yet implemented*)
-    ?go_to_id: None (* Not yet implemented*)
     ?next_step: None (* Not yet implemented*)
     ?next_step_id: None (* Not yet implemented*)
     ?event_name: None

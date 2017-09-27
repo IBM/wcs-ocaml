@@ -76,11 +76,11 @@ val json_of_entity_def : entity_def -> json
 val pretty_entity_def : entity_def -> string
 
 
-(** {6 go_to} *)
+(** {6 next_step} *)
 
-val json_of_go_to : go_to -> json
+val json_of_next_step : next_step -> json
 
-val pretty_go_to : go_to -> string
+val pretty_next_step : next_step -> string
 
 
 (** {6 output_def} *)

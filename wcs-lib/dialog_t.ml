@@ -45,7 +45,7 @@ type node = {
   n_responses : response list;
   n_slots : slot list;
   n_metadata : json option;
-  n_go_to : go_to option;
+  n_next_step : next_step option;
   n_created : string option;
   n_updated : string option;
 }

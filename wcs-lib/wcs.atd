@@ -145,13 +145,6 @@ type selector = string wrap <ocaml t="Wcs_aux.selector"
                                    unwrap="Wcs_aux.selector_unwrap">
 <doc text="Goto selector.">
 
-type go_to = {
-    ~return <ocaml default="false"> : bool;
-    selector : selector;
-    dialog_node : string;
-  } <ocaml field_prefix="goto_">
-<doc text="Type of goto definitions.">
-
 type next_step = {
     behavior : string; (* XXX TODO XXX *)
     selector : selector;
@@ -188,7 +181,6 @@ type dialog_node = {
     ?output : output_def nullable;
     ?context : json nullable;
     ?metadata : json nullable;
-    ?go_to : go_to nullable;
     ?next_step : next_step nullable;
     ?child_input_kind : string nullable;
     ?created : string nullable;
