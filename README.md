@@ -1,4 +1,4 @@
-# wcs-ocaml -- SDK and command line interface for Watson Conversation Service
+# SDK and command line interface for Watson Conversation Service
 
 wcs-ocaml is a source development kit in OCaml and command line interface for
 [Watson Conversation Service (WCS)](https://www.ibm.com/watson/services/conversation/).
