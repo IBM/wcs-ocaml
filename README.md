@@ -1,5 +1,13 @@
-# wcs-ocaml
-OCaml SDK and command line interface for the Watson Conversation Service
+# wcs-ocaml -- SDK and command line interface for Watson Conversation Service
+
+wcs-ocaml is a source development kit in OCaml and command line interface for
+[Watson Conversation Service (WCS)](https://www.ibm.com/watson/services/conversation/).
+
+* `wcs-lib` provides a framework to write WCS programs, called
+  workspaces.  It also offers an OCaml binding to the
+  [service API](https://www.ibm.com/watson/developercloud/conversation/api/v1/).
+* `wcs` is a command line tool that interact with the service.
+
 
 ## Building
 ### Prerequistes
@@ -33,7 +41,7 @@ The compilation produces a command line interface for Watson
 Conversation Service in:
 
 ```
-bin/wcs
+./_build/install/default/bin/wcs
 ```
 
 The command line interface support the following commands:
