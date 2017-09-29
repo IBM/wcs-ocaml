@@ -21,10 +21,10 @@ build: [
 build-test: [ ["jbuilder" "runtest"] ]
 
 depends: [
-  "ocamlfind"
-  "jbuilder"
-  "atdgen"
+  "wcs-lib"
+  "lwt_ssl"
+  "cohttp-lwt"
 ]
 available: [
-  ocaml-version >= "4.02.3"
+  ocaml-version >= "4.03.0"
 ]

@@ -4,8 +4,10 @@ wcs-ocaml is a source development kit in OCaml and command line interface for
 [Watson Conversation Service (WCS)](https://www.ibm.com/watson/services/conversation/). It allows to program chat bots in OCaml.
 
 * `wcs-lib` provides a framework to write WCS programs, called
-  workspaces.  It also offers an OCaml binding to the
-  [service API](https://www.ibm.com/watson/developercloud/conversation/api/v1/).
+  workspaces.
+* `wcs-api` offers an OCaml binding to the
+  [service API](https://www.ibm.com/watson/developercloud/conversation/api/v1/)
+  and a generic client application.
 * `wcs` is a command line tool that interact with the service.
 
 

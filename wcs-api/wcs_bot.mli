@@ -18,6 +18,7 @@
 
 (** Generic bot runtime. *)
 
+open Wcs_lib
 open Wcs_t
 
 val before_default : message_request -> message_request
