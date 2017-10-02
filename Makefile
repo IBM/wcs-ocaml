@@ -25,6 +25,9 @@ build:
 test:
 	$(JBUILDER) runtest
 
+doc:
+	$(JBUILDER) build @doc
+
 install:
 	$(JBUILDER) install
 
@@ -45,4 +48,4 @@ realcleanall: cleanall
 	rm -f bin/wcs
 
 
-.PHONY: all build test clean cleanall
+.PHONY: all build test doc clean cleanall
