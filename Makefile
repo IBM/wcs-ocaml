@@ -35,7 +35,8 @@ uninstall:
 	$(JBUILDER) uninstall
 
 clean:
-	rm -rf _build *.install
+	rm -rf _build \
+		wcs-api.install wcs-lib.install wcs.install
 
 cleanall: clean
 	rm -f *~ \
