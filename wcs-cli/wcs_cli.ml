@@ -467,7 +467,8 @@ let usage =
   "  "^cmd_name^" command [options]\n"^
   "\n"^
   "Available Commands:\n"^
-  "  list|ls    List the workspaces associated with a Conversation service instance.\n"^
+  "  list       Return the workspaces associated with a Conversation service instance in JSON format.\n"^
+  "  ls         List workspaces IDs and names for a Conversation service instance.\n"^
   "  create     Create workspaces on the Conversation service instance.\n"^
   "  delete|rm  Delete workspaces from the Conversation service instance.\n"^
   "  get        Get information about workspaces, optionally including all workspace contents.\n"^
