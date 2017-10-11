@@ -22,7 +22,7 @@ let entities name_list =
 let mk_knock name answer =
   let knock =
     Mk.dialog_node ("KnockKnock "^name)
-      ~conditions: "conversation_start"
+      ~conditions: ("@name:"^name)
       ~text: "Knock knock"
       ()
   in
@@ -40,14 +40,26 @@ let mk_knock name answer =
       ~conditions: ("@name:"^name)
       ~text: answer
       ~parent: whoisthere
+      ~context: (Json.set_skip_user_input `Null true)
       ()
   in
   [knock; whoisthere; answer]
 
+let simple_dispatch  =
+  Mk.dialog_node "Dispatch"
+    ~conditions: "true"
+    ~text: "Enter a name"
+    ()
+
 let knockknock =
   Mk.workspace "Knock Knock"
     ~entities: (entities (List.map fst jokes))
-    ~dialog_nodes: (List.fold_left (fun acc x -> acc@mk_knock (fst x) (snd x)) [] jokes)
+    ~dialog_nodes:
+      ((List.fold_left
+          (fun acc x -> acc@mk_knock (fst x) (snd x))
+          []
+          jokes) @
+       [ simple_dispatch ])
     ()
 
 let () =
