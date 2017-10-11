@@ -5,7 +5,7 @@ module Mk = Wcs_builder
 let jokes =
   [
     ("BrokenPencil", "Nevermind it's pointless");
-    ("Boo", "Boohoohoo")
+    ("Boo", "Boohoohoo");
   ]
 
 let entities name_list =
