@@ -27,7 +27,7 @@ type spel_type =
 
 type literal =
   | L_string of string
-(*| L_date of string *)
+  (*| L_date of string *)
   | L_int of int
   | L_real of float
   | L_boolean of bool
@@ -51,7 +51,7 @@ type op =
   | Op_pow
   | Op_concat
   | Op_toString
-(*| Op_instanceof *)
+  (*| Op_instanceof *)
 (*| Op_matches *)
 
 type expression =
@@ -68,9 +68,9 @@ and expression_desc =
   | E_new_array of spel_type * int option list * expression list option
   | E_call of expression option * string * expression list (* e.m() *)
   | E_op of op * expression list
-(*| E_assign of string * expression *)
-(*| E_type of string *)
-(*| E_constructor *)
+  (*| E_assign of string * expression *)
+  (*| E_type of string *)
+  (*| E_constructor *)
   | E_conditional of expression * expression * expression
   | E_variable of string
   | E_intent of string

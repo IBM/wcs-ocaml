@@ -30,18 +30,18 @@ let is_not_empty e =
   | E_lit (L_string "") -> false
   | _ -> true
   end
-    
+
 let rec spel_cleanup e =
   begin match e.expr_desc with
   | E_op (Op_concat, el) ->
       begin match List.filter is_not_empty el with
       | [] -> { expr_desc = E_lit (L_string "");
-	        expr_loc = e.expr_loc;
-	        expr_text = e.expr_text; }
+                expr_loc = e.expr_loc;
+                expr_text = e.expr_text; }
       | [e] -> e
       | el -> { expr_desc = E_lit (L_string "");
-	        expr_loc = e.expr_loc;
-	        expr_text = e.expr_text; }
+                expr_loc = e.expr_loc;
+                expr_text = e.expr_text; }
       end
   | _ -> e
   end
@@ -65,7 +65,7 @@ let create_lexbuf ?(file="") stream =
               pos_bol = 0;
               pos_cnum = 0; }
   in { pos ; stream }
-  
+
 (** Register a new line in the lexer's position. *)
 let new_line ?(n=0) lexbuf =
   let open Lexing in
@@ -145,4 +145,4 @@ let reset_string buff = Buffer.clear buff
 let add_char_to_string buff c = Buffer.add_char buff c
 let add_string_to_string buff s = Buffer.add_string buff s
 let get_string buff = Buffer.contents buff
-    
+
