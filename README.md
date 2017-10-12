@@ -231,4 +231,4 @@ Options:
 ## Watson Conversation Service OCaml API
 
 The interface to use Watson Conversation Service is defined in the
-module `Wcs` (https://github.ibm.com/Conversational/wcs-ocaml/blob/master/src/wcs.mli).
+module `Wcs` (https://github.com/IBM/wcs-ocaml/blob/master/wcs-api/wcs.mli)
