@@ -16,11 +16,16 @@
 
 (jbuild_version 1)
 
-(executable
- ((name example)
+(executables
+ ((names (example knock))
   (libraries (wcs-lib))))
 
 (alias
  ((name   runtest)
   (deps   (example.exe))
+  (action (run ${<}))))
+
+(alias
+ ((name   runtest)
+  (deps   (knock.exe))
   (action (run ${<}))))
