@@ -24,6 +24,8 @@ depends: [
   "ocamlfind"
   "jbuilder"
   "atdgen"
+  "sedlex"
+  "menhir"
 ]
 available: [
   ocaml-version >= "4.02.3"
