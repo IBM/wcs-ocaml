@@ -20,7 +20,8 @@
  ((name        wcs_lib)
   (public_name wcs-lib)
   (synopsis "Watson Conversation Service Library")
-  (libraries (atdgen))))
+  (libraries (atdgen sedlex menhirlib))
+  (preprocess (pps (sedlex.ppx)))))
 
 (rule
  ((targets (wcs_j.ml wcs_j.mli))
@@ -31,3 +32,7 @@
  ((targets (wcs_t.ml wcs_t.mli))
   (deps    (wcs.atd))
   (action  (run atdgen -t ${<}))))
+
+(menhir
+ ((modules (spel_parser_j))))
+
