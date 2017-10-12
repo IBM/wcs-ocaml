@@ -24,16 +24,16 @@ let keyword_table =
   begin
     List.iter (fun (key, data) -> Hashtbl.add tbl key data)
       [ "or", OR;
-	"and", AND;
+        "and", AND;
         "not", NOT;
-	"true", TRUE;
-	"anything_else", ANYTHING_ELSE;
-	"false", FALSE;
-	"null", NULL;
-	"conversation_start", CONVERSATION_START;
-	"input", INPUT;
-	"entities", ENTITIES;
-	(* "output", OUTPUT; *)
+        "true", TRUE;
+        "anything_else", ANYTHING_ELSE;
+        "false", FALSE;
+        "null", NULL;
+        "conversation_start", CONVERSATION_START;
+        "input", INPUT;
+        "entities", ENTITIES;
+        (* "output", OUTPUT; *)
       ]; tbl
   end
 
@@ -92,14 +92,14 @@ let rec token sbuff lexbuf =
   | any -> failwith "Unexpected character"
   | _ -> failwith "Unexpected character"
   end
-  
+
 and intent sbuff lexbuf =
   let buf = lexbuf.stream in
   begin match%sedlex buf with
   | uintent -> INTENT (Sedlexing.Utf8.lexeme buf)
   | _ -> failwith "Unexpected character after '#'"
   end
-  
+
 and entity sbuff lexbuf =
   let buf = lexbuf.stream in
   begin match%sedlex buf with
@@ -123,14 +123,14 @@ and entity_value sbuff entity_name lexbuf =
       ENTITY (entity_name, Some (qparen sbuff lexbuf))
   | _ -> failwith "Unexpected character after ':'"
   end
-  
+
 and variable sbuff lexbuf =
   let buf = lexbuf.stream in
   begin match%sedlex buf with
   | ident -> Sedlexing.Utf8.lexeme buf
   | _ -> failwith "Unexpected character after '#'"
   end
-  
+
 and string sbuff lexbuf =
   let buf = lexbuf.stream in
   begin match%sedlex buf with
@@ -138,7 +138,7 @@ and string sbuff lexbuf =
   | any -> add_string_to_string sbuff (Sedlexing.Utf8.lexeme buf); string sbuff lexbuf
   | _ -> failwith "Unexpected character"
   end
-  
+
 and qstring sbuff lexbuf =
   let buf = lexbuf.stream in
   begin match%sedlex buf with
@@ -146,7 +146,7 @@ and qstring sbuff lexbuf =
   | any -> add_string_to_string sbuff (Sedlexing.Utf8.lexeme buf); qstring sbuff lexbuf
   | _ -> failwith "Unexpected character"
   end
-  
+
 and qparen sbuff lexbuf =
   let buf = lexbuf.stream in
   begin match%sedlex buf with
@@ -154,7 +154,7 @@ and qparen sbuff lexbuf =
   | any -> add_string_to_string sbuff (Sedlexing.Utf8.lexeme buf); qparen sbuff lexbuf
   | _ -> failwith "Unexpected character"
   end
-  
+
 and body sbuff lexbuf =
   let buf = lexbuf.stream in
   begin match%sedlex buf with

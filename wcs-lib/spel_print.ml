@@ -67,10 +67,10 @@ let print_dim dim =
 
 let print_dims dims : string =
   String.concat "" (List.map print_dim dims)
-    
+
 let escape (istop:bool) s =
   if istop then "<?"^s^"?>" else s
-    
+
 let rec print_expr_aux (istop:bool) e : string =
   begin match e.expr_desc with
   | E_lit v -> print_lit istop v
@@ -99,7 +99,7 @@ let lift_constants e = `String e
 
 let print_expr istop e =
   lift_constants (print_expr_aux istop e)
-    
+
 (* Top level eval for conditions *)
 let print_expr_cond e : string = print_expr_aux false e
 

@@ -61,7 +61,7 @@ let fix_empty_condition ocond =
   | Some cond -> cond
   | None -> Spel_util.mk_expr (E_lit (L_boolean false))
   end
-  
+
 let parse_spel_cond_from_file f =
   fix_empty_condition (Spel_util.uparse_file Spel_parser_j.condition_main (mk_expr_lexer ()) f)
 
@@ -79,10 +79,10 @@ let parse_spel_cond_from_string s =
       error (Some (Spel_util.mk_expr (E_error (`String s))))
         (Format.sprintf "[Parse error] in condition: '%s'" s)
   end
-  
+
 let parse_spel_text_from_file f =
   Spel_util.uparse_file Spel_parser_j.body_main (mk_body_lexer ()) f
-    
+
 let parse_spel_text_from_string s =
   begin try
     let ast = Spel_util.uparse_string Spel_parser_j.body_main (mk_body_lexer ()) s in
@@ -96,9 +96,9 @@ let parse_spel_text_from_string s =
       error (Some (Spel_util.mk_expr (E_error (`String s))))
         (Format.sprintf "[Parse error] in text: '%s'" s)
   end
-  
+
 (** {6 JSON AST with embedded Spel expressions} *)
-  
+
 let rec build_spel_context_from_json (j:Yojson.Basic.json) : json_expr =
   begin try
     begin match j with
