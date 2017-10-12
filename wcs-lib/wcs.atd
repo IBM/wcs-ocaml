@@ -116,7 +116,7 @@ type entity_value = {
     ~synonyms : string list;
     ?created : string nullable;
     ?updated : string nullable;
-  } <ocaml field_prefix="e_">
+  } <ocaml field_prefix="e_val_">
 <doc text="Type of entity values.">
 
 type entity_def = {

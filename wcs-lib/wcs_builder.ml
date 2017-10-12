@@ -78,11 +78,11 @@ let value
       ?updated
       ()
   : entity_value =
-  { e_value = value;
-    e_metadata = metadata;
-    e_synonyms = synonyms;
-    e_created = created;
-    e_updated = updated; }
+  { e_val_value = value;
+    e_val_metadata = metadata;
+    e_val_synonyms = synonyms;
+    e_val_created = created;
+    e_val_updated = updated; }
 
 let entity
       entity
