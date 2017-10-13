@@ -140,12 +140,16 @@ let dialog_node
       dialog_node
       ?description
       ?type_
-      ?(conditions="true")
+      ?conditions
+      ?conditions_spel
       ?parent
       ?previous_sibling
       ?text
+      ?text_spel
       ?output
+      ?output_spel
       ?context
+      ?context_spel
       ?metadata
       ?next_step
       ?next_step_id
@@ -161,15 +165,48 @@ let dialog_node
   let previous_sibling_id =
     omap (fun node -> node.node_dialog_node) previous_sibling
   in
+  let text =
+    begin match text, text_spel with
+    | None, None -> None
+    | Some text, None -> Some (mk_output text)
+    | None, Some expr -> Some (mk_output (Spel_print.print_text_expression expr))
+    | Some _, Some _ ->
+        Log.error "Ws_builder"
+          (Some None)
+          "dialog_node: ~text and ~text_spel cannot be present simultanously"
+    end
+  in
+  let output =
+    begin match output, output_spel with
+    | None, None -> None
+    | Some output, None -> Some output
+    | None, Some json_expr -> Some (Spel_print.print_json_expression json_expr)
+    | Some _, Some _ ->
+        Log.error "Ws_builder"
+          (Some None)
+          "dialog_node: ~output and ~output_spel cannot be present simultanously"
+    end
+  in
   let output =
     begin match text, output with
     | None, None -> None
-    | Some text, None -> Some (mk_output text)
+    | Some text, None -> Some text
     | None, Some output -> Some output
     | Some _, Some _ ->
         Log.error "Ws_builder"
           (Some None)
-          "dialog_node: ~text and ~output cannot be present simlutanously"
+          "dialog_node: ~text and ~output cannot be present simultanously"
+    end
+  in
+  let context =
+    begin match context, context_spel with
+    | None, None -> None
+    | Some context, None -> Some context
+    | None, Some json_expr -> Some (Spel_print.print_json_expression json_expr)
+    | Some _, Some _ ->
+        Log.error "Ws_builder"
+          (Some None)
+          "dialog_node: ~context and ~context_spel cannot be present simultanously"
     end
   in
   let next_step =
@@ -182,13 +219,24 @@ let dialog_node
     | Some _, Some _ ->
         Log.error "Ws_builder"
           (Some None)
-          "dialog_node: ~next_step and ~next_step_id cannot be present simlutanously"
+          "dialog_node: ~next_step and ~next_step_id cannot be present simultanously"
+    end
+  in
+  let conditions =
+    begin match conditions, conditions_spel with
+    | None,None -> Some "true"
+    | Some text, None -> Some text
+    | None, Some expr -> Some (Spel_print.print_cond_expression expr)
+    | Some _, Some _ ->
+        Log.error "Ws_builder"
+          (Some None)
+          "dialog_node: ~conditions and ~conditions_spel cannot be present simultanously"
     end
   in
   { node_dialog_node = dialog_node;
     node_description = description;
     node_type_ = type_;
-    node_conditions = Some conditions;
+    node_conditions = conditions;
     node_parent = parent_id;
     node_previous_sibling = previous_sibling_id;
     node_output = output;

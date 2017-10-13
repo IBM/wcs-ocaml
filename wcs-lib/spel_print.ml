@@ -97,14 +97,14 @@ let rec print_expr_aux (istop:bool) e : string =
 
 let lift_constants e = `String e
 
-let print_expr istop e =
+let print_expression istop e =
   lift_constants (print_expr_aux istop e)
 
 (* Top level eval for conditions *)
-let print_expr_cond e : string = print_expr_aux false e
+let print_cond_expression e : string = print_expr_aux false e
 
 (* Top level eval for body *)
-let print_expr_text e = print_expr_aux true e
+let print_text_expression e = print_expr_aux true e
 
 (* Top level eval for context *)
 let rec unexpr_expr_var j =
@@ -115,11 +115,14 @@ let rec unexpr_expr_var j =
   | `Int i -> `Int i
   | `List l -> `List (List.map unexpr_expr_var l)
   | `Null -> `Null
-  | `Expr e -> print_expr true e
+  | `Expr e -> print_expression true e
   end
 
 let print_expr_var j = unexpr_expr_var j
 
-let print_expr_context context_expr : Yojson.Basic.json =
+let print_context_expression context_expr : Yojson.Basic.json =
   `Assoc (List.map (fun x -> (fst x, print_expr_var (snd x))) context_expr)
+
+let print_json_expression json_expr : Yojson.Basic.json =
+  print_expr_var json_expr
 

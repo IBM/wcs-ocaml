@@ -99,7 +99,7 @@ let parse_spel_text_from_string s =
 
 (** {6 JSON AST with embedded Spel expressions} *)
 
-let rec build_spel_context_from_json (j:Yojson.Basic.json) : json_expr =
+let rec build_spel_context_from_json (j:Yojson.Basic.json) : json_expression =
   begin try
     begin match j with
     | `Assoc l ->
@@ -121,5 +121,5 @@ let rec build_spel_context_from_json (j:Yojson.Basic.json) : json_expr =
         (Format.sprintf "[Parse error] in context: %s" (Yojson.Basic.to_string j))
   end
 
-let build_spel_context_from_context c : (string * json_expr) list =
+let build_spel_context_from_context c : (string * json_expression) list =
   List.map (fun x -> (fst x, build_spel_context_from_json (snd x))) c

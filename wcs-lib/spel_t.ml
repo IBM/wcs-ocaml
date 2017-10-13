@@ -80,12 +80,12 @@ and expression_desc =
   | E_input
 
 (** JSON with embedded expressions *)
-type json_expr = [
-    `Assoc of (string * json_expr) list
+type json_expression = [
+    `Assoc of (string * json_expression) list
   | `Bool of bool
   | `Float of float
   | `Int of int
-  | `List of json_expr list
+  | `List of json_expression list
   | `Null
   | `Expr of expression
 ]
@@ -94,5 +94,5 @@ type json_expr = [
 type expression_definition =
   | Expr_condition of expression
   | Expr_text of expression
-  | Expr_context of (string * json_expr) list
+  | Expr_context of (string * json_expression) list
 
