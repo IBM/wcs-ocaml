@@ -91,11 +91,15 @@ val dialog_node :
   ?description:string ->
   ?type_: dialog_node_type ->
   ?conditions:string ->
+  ?conditions_spel:Spel_t.expression ->
   ?parent:dialog_node ->
   ?previous_sibling:dialog_node ->
   ?text:string ->
+  ?text_spel:Spel_t.expression ->
   ?output:output_def ->
+  ?output_spel:Spel_t.json_expression ->
   ?context:json ->
+  ?context_spel:Spel_t.json_expression ->
   ?metadata:json ->
   ?next_step:dialog_node * selector ->
   ?next_step_id:string * selector ->
@@ -110,10 +114,14 @@ val response_condition :
   parent:dialog_node ->
   ?description:string ->
   ?conditions:string ->
+  ?conditions_spel:Spel_t.expression ->
   ?previous_sibling:dialog_node ->
   ?text:string ->
+  ?text_spel:Spel_t.expression ->
   ?output:output_def ->
+  ?output_spel:Spel_t.json_expression ->
   ?context:json ->
+  ?context_spel:Spel_t.json_expression ->
   ?metadata:json ->
   ?created:string ->
   ?updated:string ->

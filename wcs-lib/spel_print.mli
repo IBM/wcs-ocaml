@@ -16,6 +16,8 @@
  * limitations under the License.
  *)
 
-val print_expr_cond : Spel_t.expression -> string
-val print_expr_text : Spel_t.expression -> string
-val print_expr_context : (string * Spel_t.json_expr) list -> Yojson.Basic.json
+val print_cond_expression : Spel_t.expression -> string
+val print_text_expression : Spel_t.expression -> string
+val print_context_expression :
+  (string * Spel_t.json_expression) list -> Yojson.Basic.json
+val print_json_expression : Spel_t.json_expression -> Yojson.Basic.json

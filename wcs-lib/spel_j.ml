@@ -415,7 +415,7 @@ and (expression_desc_of_yojson :
         ((fun arg0  -> Ok (E_error arg0)))
     | `List ((`String "E_input")::[]) -> Ok E_input
     | _ -> Error "Spel_t.expression_desc")[@ocaml.warning "-A"])
-let rec (json_expr_to_yojson : json_expr -> Yojson.Safe.json) =
+let rec (json_expression_to_yojson : json_expression -> Yojson.Safe.json) =
   ((
     function
     | `Assoc x ->
@@ -427,21 +427,21 @@ let rec (json_expr_to_yojson : json_expr -> Yojson.Safe.json) =
                    (fun (arg0,arg1)  ->
                       `List
                         [((fun x  -> `String x)) arg0;
-                         ((fun x  -> json_expr_to_yojson x)) arg1]) x))) x]
+                         ((fun x  -> json_expression_to_yojson x)) arg1]) x))) x]
     | `Bool x -> `List [`String "Bool"; ((fun x  -> `Bool x)) x]
     | `Float x -> `List [`String "Float"; ((fun x  -> `Float x)) x]
     | `Int x -> `List [`String "Int"; ((fun x  -> `Int x)) x]
     | `List x ->
         `List
           [`String "List";
-           ((fun x  -> `List (List.map (fun x  -> json_expr_to_yojson x) x)))
+           ((fun x  -> `List (List.map (fun x  -> json_expression_to_yojson x) x)))
              x]
     | `Null -> `List [`String "Null"]
     | `Expr x ->
         `List [`String "Expr"; ((fun x  -> expression_to_yojson x)) x])
       [@ocaml.warning "-A"])
-and (json_expr_of_yojson :
-       Yojson.Safe.json -> json_expr error_or)
+and (json_expression_of_yojson :
+       Yojson.Safe.json -> json_expression error_or)
   =
   ((
     fun (json : Yojson.Safe.json)  ->
@@ -452,42 +452,42 @@ and (json_expr_of_yojson :
                map_bind
                  (function
                  | `List (arg0::arg1::[]) ->
-                     ((fun x  -> json_expr_of_yojson x) arg1) >>=
+                     ((fun x  -> json_expression_of_yojson x) arg1) >>=
                      ((fun arg1  ->
                         ((function
                          | `String x -> Ok x
-                         | _ -> Error "Spel_t.json_expr") arg0)
+                         | _ -> Error "Spel_t.json_expression") arg0)
                         >>= (fun arg0  -> Ok (arg0, arg1))))
-                 | _ -> Error "Spel_t.json_expr") [] xs
-           | _ -> Error "Spel_t.json_expr") x) >>=
+                 | _ -> Error "Spel_t.json_expression") [] xs
+           | _ -> Error "Spel_t.json_expression") x) >>=
           ((fun x  -> Ok (`Assoc x)))
       | `List ((`String "Bool")::x::[]) ->
           ((function
            | `Bool x -> Ok x
-           | _ -> Error "Spel_t.json_expr") x) >>=
+           | _ -> Error "Spel_t.json_expression") x) >>=
           ((fun x  -> Ok (`Bool x)))
       | `List ((`String "Float")::x::[]) ->
           ((function
            | `Int x -> Ok (float_of_int x)
            | `Intlit x -> Ok (float_of_string x)
            | `Float x -> Ok x
-           | _ -> Error "Spel_t.json_expr") x) >>=
+           | _ -> Error "Spel_t.json_expression") x) >>=
           ((fun x  -> Ok (`Float x)))
       | `List ((`String "Int")::x::[]) ->
           ((function
            | `Int x -> Ok x
-           | _ -> Error "Spel_t.json_expr") x) >>=
+           | _ -> Error "Spel_t.json_expression") x) >>=
           ((fun x  -> Ok (`Int x)))
       | `List ((`String "List")::x::[]) ->
           ((function
-           | `List xs -> map_bind (fun x  -> json_expr_of_yojson x) [] xs
-           | _ -> Error "Spel_t.json_expr") x) >>=
+           | `List xs -> map_bind (fun x  -> json_expression_of_yojson x) [] xs
+           | _ -> Error "Spel_t.json_expression") x) >>=
           ((fun x  -> Ok (`List x)))
       | `List ((`String "Null")::[]) -> Ok `Null
       | `List ((`String "Expr")::x::[]) ->
           ((fun x  -> expression_of_yojson x) x) >>=
           ((fun x  -> Ok (`Expr x)))
-      | _ -> Error "Spel_t.json_expr")[@ocaml.warning "-A"])
+      | _ -> Error "Spel_t.json_expression")[@ocaml.warning "-A"])
 let rec (expression_definition_to_yojson :
            expression_definition -> Yojson.Safe.json)
   =
@@ -509,7 +509,7 @@ let rec (expression_definition_to_yojson :
                    (fun (arg0,arg1)  ->
                       `List
                         [((fun x  -> `String x)) arg0;
-                         ((fun x  -> json_expr_to_yojson x)) arg1]) x)))
+                         ((fun x  -> json_expression_to_yojson x)) arg1]) x)))
              arg0])[@ocaml.warning "-A"])
 and (expression_definition_of_yojson :
        Yojson.Safe.json ->
@@ -529,7 +529,7 @@ and (expression_definition_of_yojson :
              map_bind
                (function
                | `List (arg0::arg1::[]) ->
-                   ((fun x  -> json_expr_of_yojson x) arg1) >>=
+                   ((fun x  -> json_expression_of_yojson x) arg1) >>=
                    ((fun arg1  ->
                       ((function
                        | `String x -> Ok x
