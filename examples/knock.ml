@@ -13,7 +13,7 @@ let spel_string_of_entity_value entity value =
 
 
 let jokes = [
-  ("BrokenPencil", "Nevermind it's pointless");
+  ("Broken Pencil", "Nevermind it's pointless");
   ("Boo", "Boohoohoo");
 ]
 
@@ -46,7 +46,7 @@ let mk_knock names_entity (name, answer) =
   in
   let answer =
     Mk.dialog_node ("Answer "^name)
-      ~conditions: ("@name:"^name)
+      ~conditions: (spel_string_of_entity_value names_entity value)
       ~text: answer
       ~parent: whoisthere
       ~context: (Json.set_skip_user_input `Null true)
