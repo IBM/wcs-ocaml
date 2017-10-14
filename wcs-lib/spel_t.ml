@@ -69,6 +69,7 @@ and expression_desc =
   | E_get_dictionary of expression * expression (* e['x'] *)
   | E_list of expression list
   | E_new_array of spel_type * int option list * expression list option
+  | E_new of string * expression list (* new c(...) *)
   | E_call of expression option * string * expression list (* e.m(...) *)
   | E_call_catch of expression option * string * expression list (* e.m(...) *)
   | E_op of op * expression list
