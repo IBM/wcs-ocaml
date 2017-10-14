@@ -26,7 +26,6 @@ let error default msg = Log.error "Spel parsing" default msg
 type state = BodyLexing | ExprLexing
 
 (** {6 Expression lexer} *)
-
 let expr_lexer buff lb =
   Spel_sedlexer_j.token buff lb
 
@@ -34,7 +33,6 @@ let mk_expr_lexer () =
   expr_lexer (Spel_util.string_buff ())
 
 (** {6 Body lexer} *)
-
 let body_lexer st buff lb =
   begin match !st with
   | BodyLexing ->
@@ -55,7 +53,6 @@ let mk_body_lexer () =
   body_lexer (ref BodyLexing) (Spel_util.string_buff ())
 
 (** {6 Parsers} *)
-
 let fix_empty_condition ocond =
   begin match ocond with
   | Some cond -> cond
@@ -98,7 +95,6 @@ let parse_spel_text_from_string s =
   end
 
 (** {6 JSON AST with embedded Spel expressions} *)
-
 let rec build_spel_context_from_json (j:Yojson.Basic.json) : json_expression =
   begin try
     begin match j with

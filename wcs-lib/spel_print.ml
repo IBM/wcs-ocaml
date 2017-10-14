@@ -18,7 +18,6 @@
 
 open Spel_t
 
-(* Eval functions *)
 let print_lit (istop:bool) v : string =
   begin match v with
   | L_string s -> if istop then s else "'" ^ s ^ "'"
@@ -76,6 +75,7 @@ let rec print_expr_aux (istop:bool) e : string =
   | E_lit v -> print_lit istop v
   | E_conversation_start -> "conversation_start"
   | E_prop (e, x) -> escape istop ((print_expr_aux false e) ^ "." ^ x)
+  | E_prop_catch (e, x) -> escape istop ((print_expr_aux false e) ^ "?." ^ x)
   | E_call (None, x, el) -> escape istop (x ^ "(" ^ (String.concat "," (List.map (print_expr_aux false) el)) ^ ")")
   | E_call (Some e, x, el) -> escape istop ((print_expr_aux false e) ^ "." ^ x ^ "(" ^ (String.concat "," (List.map (print_expr_aux false) el)) ^ ")")
   | E_get_array (e, e_n) -> escape istop ((print_expr_aux false e) ^ "[" ^ (print_expr_aux false e_n) ^ "]")
@@ -97,32 +97,24 @@ let rec print_expr_aux (istop:bool) e : string =
 
 let lift_constants e = `String e
 
-let print_expression istop e =
+let print_expression_common istop e =
   lift_constants (print_expr_aux istop e)
 
-(* Top level eval for conditions *)
-let print_cond_expression e : string = print_expr_aux false e
+(** {6 Top level printer for Spel expressions} *)
+let print_expression e : string = print_expr_aux false e
 
-(* Top level eval for body *)
-let print_text_expression e = print_expr_aux true e
-
-(* Top level eval for context *)
-let rec unexpr_expr_var j =
+(** {6 Top level printer for JSON with embedded Spel expressions} *)
+let rec print_json_expression j : Yojson.Basic.json =
   begin match j with
-  | `Assoc l -> `Assoc (List.map (fun x -> (fst x, unexpr_expr_var (snd x))) l)
+  | `Assoc l -> `Assoc (List.map (fun x -> (fst x, print_json_expression (snd x))) l)
   | `Bool b -> `Bool b
   | `Float f -> `Float f
   | `Int i -> `Int i
-  | `List l -> `List (List.map unexpr_expr_var l)
+  | `List l -> `List (List.map print_json_expression l)
   | `Null -> `Null
-  | `Expr e -> print_expression true e
+  | `Expr e -> print_expression_common true e
   end
 
-let print_expr_var j = unexpr_expr_var j
-
-let print_context_expression context_expr : Yojson.Basic.json =
-  `Assoc (List.map (fun x -> (fst x, print_expr_var (snd x))) context_expr)
-
-let print_json_expression json_expr : Yojson.Basic.json =
-  print_expr_var json_expr
+(** {6 Auxiliary printer for text expressions} *)
+let print_text e = print_expr_aux true e
 

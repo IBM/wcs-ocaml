@@ -74,6 +74,9 @@ let rec token sbuff lexbuf =
   | "]" -> RBRACKET
   | "+" -> PLUS
   | "-" -> MINUS
+  | "*" -> MULT
+  | "/" -> DIV
+  | "%" -> MOD
   | ' ' | '\t' -> token sbuff lexbuf
   | newline -> (* Sedlexing.new_line lexbuf; *) token sbuff lexbuf
   | float -> REAL (float_of_string (Sedlexing.Utf8.lexeme buf))
