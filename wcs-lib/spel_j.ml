@@ -122,6 +122,7 @@ let rec (op_to_yojson : op -> Yojson.Safe.json) =
     | Op_or  -> `List [`String "Op_or"]
     | Op_plus  -> `List [`String "Op_plus"]
     | Op_minus  -> `List [`String "Op_minus"]
+    | Op_uminus  -> `List [`String "Op_uminus"]
     | Op_mult  -> `List [`String "Op_mult"]
     | Op_div  -> `List [`String "Op_div"]
     | Op_mod  -> `List [`String "Op_mod"]
@@ -144,6 +145,7 @@ and (op_of_yojson :
     | `List ((`String "Op_or")::[]) -> Ok Op_or
     | `List ((`String "Op_plus")::[]) -> Ok Op_plus
     | `List ((`String "Op_minus")::[]) -> Ok Op_minus
+    | `List ((`String "Op_uminus")::[]) -> Ok Op_uminus
     | `List ((`String "Op_mult")::[]) -> Ok Op_mult
     | `List ((`String "Op_div")::[]) -> Ok Op_div
     | `List ((`String "Op_mod")::[]) -> Ok Op_mod
@@ -267,6 +269,15 @@ and (expression_desc_to_yojson : expression_desc -> Yojson.Safe.json) =
            ((fun x  -> `String x)) arg1;
            ((fun x  -> `List (List.map (fun x  -> expression_to_yojson x) x)))
              arg2]
+    | E_call_catch (arg0,arg1,arg2) ->
+        `List
+          [`String "E_call_catch";
+           ((function
+            | None  -> `Null
+            | Some x -> ((fun x  -> expression_to_yojson x)) x)) arg0;
+           ((fun x  -> `String x)) arg1;
+           ((fun x  -> `List (List.map (fun x  -> expression_to_yojson x) x)))
+             arg2]
     | E_op (arg0,arg1) ->
         `List
           [`String "E_op";
@@ -378,6 +389,22 @@ and (expression_desc_of_yojson :
                    ((fun x  -> Ok (Some x)))) arg0)
               >>=
               (fun arg0  -> Ok (E_call (arg0, arg1, arg2))))))
+    | `List ((`String "E_call_catch")::arg0::arg1::arg2::[]) ->
+        ((function
+         | `List xs -> map_bind (fun x  -> expression_of_yojson x) [] xs
+         | _ -> Error "Spel_t.expression_desc") arg2) >>=
+        ((fun arg2  ->
+           ((function
+            | `String x -> Ok x
+            | _ -> Error "Spel_t.expression_desc") arg1) >>=
+           (fun arg1  ->
+              ((function
+               | `Null -> Ok None
+               | x ->
+                   ((fun x  -> expression_of_yojson x) x) >>=
+                   ((fun x  -> Ok (Some x)))) arg0)
+              >>=
+              (fun arg0  -> Ok (E_call_catch (arg0, arg1, arg2))))))
     | `List ((`String "E_op")::arg0::arg1::[]) ->
         ((function
          | `List xs -> map_bind (fun x  -> expression_of_yojson x) [] xs

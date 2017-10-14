@@ -45,6 +45,7 @@ type op =
   | Op_or
   | Op_plus
   | Op_minus
+  | Op_uminus
   | Op_mult
   | Op_div
   | Op_mod
@@ -69,6 +70,7 @@ and expression_desc =
   | E_list of expression list
   | E_new_array of spel_type * int option list * expression list option
   | E_call of expression option * string * expression list (* e.m(...) *)
+  | E_call_catch of expression option * string * expression list (* e.m(...) *)
   | E_op of op * expression list
   (*| E_assign of string * expression *)
   (*| E_type of string *)
