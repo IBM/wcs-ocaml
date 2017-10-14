@@ -16,13 +16,11 @@
  * limitations under the License.
  *)
 
-val parse_spel_cond_from_file : string -> Spel_t.expression
-val parse_spel_cond_from_string : string -> Spel_t.expression
+val expression_from_file : string -> Spel_t.expression
+val expression_from_string : string -> Spel_t.expression
 
-val parse_spel_text_from_file : string -> Spel_t.expression
-val parse_spel_text_from_string : string -> Spel_t.expression
+val text_from_file : string -> Spel_t.expression
+val text_from_string : string -> Spel_t.expression
 
-val build_spel_context_from_context :
-  (string * Yojson.Basic.json) list
-  -> (string * Spel_t.json_expression) list
+val json_expression_from_json : Yojson.Basic.json -> Spel_t.json_expression
 
