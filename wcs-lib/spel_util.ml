@@ -19,8 +19,14 @@
 open Spel_t
 
 let mk_expr edesc =
+  let locs =
+    begin try (Parsing.symbol_start_pos (), Parsing.symbol_end_pos ()) with
+    | _ ->
+        (Lexing.dummy_pos, Lexing.dummy_pos)
+    end
+  in
   { expr_desc = edesc;
-    expr_loc = (Parsing.symbol_start_pos (), Parsing.symbol_end_pos ());
+    expr_loc = locs;
     expr_text = None }
 
 (* Cleanup *)
@@ -39,7 +45,7 @@ let rec spel_cleanup e =
                 expr_loc = e.expr_loc;
                 expr_text = e.expr_text; }
       | [e] -> e
-      | el -> { expr_desc = E_lit (L_string "");
+      | el -> { expr_desc = E_op (Op_concat, el);
                 expr_loc = e.expr_loc;
                 expr_text = e.expr_text; }
       end
