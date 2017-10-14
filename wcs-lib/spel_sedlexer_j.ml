@@ -165,10 +165,17 @@ and body sbuff lexbuf =
   let buf = lexbuf.stream in
   begin match%sedlex buf with
   | "\\$" -> add_string_to_string sbuff "\\$"; body sbuff lexbuf
-  | "$" -> let s = get_string sbuff in reset_string sbuff; BODYVAR (s,variable sbuff lexbuf)
+  | "$" -> let s = get_string sbuff in reset_string sbuff; body_variable sbuff s lexbuf
   | eof -> let s = get_string sbuff in EOF s (* End of string *)
   | "<?" -> let s = get_string sbuff in reset_string sbuff; OPENEXPR s  (* End of string *)
   | any -> add_string_to_string sbuff (Sedlexing.Utf8.lexeme buf); body sbuff lexbuf
   | _ -> failwith "Unexpected character"
+  end
+
+and body_variable sbuff s lexbuf =
+  let buf = lexbuf.stream in
+  begin match%sedlex buf with
+  | ident -> BODYVAR (s,Sedlexing.Utf8.lexeme buf)
+  | _ -> add_string_to_string sbuff "$"; body sbuff lexbuf
   end
 
