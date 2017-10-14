@@ -52,6 +52,7 @@ open Spel_util
 %token LBRACKET RBRACKET
 %token PLUS MINUS
 %token MULT DIV MOD
+%token NEW
 %token <string> EOF
 
 (* Quoted expressions *)
@@ -168,6 +169,8 @@ expr:
     { mk_expr (E_call (Some e1, id, el)) }
 | e1 = expr QUESTION DOT id = IDENT LPAREN el = elist RPAREN
     { mk_expr (E_call_catch (Some e1, id, el)) }
+| NEW id = IDENT LPAREN el = elist RPAREN
+    { mk_expr (E_new (id, el)) }
 | e1 = expr LBRACKET e2 = expr RBRACKET
     { mk_expr (E_get_array (e1, e2)) }
 
