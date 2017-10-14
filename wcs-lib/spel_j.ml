@@ -260,6 +260,12 @@ and (expression_desc_to_yojson : expression_desc -> Yojson.Safe.json) =
                 ((fun x  ->
                    `List (List.map (fun x  -> expression_to_yojson x) x)))
                   x)) arg2]
+    | E_new (arg0,arg1) ->
+        `List
+          [`String "E_new";
+           ((fun x  -> `String x)) arg0;
+           ((fun x  -> `List (List.map (fun x  -> expression_to_yojson x) x)))
+             arg1]
     | E_call (arg0,arg1,arg2) ->
         `List
           [`String "E_call";
@@ -373,6 +379,16 @@ and (expression_desc_of_yojson :
               ((fun x  -> spel_type_of_yojson x) arg0) >>=
               (fun arg0  ->
                  Ok (E_new_array (arg0, arg1, arg2))))))
+    | `List ((`String "E_new")::arg0::arg1::[]) ->
+        ((function
+         | `List xs -> map_bind (fun x  -> expression_of_yojson x) [] xs
+         | _ -> Error "Spel_t.expression_desc") arg1) >>=
+        ((fun arg1  ->
+           ((function
+            | `String x -> Ok x
+            | _ -> Error "Spel_t.expression_desc") arg0)
+              >>=
+              (fun arg0  -> Ok (E_new (arg0, arg1)))))
     | `List ((`String "E_call")::arg0::arg1::arg2::[]) ->
         ((function
          | `List xs -> map_bind (fun x  -> expression_of_yojson x) [] xs

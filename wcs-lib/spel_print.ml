@@ -77,6 +77,7 @@ let rec print_expr_aux (istop:bool) e : string =
   | E_conversation_start -> "conversation_start"
   | E_prop (e, x) -> escape istop ((print_expr_aux false e) ^ "." ^ x)
   | E_prop_catch (e, x) -> escape istop ((print_expr_aux false e) ^ "?." ^ x)
+  | E_new (x, el) -> escape istop ("new" ^ x ^ "(" ^ (String.concat "," (List.map (print_expr_aux false) el)) ^ ")")
   | E_call (None, x, el) -> escape istop (x ^ "(" ^ (String.concat "," (List.map (print_expr_aux false) el)) ^ ")")
   | E_call (Some e, x, el) -> escape istop ((print_expr_aux false e) ^ "." ^ x ^ "(" ^ (String.concat "," (List.map (print_expr_aux false) el)) ^ ")")
   | E_call_catch (None, x, el) -> escape istop (x ^ "(" ^ (String.concat "," (List.map (print_expr_aux false) el)) ^ ")")

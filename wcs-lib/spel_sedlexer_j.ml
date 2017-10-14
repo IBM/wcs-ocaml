@@ -33,6 +33,7 @@ let keyword_table =
         "conversation_start", CONVERSATION_START;
         "input", INPUT;
         "entities", ENTITIES;
+        "new", NEW;
         (* "output", OUTPUT; *)
       ]; tbl
   end
