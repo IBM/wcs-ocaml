@@ -48,6 +48,7 @@ open Spel_util
 %token DOT QUESTION COLON
 %token COMMA
 %token LPAREN RPAREN
+%token LCURL RCURL
 %token LBRACKET RBRACKET
 %token PLUS MINUS
 %token MULT DIV MOD
@@ -67,6 +68,7 @@ open Spel_util
 %left NOT
 %left LBRACKET
 %left DOT
+%nonassoc UMINUS
 
 %start <Spel_t.expression> body_main
 %start <Spel_t.expression option> condition_main
@@ -144,6 +146,12 @@ expr:
     { mk_expr (E_op (Op_gt, [e1;e2])) }
 | e1 = expr GTEQ e2 = expr
     { mk_expr (E_op (Op_ge, [e1;e2])) }
+| MINUS e1 = expr %prec UMINUS
+    { mk_expr (E_op (Op_uminus, [e1])) }
+
+(* Collections *)
+| LCURL el = elist RCURL
+    { mk_expr (E_list el) }
 
 (* Conditionals *)
 | e1 = expr QUESTION e2 = expr COLON e3 = expr
@@ -158,6 +166,8 @@ expr:
     { mk_expr (E_call (None, id, el)) }
 | e1 = expr DOT id = IDENT LPAREN el = elist RPAREN
     { mk_expr (E_call (Some e1, id, el)) }
+| e1 = expr QUESTION DOT id = IDENT LPAREN el = elist RPAREN
+    { mk_expr (E_call_catch (Some e1, id, el)) }
 | e1 = expr LBRACKET e2 = expr RBRACKET
     { mk_expr (E_get_array (e1, e2)) }
 

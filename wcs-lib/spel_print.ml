@@ -49,6 +49,7 @@ let print_op (op: Spel_t.op) (l: string list) : string =
   | Op_or, [v1; v2] -> v1 ^ " or " ^ v2
   | Op_plus, [v1; v2] -> v1 ^ " + " ^ v2
   | Op_minus, [v1; v2] -> v1 ^ " - " ^ v2
+  | Op_uminus, [v1] -> " - " ^ v1
   | Op_mult, [v1; v2] -> v1 ^ " * " ^ v2
   | Op_div, [v1; v2] -> v1 ^ " / " ^ v2
   | Op_mod, [v1; v2] -> v1 ^ " % " ^ v2
@@ -78,6 +79,8 @@ let rec print_expr_aux (istop:bool) e : string =
   | E_prop_catch (e, x) -> escape istop ((print_expr_aux false e) ^ "?." ^ x)
   | E_call (None, x, el) -> escape istop (x ^ "(" ^ (String.concat "," (List.map (print_expr_aux false) el)) ^ ")")
   | E_call (Some e, x, el) -> escape istop ((print_expr_aux false e) ^ "." ^ x ^ "(" ^ (String.concat "," (List.map (print_expr_aux false) el)) ^ ")")
+  | E_call_catch (None, x, el) -> escape istop (x ^ "(" ^ (String.concat "," (List.map (print_expr_aux false) el)) ^ ")")
+  | E_call_catch (Some e, x, el) -> escape istop ((print_expr_aux false e) ^ "?." ^ x ^ "(" ^ (String.concat "," (List.map (print_expr_aux false) el)) ^ ")")
   | E_get_array (e, e_n) -> escape istop ((print_expr_aux false e) ^ "[" ^ (print_expr_aux false e_n) ^ "]")
   | E_get_dictionary (e, e_x) -> escape istop ((print_expr_aux false e) ^ "[" ^ (print_expr_aux false e_x) ^ "]")
   | E_list l -> escape istop ("{"  ^ (String.concat "," (List.map (print_expr_aux false) l)) ^ "}")

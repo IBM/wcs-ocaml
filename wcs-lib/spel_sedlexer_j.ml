@@ -48,8 +48,8 @@ let ident = [%sedlex.regexp? (letter, Star ident_char)]
 let digit = [%sedlex.regexp? '0'..'9']
 let frac = [%sedlex.regexp? '.', Star digit]
 let exp = [%sedlex.regexp? ('e'|'E'), ('-'|'+'), Plus digit]
-let integ = [%sedlex.regexp? Opt '-', Star digit]
-let float = [%sedlex.regexp? Opt '-', Star digit, ((frac, Opt exp) | exp)]
+let integ = [%sedlex.regexp? Star digit]
+let float = [%sedlex.regexp? Star digit, ((frac, Opt exp) | exp)]
 
 let rec token sbuff lexbuf =
   let buf = lexbuf.stream in
@@ -70,6 +70,8 @@ let rec token sbuff lexbuf =
   | "," -> COMMA
   | "(" -> LPAREN
   | ")" -> RPAREN
+  | "{" -> LCURL
+  | "}" -> RCURL
   | "[" -> LBRACKET
   | "]" -> RBRACKET
   | "+" -> PLUS
@@ -88,7 +90,7 @@ let rec token sbuff lexbuf =
   | "$" -> VAR (variable sbuff lexbuf)
   | ident ->
       let s = Sedlexing.Utf8.lexeme buf in
-      begin try Hashtbl.find keyword_table s
+      begin try Hashtbl.find keyword_table (String.lowercase_ascii s)
       with Not_found -> IDENT s
       end
   | "?>" -> reset_string sbuff; CLOSEEXPR
