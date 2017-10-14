@@ -20,10 +20,11 @@ type ('a, 'b) result =
   | Ok of 'a
   | Error of 'b
 
-(** {6 JSON serialization for Spel AST} *)
+(** {6 JSON serialization/deserialization for Spel expressions} *)
 val expression_of_yojson : Yojson.Safe.json -> (Spel_t.expression, string) result
 val expression_to_yojson : Spel_t.expression -> Yojson.Safe.json
 
-val expression_definition_of_yojson : Yojson.Safe.json -> (Spel_t.expression_definition, string) result
-val expression_definition_to_yojson : Spel_t.expression_definition -> Yojson.Safe.json
+(** {6 JSON serialization/deserialization for JSON with embedded Spel expressions} *)
+val json_expression_of_yojson : Yojson.Safe.json -> (Spel_t.json_expression, string) result
+val json_expression_to_yojson : Spel_t.json_expression -> Yojson.Safe.json
 

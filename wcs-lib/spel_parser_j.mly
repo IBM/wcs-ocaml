@@ -27,13 +27,14 @@ open Spel_util
 %token <float> REAL
 %token <string> STRING
 
-(* Special thingies *)
+(* Variables and Entities *)
 %token CONVERSATION_START
 %token ANYTHING_ELSE
-%token INPUT ENTITIES
+%token INPUT
+%token ENTITIES
 
 (* Identifiers *)
-%token <string> IDENT                    (* foo -- XXX how does it differ from variables XXX *)
+%token <string> IDENT                    (* foo *)
 %token <string> INTENT                   (* #foo *)
 %token <string * string option> ENTITY   (* @foo *)
 %token <string> VAR                      (* $foo *)
@@ -41,7 +42,7 @@ open Spel_util
 %token TRUE FALSE
 
 (* Symbols and operators *)
-%token AND OR NOT        (* XXX In the Spel spec, those are 'and' 'or' '!' while we also use '&&' '||' '!' XXX *)
+%token AND OR NOT (* In Spel: 'and' 'or' '!' ; WCS also uses: '&&' '||' '!' *)
 %token EQUALEQUAL NOTEQUAL
 %token LT LTEQ GT GTEQ
 %token DOT QUESTION COLON
@@ -49,6 +50,7 @@ open Spel_util
 %token LPAREN RPAREN
 %token LBRACKET RBRACKET
 %token PLUS MINUS
+%token MULT DIV MOD
 %token <string> EOF
 
 (* Quoted expressions *)
@@ -56,10 +58,12 @@ open Spel_util
 %token CLOSEEXPR
 
 %nonassoc QUESTION COLON
-%right AND OR
+%right OR
+%right AND
 %right EQUALEQUAL NOTEQUAL
 %right LT LTEQ GT GTEQ
 %right PLUS MINUS
+%right MULT DIV MOD
 %left NOT
 %left LBRACKET
 %left DOT
@@ -126,6 +130,12 @@ expr:
     { mk_expr (E_op (Op_plus, [e1;e2])) }
 | e1 = expr MINUS e2 = expr
     { mk_expr (E_op (Op_minus, [e1;e2])) }
+| e1 = expr MULT e2 = expr
+    { mk_expr (E_op (Op_mult, [e1;e2])) }
+| e1 = expr DIV e2 = expr
+    { mk_expr (E_op (Op_div, [e1;e2])) }
+| e1 = expr MOD e2 = expr
+    { mk_expr (E_op (Op_mod, [e1;e2])) }
 | e1 = expr LT e2 = expr
     { mk_expr (E_op (Op_lt, [e1;e2])) }
 | e1 = expr LTEQ e2 = expr
@@ -142,6 +152,8 @@ expr:
 (* Accessors *)
 | e1 = expr DOT id = IDENT
     { mk_expr (E_prop (e1, id)) }
+| e1 = expr QUESTION DOT id = IDENT
+    { mk_expr (E_prop_catch (e1, id)) }
 | id = IDENT LPAREN el = elist RPAREN
     { mk_expr (E_call (None, id, el)) }
 | e1 = expr DOT id = IDENT LPAREN el = elist RPAREN

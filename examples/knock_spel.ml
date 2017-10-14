@@ -8,7 +8,7 @@ let jokes =
   [
     ("BrokenPencil", "Nevermind it's pointless");
     ("Boo", "Boohoohoo");
-    ("タップ","利用できる支払い方法が何かを確認したい");
+    ("だれ","トンでもない！");
   ]
 
 let entities name_list =

@@ -169,7 +169,7 @@ let dialog_node
     begin match text, text_spel with
     | None, None -> None
     | Some text, None -> Some (mk_output text)
-    | None, Some expr -> Some (mk_output (Spel_print.print_text_expression expr))
+    | None, Some expr -> Some (mk_output (Spel_print.print_text expr))
     | Some _, Some _ ->
         Log.error "Ws_builder"
           (Some None)
@@ -226,7 +226,7 @@ let dialog_node
     begin match conditions, conditions_spel with
     | None,None -> Some "true"
     | Some text, None -> Some text
-    | None, Some expr -> Some (Spel_print.print_cond_expression expr)
+    | None, Some expr -> Some (Spel_print.print_expression expr)
     | Some _, Some _ ->
         Log.error "Ws_builder"
           (Some None)

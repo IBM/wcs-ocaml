@@ -222,6 +222,11 @@ and (expression_desc_to_yojson : expression_desc -> Yojson.Safe.json) =
           [`String "E_prop";
            ((fun x  -> expression_to_yojson x)) arg0;
            ((fun x  -> `String x)) arg1]
+    | E_prop_catch (arg0,arg1) ->
+        `List
+          [`String "E_prop_catch";
+           ((fun x  -> expression_to_yojson x)) arg0;
+           ((fun x  -> `String x)) arg1]
     | E_get_array (arg0,arg1) ->
         `List
           [`String "E_get_array";
@@ -308,6 +313,13 @@ and (expression_desc_of_yojson :
         ((fun arg1  ->
            ((fun x  -> expression_of_yojson x) arg0) >>=
            (fun arg0  -> Ok (E_prop (arg0, arg1)))))
+    | `List ((`String "E_prop_catch")::arg0::arg1::[]) ->
+        ((function
+         | `String x -> Ok x
+         | _ -> Error "Spel_t.expression_desc") arg1) >>=
+        ((fun arg1  ->
+           ((fun x  -> expression_of_yojson x) arg0) >>=
+           (fun arg0  -> Ok (E_prop_catch (arg0, arg1)))))
     | `List ((`String "E_get_array")::arg0::arg1::[]) ->
         ((fun x  -> expression_of_yojson x) arg1) >>=
         ((fun arg1  ->
@@ -488,58 +500,3 @@ and (json_expression_of_yojson :
           ((fun x  -> expression_of_yojson x) x) >>=
           ((fun x  -> Ok (`Expr x)))
       | _ -> Error "Spel_t.json_expression")[@ocaml.warning "-A"])
-let rec (expression_definition_to_yojson :
-           expression_definition -> Yojson.Safe.json)
-  =
-  ((
-    function
-    | Expr_condition arg0 ->
-        `List
-          [`String "Expr_condition";
-           ((fun x  -> expression_to_yojson x)) arg0]
-    | Expr_text arg0 ->
-        `List
-          [`String "Expr_text"; ((fun x  -> expression_to_yojson x)) arg0]
-    | Expr_context arg0 ->
-        `List
-          [`String "Expr_context";
-           ((fun x  ->
-              `List
-                (List.map
-                   (fun (arg0,arg1)  ->
-                      `List
-                        [((fun x  -> `String x)) arg0;
-                         ((fun x  -> json_expression_to_yojson x)) arg1]) x)))
-             arg0])[@ocaml.warning "-A"])
-and (expression_definition_of_yojson :
-       Yojson.Safe.json ->
-     expression_definition error_or)
-  =
-  ((
-    function
-    | `List ((`String "Expr_condition")::arg0::[]) ->
-        ((fun x  -> expression_of_yojson x) arg0) >>=
-        ((fun arg0  -> Ok (Expr_condition arg0)))
-    | `List ((`String "Expr_text")::arg0::[]) ->
-        ((fun x  -> expression_of_yojson x) arg0) >>=
-        ((fun arg0  -> Ok (Expr_text arg0)))
-    | `List ((`String "Expr_context")::arg0::[]) ->
-        ((function
-         | `List xs ->
-             map_bind
-               (function
-               | `List (arg0::arg1::[]) ->
-                   ((fun x  -> json_expression_of_yojson x) arg1) >>=
-                   ((fun arg1  ->
-                      ((function
-                       | `String x -> Ok x
-                       | _ ->
-                           Error
-                             "Spel_t.expression_definition") arg0)
-                      >>= (fun arg0  -> Ok (arg0, arg1))))
-               | _ -> Error "Spel_t.expression_definition") [] xs
-         | _ -> Error "Spel_t.expression_definition") arg0) >>=
-        ((fun arg0  -> Ok (Expr_context arg0)))
-    | _ -> Error "Spel_t.expression_definition")[@ocaml.warning
-      "-A"])
-

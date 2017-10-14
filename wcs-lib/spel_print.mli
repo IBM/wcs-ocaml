@@ -16,8 +16,12 @@
  * limitations under the License.
  *)
 
-val print_cond_expression : Spel_t.expression -> string
-val print_text_expression : Spel_t.expression -> string
-val print_context_expression :
-  (string * Spel_t.json_expression) list -> Yojson.Basic.json
+(** {6 Top level printer for Spel expressions} *)
+val print_expression : Spel_t.expression -> string
+
+(** {6 Top level printer for JSON with embedded Spel expressions} *)
 val print_json_expression : Spel_t.json_expression -> Yojson.Basic.json
+
+(** {6 Auxiliary printer for text expressions} *)
+val print_text : Spel_t.expression -> string
+
