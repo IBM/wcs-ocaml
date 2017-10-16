@@ -41,7 +41,7 @@ type credential = {
 
 type version = [
   | V_2017_05_26
-  ] (* <ocaml repr="classic"> *)
+  ] <ocaml repr="classic">
 <doc text="Supported versions">
 
 (** {6 Workspaces } *)
@@ -56,7 +56,7 @@ type sort_workspace_criteria = [
   | Sort_name_decr <json name="-name">
   | Sort_modified_decr <json name="-modified">
   | Sort_workspace_id_decr <json name="-workspace_id">
-  ] (* <ocaml repr="classic"> *)
+  ] <ocaml repr="classic">
 <doc text="Sorting criteria for list of workspaces.">
 
 
@@ -177,7 +177,7 @@ type dialog_node_event_name = [
   | Evt_nomatch <json name="nomatch">
   | Evt_filled <json name="filled">
   | Evt_generic <json name="generic">
-]
+] <ocaml repr="classic">
 
 type dialog_node = {
     dialog_node : string;
@@ -204,7 +204,7 @@ type workspace_status = [
   | Ws_failed <json name="Failed">
   | Ws_available <json name="Available">
   | Ws_unavailable <json name="Unavailable">
-]
+] <ocaml repr="classic">
 
 type workspace = {
     name : string nullable;
@@ -315,7 +315,7 @@ type action = {
 type sort_logs_criteria = [
   | Sort_request_timestamp_incr <json name="request_timestamp">
   | Sort_request_timestamp_decr <json name="-name">
-  ] (* <ocaml repr="classic"> *)
+  ] <ocaml repr="classic">
 <doc text="Sorting criteria for logs.">
 
 type log_entry = {
