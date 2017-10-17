@@ -59,6 +59,7 @@ open Spel_util
 %token <string> OPENEXPR
 %token CLOSEEXPR
 
+(* Priority *)
 %nonassoc QUESTION COLON
 %right OR
 %right AND
