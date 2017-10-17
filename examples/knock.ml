@@ -1,4 +1,3 @@
-open Wcs_lib
 open Wcs_t
 module Mk = Wcs_builder
 

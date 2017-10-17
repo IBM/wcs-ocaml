@@ -16,7 +16,6 @@
  * limitations under the License.
  *)
 
-open Wcs_lib
 open Wcs_t
 
 let pretty_json_string s =
