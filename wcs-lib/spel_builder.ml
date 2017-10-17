@@ -41,12 +41,12 @@ let of_entity_def entity_def ?value () =
         Log.error "Spel builder" None ("Undefined entity: " ^  value)
   end
 
-let of_intent_def intent_def () =
+let of_intent_def intent_def =
   Spel_util.mk_expr (E_intent intent_def.i_def_intent)
 
-let of_boolean b () =
+let of_boolean b =
   Spel_util.mk_expr (E_lit (L_boolean b))
 
-let of_string s () =
+let of_string s =
   Spel_util.mk_expr (E_lit (L_string s))
 
