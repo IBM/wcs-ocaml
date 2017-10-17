@@ -3,15 +3,10 @@ open Wcs_t
 open Spel_t
 open Spel_util
 module Mk = Wcs_builder
+module Mk_spel = Spel_builder
 
 let add_value entity value =
   { entity with e_def_values = value::entity.e_def_values }
-
-let spel_of_entity entity =
-  Spel_builder.of_entity_def entity ()
-
-let spel_of_entity_value entity value =
-  Spel_builder.of_entity_def entity ~value:value.e_val_value ()
 
 
 let jokes = [
@@ -36,20 +31,28 @@ let mk_knock names_entity (name, answer) =
   let names_entity = add_value names_entity value in
   let knock =
     Mk.dialog_node ("KnockKnock "^name)
-      ~conditions_spel: (spel_of_entity_value names_entity value)
+      ~conditions_spel: (Mk_spel.of_entity_def
+                           names_entity
+                           ~value:value
+                           ())
       ~text: "Knock knock"
       ()
   in
   let whoisthere =
     Mk.dialog_node ("Whoisthere "^name)
-      ~conditions_spel: (spel_of_entity whoisthere_entity)
+      ~conditions_spel: (Mk_spel.of_entity_def
+                           whoisthere_entity
+                           ())
       ~text: name
       ~parent: knock
       ()
   in
   let answer =
     Mk.dialog_node ("Answer "^name)
-      ~conditions_spel: (spel_of_entity_value names_entity value)
+      ~conditions_spel: (Mk_spel.of_entity_def
+                           names_entity
+                           ~value:value
+                           ())
       ~text: answer
       ~parent: whoisthere
       ~context: (Json.set_skip_user_input `Null true)
@@ -59,7 +62,7 @@ let mk_knock names_entity (name, answer) =
 
 let simple_dispatch  =
   Mk.dialog_node "Dispatch"
-    ~conditions_spel: (mk_expr (E_lit (L_boolean true)))
+    ~conditions_spel: (Mk_spel.boolean true ())
     ~text: "Enter a name"
     ()
 

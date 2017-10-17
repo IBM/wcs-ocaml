@@ -21,13 +21,32 @@
 
 open Spel_t
 
-val condition_of_string :
+val of_string :
   string ->
   Spel_t.expression
 
+val of_json :
+  Yojson.Basic.json ->
+  Spel_t.json_expression
+
 val of_entity_def :
   Wcs_t.entity_def ->
-  ?value:string ->
+  ?value:Wcs_t.entity_value ->
+  unit ->
+  Spel_t.expression
+
+val of_intent_def :
+  Wcs_t.intent_def ->
+  unit ->
+  Spel_t.expression
+
+val of_boolean :
+  bool ->
+  unit ->
+  Spel_t.expression
+
+val of_string :
+  string ->
   unit ->
   Spel_t.expression
 
