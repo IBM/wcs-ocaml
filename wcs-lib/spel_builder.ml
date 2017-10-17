@@ -22,21 +22,31 @@
 open Spel_t
 open Wcs_t
 
-let condition_of_string s =
+let of_string s =
   Spel_parse.expression_from_string s
 
-let output_of_string j =
+let of_json j =
   Spel_parse.json_expression_from_json j
 
 let of_entity_def entity_def ?value () =
   begin match value with
   | None ->
       Spel_util.mk_expr (E_entity (entity_def.e_def_entity, None))
-  | Some value ->
+  | Some value_def ->
+      let value = value_def.e_val_value in
       if List.mem value (List.map (fun ev -> ev.e_val_value) entity_def.e_def_values)
       then
         Spel_util.mk_expr (E_entity (entity_def.e_def_entity, Some value))
       else
         Log.error "Spel builder" None ("Undefined entity: " ^  value)
   end
+
+let of_intent_def intent_def () =
+  Spel_util.mk_expr (E_intent intent_def.i_def_intent)
+
+let of_boolean b () =
+  Spel_util.mk_expr (E_lit (L_boolean b))
+
+let of_string s () =
+  Spel_util.mk_expr (E_lit (L_string s))
 
