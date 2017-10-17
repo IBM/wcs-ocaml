@@ -174,7 +174,7 @@ val add_tree:
     sibling of the root of [subtree].
 *)
 
-(** {Tree access} *)
+(** {6 Tree access} *)
 
 val get_root : dialog_node list -> dialog_node option
 (** [get_root tree] return the root of the dialog tree [tree]. It

@@ -94,7 +94,7 @@ let rec print_expr_aux (istop:bool) e : string =
   | E_intent x -> "#" ^ x
   | E_entities -> "entities"
   | E_entity (x, None) -> "@" ^ x
-  | E_entity (x, Some y) -> "@" ^ x ^ ":" ^ y
+  | E_entity (x, Some y) -> "@" ^ x ^ ":" ^ "(" ^ y ^ ")"
   | E_error j -> "[ERROR]"
   | E_input -> "input"
   end
