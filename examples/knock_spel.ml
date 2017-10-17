@@ -1,4 +1,3 @@
-open Wcs_lib
 open Wcs_t
 open Spel_t
 open Spel_util

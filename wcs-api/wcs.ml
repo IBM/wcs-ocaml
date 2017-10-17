@@ -16,7 +16,6 @@
  * limitations under the License.
  *)
 
-open Wcs_lib
 open Lwt
 open Wcs_t
 
