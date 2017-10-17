@@ -25,6 +25,7 @@ type spel_type =
   | T_boolean
   | T_object
 
+(** {6 literals} *)
 type literal =
   | L_string of string
   (*| L_date of string *)
@@ -33,6 +34,7 @@ type literal =
   | L_boolean of bool
   | L_null
 
+(** {6 operators} *)
 type op =
   | Op_eq
   | Op_ne
@@ -62,27 +64,29 @@ type expression =
     mutable expr_text : string option }
 and expression_desc =
   | E_lit of literal
-  | E_conversation_start
   | E_prop of expression * string    (* e.x *)
-  | E_prop_catch of expression * string    (* e?.x - safe if property absent *)
+  | E_prop_catch of expression * string    (* e?.x *)
   | E_get_array of expression * expression  (* e[n] *)
   | E_get_dictionary of expression * expression (* e['x'] *)
   | E_list of expression list
   | E_new_array of spel_type * int option list * expression list option
   | E_new of string * expression list (* new c(...) *)
   | E_call of expression option * string * expression list (* e.m(...) *)
-  | E_call_catch of expression option * string * expression list (* e.m(...) *)
+  | E_call_catch of expression option * string * expression list (* e?.m(...) *)
   | E_op of op * expression list
   (*| E_assign of string * expression *)
   (*| E_type of string *)
   (*| E_constructor *)
   | E_conditional of expression * expression * expression
+  (* WCS additions *)
+  | E_input
+  | E_conversation_start
   | E_variable of string
   | E_intent of string
   | E_entities
   | E_entity of (string * string option)
+  (* Fallback *)
   | E_error of Yojson.Safe.json
-  | E_input
 
 (** {6 JSON with embedded expressions} *)
 type json_expression = [
