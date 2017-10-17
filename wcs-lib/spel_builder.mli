@@ -37,16 +37,13 @@ val of_entity_def :
 
 val of_intent_def :
   Wcs_t.intent_def ->
-  unit ->
   Spel_t.expression
 
 val of_boolean :
   bool ->
-  unit ->
   Spel_t.expression
 
 val of_string :
   string ->
-  unit ->
   Spel_t.expression
 

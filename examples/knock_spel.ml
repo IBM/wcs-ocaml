@@ -62,7 +62,7 @@ let mk_knock names_entity (name, answer) =
 
 let simple_dispatch  =
   Mk.dialog_node "Dispatch"
-    ~conditions_spel: (Mk_spel.boolean true ())
+    ~conditions_spel: (Mk_spel.of_boolean true)
     ~text: "Enter a name"
     ()
 
