@@ -169,7 +169,7 @@ let dialog_node
     begin match text, text_spel with
     | None, None -> None
     | Some text, None -> Some (mk_output text)
-    | None, Some expr -> Some (mk_output (Spel_print.print_text expr))
+    | None, Some expr -> Some (mk_output (Spel_print.to_text expr))
     | Some _, Some _ ->
         Log.error "Ws_builder"
           (Some None)
@@ -180,7 +180,7 @@ let dialog_node
     begin match output, output_spel with
     | None, None -> None
     | Some output, None -> Some output
-    | None, Some json_expr -> Some (Spel_print.print_json_expression json_expr)
+    | None, Some json_expr -> Some (Spel_print.to_json json_expr)
     | Some _, Some _ ->
         Log.error "Ws_builder"
           (Some None)
@@ -202,7 +202,7 @@ let dialog_node
     begin match context, context_spel with
     | None, None -> None
     | Some context, None -> Some context
-    | None, Some json_expr -> Some (Spel_print.print_json_expression json_expr)
+    | None, Some json_expr -> Some (Spel_print.to_json json_expr)
     | Some _, Some _ ->
         Log.error "Ws_builder"
           (Some None)
@@ -226,7 +226,7 @@ let dialog_node
     begin match conditions, conditions_spel with
     | None,None -> Some "true"
     | Some text, None -> Some text
-    | None, Some expr -> Some (Spel_print.print_expression expr)
+    | None, Some expr -> Some (Spel_print.to_string expr)
     | Some _, Some _ ->
         Log.error "Ws_builder"
           (Some None)

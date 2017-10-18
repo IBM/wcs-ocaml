@@ -88,10 +88,10 @@ let expression_from_string s =
         (Format.sprintf "error in expression: '%s'" s)
   end
 
-let text_from_file f =
+let expression_from_text_file f =
   Spel_util.uparse_file Spel_parser_j.body_main (mk_body_lexer ()) f
 
-let text_from_string s =
+let expression_from_text_string s =
   begin try
     let ast =
       Spel_util.uparse_string
@@ -122,5 +122,5 @@ let rec json_expression_from_json (j:Json_t.json) : json_expression =
   | `Int i -> `Int i
   | `List l -> `List (List.map json_expression_from_json l)
   | `Null -> `Null
-  | `String s -> `Expr (text_from_string s) (* This catches parse errors at the expression level *)
+  | `String s -> `Expr (expression_from_text_string s) (* This catches parse errors at the expression level *)
   end
