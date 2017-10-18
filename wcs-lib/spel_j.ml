@@ -126,7 +126,6 @@ let rec (op_to_yojson : op -> Yojson.Safe.json) =
     | Op_mult  -> `List [`String "Op_mult"]
     | Op_div  -> `List [`String "Op_div"]
     | Op_mod  -> `List [`String "Op_mod"]
-    | Op_pow  -> `List [`String "Op_pow"]
     | Op_concat  -> `List [`String "Op_concat"]
     | Op_toString  -> `List [`String "Op_toString"])[@ocaml.warning "-A"])
 and (op_of_yojson :
@@ -149,7 +148,6 @@ and (op_of_yojson :
     | `List ((`String "Op_mult")::[]) -> Ok Op_mult
     | `List ((`String "Op_div")::[]) -> Ok Op_div
     | `List ((`String "Op_mod")::[]) -> Ok Op_mod
-    | `List ((`String "Op_pow")::[]) -> Ok Op_pow
     | `List ((`String "Op_concat")::[]) -> Ok Op_concat
     | `List ((`String "Op_toString")::[]) -> Ok Op_toString
     | _ -> Error "Spel_t.op")[@ocaml.warning "-A"])
@@ -219,6 +217,7 @@ and (expression_desc_to_yojson : expression_desc -> Yojson.Safe.json) =
     | E_lit arg0 ->
         `List [`String "E_lit"; ((fun x  -> literal_to_yojson x)) arg0]
     | E_conversation_start  -> `List [`String "E_conversation_start"]
+    | E_anything_else  -> `List [`String "E_anything_else"]
     | E_prop (arg0,arg1) ->
         `List
           [`String "E_prop";
@@ -323,6 +322,8 @@ and (expression_desc_of_yojson :
         ((fun arg0  -> Ok (E_lit arg0)))
     | `List ((`String "E_conversation_start")::[]) ->
         Ok E_conversation_start
+    | `List ((`String "E_anything_else")::[]) ->
+        Ok E_anything_else
     | `List ((`String "E_prop")::arg0::arg1::[]) ->
         ((function
          | `String x -> Ok x
