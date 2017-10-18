@@ -96,7 +96,7 @@ val dialog_node :
   ?previous_sibling:dialog_node ->
   ?text:string ->
   ?text_spel:Spel_t.expression ->
-  ?output:output_def ->
+  ?output:json ->
   ?output_spel:Spel_t.json_expression ->
   ?context:json ->
   ?context_spel:Spel_t.json_expression ->
@@ -118,7 +118,7 @@ val response_condition :
   ?previous_sibling:dialog_node ->
   ?text:string ->
   ?text_spel:Spel_t.expression ->
-  ?output:output_def ->
+  ?output:json ->
   ?output_spel:Spel_t.json_expression ->
   ?context:json ->
   ?context_spel:Spel_t.json_expression ->

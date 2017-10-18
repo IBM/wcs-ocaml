@@ -152,7 +152,15 @@ type next_step = {
   } <ocaml field_prefix="next_">
 <doc text="Type of goto definitions.">
 
-type output_def = json
+type spel = string wrap <ocaml t="Spel_t.expression"
+                                   wrap="Spel_builder.of_string"
+                                   unwrap="Spel_print.to_string">
+
+type json_spel = json wrap <ocaml t="Spel_t.json_expression"
+                                   wrap="Spel_builder.of_json"
+                                   unwrap="Spel_print.to_json">
+
+type output_def = json_spel
 <doc text="Type of outputs of a dialog node.">
 
 type dialog_node_type = [
@@ -175,11 +183,11 @@ type dialog_node = {
     dialog_node : string;
     ?type_ <json name="type"> : dialog_node_type nullable;
     ?description : string nullable;
-    ?conditions : string nullable;
+    ?conditions : spel nullable;
     ?parent : string nullable;
     ?previous_sibling : string nullable;
     ?output : output_def nullable;
-    ?context : json nullable;
+    ?context : json_spel nullable;
     ?metadata : json nullable;
     ?next_step : next_step nullable;
     ?child_input_kind : string nullable;
