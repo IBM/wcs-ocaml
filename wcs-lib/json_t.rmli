@@ -16,22 +16,17 @@
  * limitations under the License.
  *)
 
-type selector =
-  | Goto_user_input
-  | Goto_condition
-  | Goto_body
+(** JSON type definition. *)
 
-let selector_wrap s =
-  begin match s with
-  | "user_input" | "client" -> Goto_user_input
-  | "condition" -> Goto_condition
-  | "body" -> Goto_body
-  | _ -> Log.error "Wcs_aux" (Some Goto_user_input) ("bad selector: "^s)
-  end
+type safe
 
-let selector_unwrap s =
-  begin match s with
-  | Goto_user_input -> "user_input"
-  | Goto_condition -> "condition"
-  | Goto_body -> "body"
-  end
+type basic
+
+type json = basic
+
+type lexer_state
+type bi_outbuf_t
+
+val write_json : bi_outbuf_t -> json -> unit
+
+val read_json : lexer_state -> Lexing.lexbuf -> json

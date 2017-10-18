@@ -24,9 +24,11 @@ type basic = Yojson.Basic.json
 
 type json = basic
 
-val write_json : Bi_outbuf.t -> json -> unit
+type lexer_state = Yojson.Basic.lexer_state
+type bi_outbuf_t = Bi_outbuf.t
 
-val read_json : Yojson.Basic.lexer_state -> Lexing.lexbuf -> json
+val write_json : bi_outbuf_t -> json -> unit
+
+val read_json : lexer_state -> Lexing.lexbuf -> json
 
 val to_string : json -> string
-

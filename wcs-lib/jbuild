@@ -24,6 +24,13 @@
   (libraries (atdgen sedlex menhirlib))
   (preprocess (pps (sedlex.ppx)))))
 
+(install
+  ((section lib)
+   (files   (json_t.rzi
+	     wcs_aux.rzi
+	     wcs_t.rzi))
+   (package wcs-lib)))
+
 (rule
  ((targets (wcs_j.ml wcs_j.mli))
   (deps    (wcs.atd))
@@ -33,6 +40,22 @@
  ((targets (wcs_t.ml wcs_t.mli))
   (deps    (wcs.atd))
   (action  (run atdgen -t ${<}))))
+
+(rule
+ ((targets (wcs_t.rzi))
+  (deps    (wcs_t.mli json_t.rzi wcs_aux.rzi))
+  (action  (run rmlc -c ${<}))))
+
+(rule
+ ((targets (json_t.rzi))
+  (deps    (json_t.rmli))
+  (action  (run rmlc -c ${<}))))
+
+(rule
+ ((targets (wcs_aux.rzi))
+  (deps    (wcs_aux.mli))
+  (action  (run rmlc -c ${<}))))
+
 
 (menhir
  ((modules (spel_parser_j))))
