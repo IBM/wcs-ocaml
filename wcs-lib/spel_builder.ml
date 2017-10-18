@@ -22,9 +22,9 @@
 open Spel_t
 open Wcs_t
 
-(** {6 roundtrip *)
+(** {6 Spel checker *)
 
-let string_of_spel_string s =
+let spel_check s =
   Spel_print.print_expression
     (Spel_parse.expression_from_string s)
 

@@ -20,7 +20,7 @@
 val print_expression : Spel_t.expression -> string
 
 (** {6 Top level printer for JSON with embedded Spel expressions} *)
-val print_json_expression : Spel_t.json_expression -> Yojson.Basic.json
+val print_json_expression : Spel_t.json_expression -> Json_t.json
 
 (** {6 Auxiliary printer for text expressions} *)
 val print_text : Spel_t.expression -> string

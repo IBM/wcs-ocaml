@@ -50,7 +50,7 @@ let location_of_yojson j =
         Lexing.pos_bol = 0;
         Lexing.pos_cnum = 0
       })
-let rec (spel_type_to_yojson : spel_type -> Yojson.Safe.json) =
+let rec (spel_type_to_yojson : spel_type -> Json_t.safe) =
   ((
     function
     | T_string  -> `List [`String "T_string"]
@@ -59,7 +59,7 @@ let rec (spel_type_to_yojson : spel_type -> Yojson.Safe.json) =
     | T_boolean  -> `List [`String "T_boolean"]
     | T_object  -> `List [`String "T_object"])[@ocaml.warning "-A"])
 and (spel_type_of_yojson :
-       Yojson.Safe.json -> spel_type error_or)
+       Json_t.safe -> spel_type error_or)
   =
   ((
     function
@@ -69,7 +69,7 @@ and (spel_type_of_yojson :
     | `List ((`String "T_boolean")::[]) -> Ok T_boolean
     | `List ((`String "T_object")::[]) -> Ok T_object
     | _ -> Error "Spel_t.spel_type")[@ocaml.warning "-A"])
-let rec (literal_to_yojson : literal -> Yojson.Safe.json) =
+let rec (literal_to_yojson : literal -> Json_t.safe) =
   ((
     function
     | L_string arg0 ->
@@ -80,7 +80,7 @@ let rec (literal_to_yojson : literal -> Yojson.Safe.json) =
         `List [`String "L_boolean"; ((fun x  -> `Bool x)) arg0]
     | L_null  -> `List [`String "L_null"])[@ocaml.warning "-A"])
 and (literal_of_yojson :
-       Yojson.Safe.json -> literal error_or)
+       Json_t.safe -> literal error_or)
   =
   ((
     function
@@ -108,7 +108,7 @@ and (literal_of_yojson :
         ((fun arg0  -> Ok (L_boolean arg0)))
     | `List ((`String "L_null")::[]) -> Ok L_null
     | _ -> Error "Spel_t.literal")[@ocaml.warning "-A"])
-let rec (op_to_yojson : op -> Yojson.Safe.json) =
+let rec (op_to_yojson : op -> Json_t.safe) =
   ((
     function
     | Op_eq  -> `List [`String "Op_eq"]
@@ -129,7 +129,7 @@ let rec (op_to_yojson : op -> Yojson.Safe.json) =
     | Op_concat  -> `List [`String "Op_concat"]
     | Op_toString  -> `List [`String "Op_toString"])[@ocaml.warning "-A"])
 and (op_of_yojson :
-       Yojson.Safe.json -> op error_or)
+       Json_t.safe -> op error_or)
   =
   ((
     function
@@ -151,7 +151,7 @@ and (op_of_yojson :
     | `List ((`String "Op_concat")::[]) -> Ok Op_concat
     | `List ((`String "Op_toString")::[]) -> Ok Op_toString
     | _ -> Error "Spel_t.op")[@ocaml.warning "-A"])
-let rec (expression_to_yojson : expression -> Yojson.Safe.json) =
+let rec (expression_to_yojson : expression -> Json_t.safe) =
   ((
     fun x  ->
       let fields = [] in
@@ -169,7 +169,7 @@ let rec (expression_to_yojson : expression -> Yojson.Safe.json) =
         :: fields in
       `Assoc fields)[@ocaml.warning "-A"])
 and (expression_of_yojson :
-       Yojson.Safe.json -> expression error_or)
+       Json_t.safe -> expression error_or)
   =
   ((
     function
@@ -211,7 +211,7 @@ and (expression_of_yojson :
            (Error "Spel_t.expression.expr_loc"),
            (Error "Spel_t.expression.expr_text"))
     | _ -> Error "Spel_t.expression")[@ocaml.warning "-A"])
-and (expression_desc_to_yojson : expression_desc -> Yojson.Safe.json) =
+and (expression_desc_to_yojson : expression_desc -> Json_t.safe) =
   ((
     function
     | E_lit arg0 ->
@@ -309,10 +309,10 @@ and (expression_desc_to_yojson : expression_desc -> Yojson.Safe.json) =
                  ((function
                   | None  -> `Null
                   | Some x -> ((fun x  -> `String x)) x)) arg1])) arg0]
-    | E_error arg0 -> `List [`String "E_error"; ((fun x  -> x)) arg0]
+    | E_error arg0 -> `List [`String "E_error"; `String arg0]
     | E_input  -> `List [`String "E_input"])[@ocaml.warning "-A"])
 and (expression_desc_of_yojson :
-       Yojson.Safe.json ->
+       Json_t.safe ->
      expression_desc error_or)
   =
   ((
@@ -466,12 +466,12 @@ and (expression_desc_of_yojson :
                 >>= (fun arg0  -> Ok (arg0, arg1))))
          | _ -> Error "Spel_t.expression_desc") arg0) >>=
         ((fun arg0  -> Ok (E_entity arg0)))
-    | `List ((`String "E_error")::arg0::[]) ->
+    | `List ((`String "E_error")::(`String arg0)::[]) ->
         ((fun x  -> Ok x) arg0) >>=
         ((fun arg0  -> Ok (E_error arg0)))
     | `List ((`String "E_input")::[]) -> Ok E_input
     | _ -> Error "Spel_t.expression_desc")[@ocaml.warning "-A"])
-let rec (json_expression_to_yojson : json_expression -> Yojson.Safe.json) =
+let rec (json_expression_to_yojson : json_expression -> Json_t.safe) =
   ((
     function
     | `Assoc x ->
@@ -497,10 +497,10 @@ let rec (json_expression_to_yojson : json_expression -> Yojson.Safe.json) =
         `List [`String "Expr"; ((fun x  -> expression_to_yojson x)) x])
       [@ocaml.warning "-A"])
 and (json_expression_of_yojson :
-       Yojson.Safe.json -> json_expression error_or)
+       Json_t.safe -> json_expression error_or)
   =
   ((
-    fun (json : Yojson.Safe.json)  ->
+    fun (json : Json_t.safe)  ->
       match json with
       | `List ((`String "Assoc")::x::[]) ->
           ((function
