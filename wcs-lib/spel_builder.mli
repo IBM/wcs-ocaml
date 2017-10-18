@@ -21,9 +21,11 @@
 
 open Spel_t
 
-(** {6 roundtrip *)
+(** {6 Spel checker *)
 
-val string_of_spel_string : string -> string
+val spel_check : string -> string
+(** [spel_check expr] parses the spel expression and prints it
+    back. Fall backs to the initial string in case of error. *)
 
 (** {6 from OCaml types} *)
 

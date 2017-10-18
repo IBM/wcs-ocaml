@@ -18,7 +18,7 @@
 
 open Spel_t
 
-let mk_expr edesc =
+let mk_expr_lit edesc text =
   let locs =
     begin try (Parsing.symbol_start_pos (), Parsing.symbol_end_pos ()) with
     | _ ->
@@ -27,7 +27,10 @@ let mk_expr edesc =
   in
   { expr_desc = edesc;
     expr_loc = locs;
-    expr_text = None }
+    expr_text = text }
+
+let mk_expr edesc =
+  mk_expr_lit edesc None
 
 (* Cleanup *)
 

@@ -35,7 +35,7 @@ let mk_knock names_entity (name, answer) =
   let knock =
     Mk.dialog_node ("KnockKnock "^name)
       ~conditions:
-        (Mk_spel.string_of_spel_string
+        (Mk_spel.spel_check
            (spel_string_of_entity_value names_entity value))
       ~text: "Knock knock"
       ()
@@ -43,7 +43,7 @@ let mk_knock names_entity (name, answer) =
   let whoisthere =
     Mk.dialog_node ("Whoisthere "^name)
       ~conditions:
-        (Mk_spel.string_of_spel_string
+        (Mk_spel.spel_check
            (spel_string_of_entity whoisthere_entity))
       ~text: name
       ~parent: knock
@@ -52,7 +52,7 @@ let mk_knock names_entity (name, answer) =
   let answer =
     Mk.dialog_node ("Answer "^name)
       ~conditions:
-        (Mk_spel.string_of_spel_string
+        (Mk_spel.spel_check
            (spel_string_of_entity_value names_entity value))
       ~text: answer
       ~parent: whoisthere
@@ -64,7 +64,7 @@ let mk_knock names_entity (name, answer) =
 let simple_dispatch  =
   Mk.dialog_node "Dispatch"
     ~conditions:
-      (Mk_spel.string_of_spel_string
+      (Mk_spel.spel_check
            "true")
     ~text: "Enter a name"
     ()

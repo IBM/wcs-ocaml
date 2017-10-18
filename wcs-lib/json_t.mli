@@ -27,3 +27,6 @@ type json = basic
 val write_json : Bi_outbuf.t -> json -> unit
 
 val read_json : Yojson.Basic.lexer_state -> Lexing.lexbuf -> json
+
+val to_string : json -> string
+

@@ -22,6 +22,7 @@ open Spel_sedlexer_j
 exception LexError of string
 
 let error default msg = Log.error "Spel parsing" default msg
+let warning default msg = Log.warning "Spel parsing" msg; default
 
 type state = BodyLexing | ExprLexing
 
@@ -60,21 +61,31 @@ let fix_empty_condition ocond =
   end
 
 let expression_from_file f =
-  fix_empty_condition (Spel_util.uparse_file Spel_parser_j.condition_main (mk_expr_lexer ()) f)
+  fix_empty_condition
+    (Spel_util.uparse_file
+       Spel_parser_j.condition_main (mk_expr_lexer ()) f)
 
 let expression_from_string s =
   begin try
-    let parsed = Spel_util.uparse_string Spel_parser_j.condition_main (mk_expr_lexer ()) s in
+    let parsed =
+      Spel_util.uparse_string
+        Spel_parser_j.condition_main
+        (mk_expr_lexer ())
+        s
+    in
     let ast = fix_empty_condition parsed in
     ast.expr_text <- Some s;
     ast
   with
   | LexError msg ->
-      error (Some (Spel_util.mk_expr (E_error (`String s))))
-        (Format.sprintf "[%s] in condition: '%s'" msg s)
+      warning (Spel_util.mk_expr_lit (E_error msg) (Some s))
+        (Format.sprintf "[%s] in expression: '%s'" msg s)
   | _ ->
-      error (Some (Spel_util.mk_expr (E_error (`String s))))
-        (Format.sprintf "[Parse error] in condition: '%s'" s)
+      warning
+        (Spel_util.mk_expr_lit
+           (E_error "Parse error in expression")
+           (Some s))
+        (Format.sprintf "error in expression: '%s'" s)
   end
 
 let text_from_file f =
@@ -82,38 +93,34 @@ let text_from_file f =
 
 let text_from_string s =
   begin try
-    let ast = Spel_util.uparse_string Spel_parser_j.body_main (mk_body_lexer ()) s in
+    let ast =
+      Spel_util.uparse_string
+        Spel_parser_j.body_main
+        (mk_body_lexer ())
+        s
+    in
     ast.expr_text <- Some s;
     ast
   with
   | LexError msg ->
-      error (Some (Spel_util.mk_expr (E_error (`String s))))
+      warning
+        (Spel_util.mk_expr_lit (E_error msg) (Some s))
         (Format.sprintf "[%s] in text: '%s'" msg s)
   | _ ->
-      error (Some (Spel_util.mk_expr (E_error (`String s))))
-        (Format.sprintf "[Parse error] in text: '%s'" s)
+      warning
+        (Spel_util.mk_expr_lit (E_error "Parse error in text") (Some s))
+        (Format.sprintf "in text: '%s'" s)
   end
 
 (** {6 JSON AST with embedded Spel expressions} *)
-let rec json_expression_from_json (j:Yojson.Basic.json) : json_expression =
-  begin try
-    begin match j with
-    | `Assoc l ->
-        `Assoc (List.map (fun x -> (fst x, json_expression_from_json (snd x))) l)
-    | `Bool b -> `Bool b
-    | `Float f -> `Float f
-    | `Int i -> `Int i
-    | `List l -> `List (List.map json_expression_from_json l)
-    | `Null -> `Null
-    | `String s -> `Expr (text_from_string s)
-    end
-  with
-  | LexError msg ->
-      let expr = E_error (j :> Yojson.Safe.json) in
-      error (Some (`Expr (Spel_util.mk_expr expr)))
-        (Format.sprintf "[%s] in context: %s" msg (Yojson.Basic.to_string j))
-  | _ ->
-      error (Some (`Expr (Spel_util.mk_expr (E_error (j :> Yojson.Safe.json)))))
-        (Format.sprintf "[Parse error] in context: %s" (Yojson.Basic.to_string j))
+let rec json_expression_from_json (j:Json_t.json) : json_expression =
+  begin match j with
+  | `Assoc l ->
+      `Assoc (List.map (fun x -> (fst x, json_expression_from_json (snd x))) l)
+  | `Bool b -> `Bool b
+  | `Float f -> `Float f
+  | `Int i -> `Int i
+  | `List l -> `List (List.map json_expression_from_json l)
+  | `Null -> `Null
+  | `String s -> `Expr (text_from_string s) (* This catches parse errors at the expression level *)
   end
-
