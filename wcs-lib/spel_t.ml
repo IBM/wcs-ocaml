@@ -18,6 +18,7 @@
 
 type location = Lexing.position * Lexing.position
 
+(** {6 } atomic types *)
 type spel_type =
   | T_string
   | T_int
@@ -28,7 +29,6 @@ type spel_type =
 (** {6 literals} *)
 type literal =
   | L_string of string
-  (*| L_date of string *)
   | L_int of int
   | L_real of float
   | L_boolean of bool
@@ -51,11 +51,8 @@ type op =
   | Op_mult
   | Op_div
   | Op_mod
-  | Op_pow
   | Op_concat
   | Op_toString
-  (*| Op_instanceof *)
-(*| Op_matches *)
 
 (** {6 expressions} *)
 type expression =
@@ -63,28 +60,27 @@ type expression =
     expr_loc : location;
     mutable expr_text : string option }
 and expression_desc =
+  (* Spel expressions *)
   | E_lit of literal
-  | E_prop of expression * string    (* e.x *)
-  | E_prop_catch of expression * string    (* e?.x *)
-  | E_get_array of expression * expression  (* e[n] *)
-  | E_get_dictionary of expression * expression (* e['x'] *)
-  | E_list of expression list
-  | E_new_array of spel_type * int option list * expression list option
-  | E_new of string * expression list (* new c(...) *)
-  | E_call of expression option * string * expression list (* e.m(...) *)
-  | E_call_catch of expression option * string * expression list (* e?.m(...) *)
+  | E_prop of expression * string (** e.x *)
+  | E_prop_catch of expression * string (** e?.x *)
+  | E_get_array of expression * expression (** e\[n\] *)
+  | E_get_dictionary of expression * expression (** e\['x'\] *)
+  | E_list of expression list (** { e1, e2 .. } *)
+  | E_new_array of spel_type * int option list * expression list option (** new T[]{ e1, e2 ... } *)
+  | E_new of string * expression list (** new T(e1,e2...) *)
+  | E_call of expression option * string * expression list (** e.m(e1,e2...) *)
+  | E_call_catch of expression option * string * expression list (** e?.m(e1,e2...) *)
   | E_op of op * expression list
-  (*| E_assign of string * expression *)
-  (*| E_type of string *)
-  (*| E_constructor *)
-  | E_conditional of expression * expression * expression
-  (* WCS additions *)
-  | E_input
+  | E_conditional of expression * expression * expression (** e1?e2:e3 *)
+  (* WCS extensions *)
   | E_conversation_start
-  | E_variable of string
-  | E_intent of string
-  | E_entities
-  | E_entity of (string * string option)
+  | E_anything_else
+  | E_input
+  | E_entities (** entities *)
+  | E_variable of string (** $v *)
+  | E_intent of string (** #intent *)
+  | E_entity of (string * string option) (** @a or @a:(b) *)
   (* Fallback *)
   | E_error of Yojson.Safe.json
 

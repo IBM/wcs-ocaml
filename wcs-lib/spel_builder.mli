@@ -17,16 +17,22 @@
  *)
 
 
-(** {6 Spel data structure constructors} *)
+(** Spel data structure constructors *)
 
 open Spel_t
+
+(** {6 roundtrip *)
+
+val string_of_spel_string : string -> string
+
+(** {6 from OCaml types} *)
 
 val of_string :
   string ->
   Spel_t.expression
 
 val of_json :
-  Yojson.Basic.json ->
+  Json_t.json ->
   Spel_t.json_expression
 
 val of_entity_def :
@@ -39,11 +45,19 @@ val of_intent_def :
   Wcs_t.intent_def ->
   Spel_t.expression
 
-val of_boolean :
+val of_bool :
   bool ->
   Spel_t.expression
 
 val of_string :
   string ->
+  Spel_t.expression
+
+(** {6 other constructors} *)
+
+val conversation_start :
+  Spel_t.expression
+
+val anything_else :
   Spel_t.expression
 
