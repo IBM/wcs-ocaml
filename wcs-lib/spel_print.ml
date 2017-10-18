@@ -81,9 +81,9 @@ let print_op (prec:int) (op: Spel_t.op) (l: string list) : string =
   | Op_not, [v] ->
       paren prec 14 ("!" ^ v)
   | Op_and, [v1; v2] ->
-      paren prec 4 (v1 ^ " and " ^ v2)
+      paren prec 4 (v1 ^ " && " ^ v2)
   | Op_or, [v1; v2] ->
-      paren prec 3 (v1 ^ " or " ^ v2)
+      paren prec 3 (v1 ^ " || " ^ v2)
   | Op_plus, [v1; v2] ->
       paren prec 11 (v1 ^ " + " ^ v2)
   | Op_minus, [v1; v2] ->
@@ -186,6 +186,7 @@ let rec print_expr_aux (prec:int) (istop:bool) e : string =
   | E_conversation_start -> "conversation_start"
   | E_anything_else -> "anything_else"
   | E_input -> "input"
+  | E_ident x -> x
   | E_variable x -> "$" ^ x
   | E_intent x -> "#" ^ x
   | E_entities -> "entities"

@@ -110,7 +110,7 @@ expr:
     { mk_expr E_entities }
 (* Identifiers *)
 | id = IDENT
-    { mk_expr (E_variable id) }
+    { mk_expr (E_ident id) }
 | id = VAR
     { mk_expr (E_variable id) }
 | itt = INTENT
