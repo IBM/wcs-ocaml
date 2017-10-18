@@ -22,3 +22,19 @@
   (wrapped false)
   (synopsis "Watson Conversation Service rest calls")
   (libraries (wcs-lib cohttp.lwt))))
+
+(install
+  ((section lib)
+   (files   (wcs.rzi
+	     wcs_bot.rzi))
+   (package wcs-lib)))
+
+(rule
+ ((targets (wcs_bot.rzi))
+  (deps    (wcs_bot.rmli))
+  (action  (run rmlc -I ../wcs-lib -c ${<}))))
+
+(rule
+ ((targets (wcs.rzi))
+  (deps    (wcs.mli))
+  (action  (run rmlc -I ../wcs-lib -c ${<}))))

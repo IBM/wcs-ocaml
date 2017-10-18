@@ -19,6 +19,8 @@
 type safe = Yojson.Safe.json
 type basic = Yojson.Basic.json
 type json = basic
+type lexer_state = Yojson.Basic.lexer_state
+type bi_outbuf_t = Bi_outbuf.t
 
 let write_json = Yojson.Basic.write_json
 let read_json = Yojson.Basic.read_json
