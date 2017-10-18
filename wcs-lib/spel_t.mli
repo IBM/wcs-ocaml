@@ -18,7 +18,7 @@
 
 type location = Lexing.position * Lexing.position
 
-(** {6 } atomic types *)
+(** {6 atomic types} *)
 type spel_type =
   | T_string
   | T_int
