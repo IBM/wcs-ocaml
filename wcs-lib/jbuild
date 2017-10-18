@@ -28,6 +28,7 @@
   ((section lib)
    (files   (json_t.rzi
 	     wcs_aux.rzi
+	     spel_t.rzi
 	     wcs_t.rzi))
    (package wcs-lib)))
 
@@ -56,6 +57,10 @@
   (deps    (wcs_aux.mli))
   (action  (run rmlc -c ${<}))))
 
+(rule
+ ((targets (spel_t.rzi))
+  (deps    (spel_t.rmli))
+  (action  (run rmlc -c ${<}))))
 
 (menhir
  ((modules (spel_parser_j))))

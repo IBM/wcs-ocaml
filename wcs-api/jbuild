@@ -31,10 +31,10 @@
 
 (rule
  ((targets (wcs_bot.rzi))
-  (deps    (wcs_bot.rmli))
+  (deps    (wcs_bot.rmli ../wcs-lib/wcs_t.rzi))
   (action  (run rmlc -I ../wcs-lib -c ${<}))))
 
 (rule
  ((targets (wcs.rzi))
-  (deps    (wcs.mli))
+  (deps    (wcs.mli ../wcs-lib/wcs_t.rzi))
   (action  (run rmlc -I ../wcs-lib -c ${<}))))
