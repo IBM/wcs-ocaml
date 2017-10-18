@@ -17,10 +17,18 @@
  *)
 
 
-(** {6 Spel data structure constructors} *)
+(** Spel data structure constructors *)
 
 open Spel_t
 open Wcs_t
+
+(** {6 roundtrip *)
+
+let string_of_spel_string s =
+  Spel_print.print_expression
+    (Spel_parse.expression_from_string s)
+
+(** {6 from OCaml types} *)
 
 let of_string s =
   Spel_parse.expression_from_string s
@@ -44,9 +52,17 @@ let of_entity_def entity_def ?value () =
 let of_intent_def intent_def =
   Spel_util.mk_expr (E_intent intent_def.i_def_intent)
 
-let of_boolean b =
+let of_bool b =
   Spel_util.mk_expr (E_lit (L_boolean b))
 
 let of_string s =
   Spel_util.mk_expr (E_lit (L_string s))
+
+(** {6 other constructors} *)
+
+let conversation_start =
+  Spel_util.mk_expr E_conversation_start
+
+let anything_else =
+  Spel_util.mk_expr E_anything_else
 

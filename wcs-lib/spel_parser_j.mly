@@ -60,17 +60,16 @@ open Spel_util
 %token CLOSEEXPR
 
 (* Priority *)
-%nonassoc QUESTION COLON
-%right OR
-%right AND
-%right EQUALEQUAL NOTEQUAL
-%right LT LTEQ GT GTEQ
-%right PLUS MINUS
-%right MULT DIV MOD
-%left NOT
-%left LBRACKET
-%left DOT
-%nonassoc UMINUS
+%right QUESTION COLON (* 2 ternary *)
+%left OR (* 3 logical or *)
+%left AND (* 4 logical and *)
+%left EQUALEQUAL NOTEQUAL (* 8 equality *)
+%left LT LTEQ GT GTEQ (* 9 relational *)
+%left PLUS MINUS (* 11 additive *)
+%left MULT DIV MOD (* 12 multiplicative *)
+(* %right NEW *) (* 13 new *)
+%right NOT UMINUS (* 14 unary *)
+%left LBRACKET DOT (* 16 access *)
 
 %start <Spel_t.expression> body_main
 %start <Spel_t.expression option> condition_main
