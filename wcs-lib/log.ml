@@ -22,9 +22,6 @@ let column s =
   if s = "" then ""
   else ": "^s
 
-let warning (module_name: string) (msg: string) : unit =
-  Format.eprintf "[Warning%s] %s@." (column module_name) msg
-
 let error_recovery = ref true
 
 let print_error module_name msg =
@@ -38,6 +35,12 @@ let error (module_name: string) (default: 'a option) (msg: string) : 'a =
   | false, Some _
   | _, None -> raise (Error (module_name, msg))
   end
+
+let warning_message = ref true
+
+let warning (module_name: string) (msg: string) : unit =
+  if !warning_message then
+    Format.eprintf "[Warning%s] %s@." (column module_name) msg
 
 let debug_message = ref false
 

@@ -21,7 +21,7 @@ open Wcs_t
 (** Type of a condtional response *)
 type response = {
   r_conditions : string option;
-  r_output : output_def option;
+  r_output : json option;
   r_context : json option;
 }
 

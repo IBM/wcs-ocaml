@@ -26,6 +26,12 @@ let paren prec_out prec_in s =
   then "(" ^ s ^ ")"
   else s
 
+let recover msg e =
+  begin match e.expr_text with
+  | Some text -> text
+  | None -> "[ERROR] " ^ msg
+  end
+
 let print_lit (istop:bool) v : string =
   begin match v with
   | L_string s -> if istop then s else "'" ^ s ^ "'"
@@ -185,7 +191,8 @@ let rec print_expr_aux (prec:int) (istop:bool) e : string =
   | E_entities -> "entities"
   | E_entity (x, None) -> "@" ^ x
   | E_entity (x, Some y) -> "@" ^ x ^ ":" ^ "(" ^ y ^ ")"
-  | E_error j -> "[ERROR]"
+  | E_error msg ->
+      recover msg e
   end
 
 let lift_constants e = `String e
@@ -194,20 +201,20 @@ let print_expression_common istop e =
   lift_constants (print_expr_aux 0 istop e)
 
 (** {6 Top level printer for Spel expressions} *)
-let print_expression e : string = print_expr_aux 0 false e
+let to_string e : string = print_expr_aux 0 false e
 
 (** {6 Top level printer for JSON with embedded Spel expressions} *)
-let rec print_json_expression j : Yojson.Basic.json =
+let rec to_json j : Json_t.json =
   begin match j with
-  | `Assoc l -> `Assoc (List.map (fun x -> (fst x, print_json_expression (snd x))) l)
+  | `Assoc l -> `Assoc (List.map (fun x -> (fst x, to_json (snd x))) l)
   | `Bool b -> `Bool b
   | `Float f -> `Float f
   | `Int i -> `Int i
-  | `List l -> `List (List.map print_json_expression l)
+  | `List l -> `List (List.map to_json l)
   | `Null -> `Null
   | `Expr e -> print_expression_common true e
   end
 
 (** {6 Auxiliary printer for text expressions} *)
-let print_text e = print_expr_aux 0 true e
+let to_text e = print_expr_aux 0 true e
 

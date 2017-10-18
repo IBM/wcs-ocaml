@@ -21,9 +21,12 @@
 
 open Spel_t
 
-(** {6 roundtrip *)
+(** {6 Spel checker *)
 
-val string_of_spel_string : string -> string
+val spel_check : string -> string
+(** [spel_check expr] parses the spel expression and prints it
+    back. Fall backs to the initial string with a warning in case of
+    error. *)
 
 (** {6 from OCaml types} *)
 
@@ -34,6 +37,10 @@ val of_string :
 val of_json :
   Json_t.json ->
   Spel_t.json_expression
+
+val of_text :
+  string ->
+  Spel_t.expression
 
 val of_entity_def :
   Wcs_t.entity_def ->
@@ -47,10 +54,6 @@ val of_intent_def :
 
 val of_bool :
   bool ->
-  Spel_t.expression
-
-val of_string :
-  string ->
   Spel_t.expression
 
 (** {6 other constructors} *)

@@ -82,7 +82,7 @@ and expression_desc =
   | E_intent of string (** #intent *)
   | E_entity of (string * string option) (** @a or @a:(b) *)
   (* Fallback *)
-  | E_error of Yojson.Safe.json
+  | E_error of string
 
 (** {6 JSON with embedded expressions} *)
 type json_expression = [

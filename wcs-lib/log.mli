@@ -44,6 +44,9 @@ val print_error : string -> string -> unit
 
 (** {6 Warnings} *)
 
+val warning_message : bool ref
+(** Set if we should display warnings. *)
+
 val warning : string -> string -> unit
 (** [warning module_name msg] prints the warning message [msg] prefixed
     with the module name [module_name].

@@ -19,8 +19,8 @@
 val expression_from_file : string -> Spel_t.expression
 val expression_from_string : string -> Spel_t.expression
 
-val text_from_file : string -> Spel_t.expression
-val text_from_string : string -> Spel_t.expression
+val expression_from_text_file : string -> Spel_t.expression
+val expression_from_text_string : string -> Spel_t.expression
 
-val json_expression_from_json : Yojson.Basic.json -> Spel_t.json_expression
+val json_expression_from_json : Json_t.json -> Spel_t.json_expression
 

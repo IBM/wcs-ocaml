@@ -132,7 +132,7 @@ let mk_next_step_id = next_step_id (* alias to avoid hiding *)
 let output (* XX TODO : handle multiple outputs *)
       text
   : output_def =
-  (`Assoc [ "text", `String text ])
+  Spel_builder.of_json (`Assoc [ "text", `String text ])
 
 let mk_output = output (* alias to avoid hiding *)
 
@@ -169,7 +169,7 @@ let dialog_node
     begin match text, text_spel with
     | None, None -> None
     | Some text, None -> Some (mk_output text)
-    | None, Some expr -> Some (mk_output (Spel_print.print_text expr))
+    | None, Some expr -> Some (mk_output (Spel_print.to_text expr))
     | Some _, Some _ ->
         Log.error "Ws_builder"
           (Some None)
@@ -179,8 +179,8 @@ let dialog_node
   let output =
     begin match output, output_spel with
     | None, None -> None
-    | Some output, None -> Some output
-    | None, Some json_expr -> Some (Spel_print.print_json_expression json_expr)
+    | Some output, None -> Some (Spel_builder.of_json output)
+    | None, Some json_expr -> Some json_expr
     | Some _, Some _ ->
         Log.error "Ws_builder"
           (Some None)
@@ -201,8 +201,8 @@ let dialog_node
   let context =
     begin match context, context_spel with
     | None, None -> None
-    | Some context, None -> Some context
-    | None, Some json_expr -> Some (Spel_print.print_json_expression json_expr)
+    | Some context, None -> Some (Spel_builder.of_json context)
+    | None, Some json_expr -> Some json_expr
     | Some _, Some _ ->
         Log.error "Ws_builder"
           (Some None)
@@ -224,9 +224,9 @@ let dialog_node
   in
   let conditions =
     begin match conditions, conditions_spel with
-    | None,None -> Some "true"
-    | Some text, None -> Some text
-    | None, Some expr -> Some (Spel_print.print_expression expr)
+    | None,None -> Some (Spel_builder.of_bool true)
+    | Some text, None -> Some (Spel_builder.of_string text)
+    | None, Some expr -> Some expr
     | Some _, Some _ ->
         Log.error "Ws_builder"
           (Some None)

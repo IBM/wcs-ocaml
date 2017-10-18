@@ -19,12 +19,30 @@
 open Wcs_t
 open Dialog_t
 
+let mk_conditions cond =
+  begin match cond with
+  | None -> None
+  | Some cond -> Some (Spel_builder.of_string cond)
+  end
+
+let mk_context context =
+  begin match context with
+  | None -> None
+  | Some context -> Some (Spel_builder.of_json context)
+  end
+
+let mk_output output =
+  begin match output with
+  | None -> None
+  | Some output -> Some (Spel_builder.of_json output)
+  end
+
 let dialog_node_of_node (n : node) : dialog_node list =
   let root =
     { node_dialog_node = n.n_dialog_node;
       node_type_ = None;
       node_description = n.n_description;
-      node_conditions = n.n_conditions;
+      node_conditions = mk_conditions n.n_conditions;
       node_parent = None;
       node_previous_sibling = None;
       node_output = None;
@@ -57,8 +75,8 @@ let dialog_node_of_node (n : node) : dialog_node list =
           r_context = context; } ] ->
         let root =
           { root with
-            node_output = output;
-            node_context = context; }
+            node_output = mk_output output;
+            node_context = mk_context context; }
         in
         root, children
     | _ -> assert false (* XXX TODO XXX *)

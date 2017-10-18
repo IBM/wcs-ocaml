@@ -22,16 +22,13 @@
 open Spel_t
 open Wcs_t
 
-(** {6 roundtrip *)
-
-let string_of_spel_string s =
-  Spel_print.print_expression
-    (Spel_parse.expression_from_string s)
-
 (** {6 from OCaml types} *)
 
 let of_string s =
   Spel_parse.expression_from_string s
+
+let of_text s =
+  Spel_parse.expression_from_text_string s
 
 let of_json j =
   Spel_parse.json_expression_from_json j
@@ -55,9 +52,6 @@ let of_intent_def intent_def =
 let of_bool b =
   Spel_util.mk_expr (E_lit (L_boolean b))
 
-let of_string s =
-  Spel_util.mk_expr (E_lit (L_string s))
-
 (** {6 other constructors} *)
 
 let conversation_start =
@@ -65,4 +59,10 @@ let conversation_start =
 
 let anything_else =
   Spel_util.mk_expr E_anything_else
+
+(** {6 Spel checker *)
+
+let spel_check s =
+  Spel_print.to_string
+    (of_string s)
 

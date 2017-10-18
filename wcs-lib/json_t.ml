@@ -22,3 +22,5 @@ type json = basic
 
 let write_json = Yojson.Basic.write_json
 let read_json = Yojson.Basic.read_json
+let to_string j = Yojson.Basic.to_string j
+
