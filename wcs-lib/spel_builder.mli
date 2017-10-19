@@ -42,17 +42,17 @@ val of_text :
   string ->
   Spel_t.expression
 
-val of_entity :
+val entity :
   Wcs_t.entity_def ->
   ?value:Wcs_t.entity_value ->
   unit ->
   Spel_t.expression
 
-val of_intent :
+val intent :
   Wcs_t.intent_def ->
   Spel_t.expression
 
-val of_bool :
+val bool :
   bool ->
   Spel_t.expression
 

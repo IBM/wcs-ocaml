@@ -29,7 +29,7 @@ let mk_knock names_entity (name, answer) =
   let names_entity = add_value names_entity value in
   let knock =
     WCS.dialog_node ("KnockKnock "^name)
-      ~conditions_spel: (Spel.of_entity
+      ~conditions_spel: (Spel.entity
                            names_entity
                            ~value:value
                            ())
@@ -38,7 +38,7 @@ let mk_knock names_entity (name, answer) =
   in
   let whoisthere =
     WCS.dialog_node ("Whoisthere "^name)
-      ~conditions_spel: (Spel.of_entity
+      ~conditions_spel: (Spel.entity
                            whoisthere_entity
                            ())
       ~text: name
@@ -47,7 +47,7 @@ let mk_knock names_entity (name, answer) =
   in
   let answer =
     WCS.dialog_node ("Answer "^name)
-      ~conditions_spel: (Spel.of_entity
+      ~conditions_spel: (Spel.entity
                            names_entity
                            ~value:value
                            ())
