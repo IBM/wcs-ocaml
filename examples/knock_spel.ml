@@ -1,80 +1,57 @@
 open Wcs_t
-open Spel_t
-open Spel_util
 module WCS = Wcs_builder
 module Spel = Spel_builder
 
-let add_value entity value =
-  { entity with e_def_values = value::entity.e_def_values }
-
-
-let jokes = [
-  ("Broken Pencil", "Nevermind it's pointless");
-  ("Boo", "Boohoohoo");
-]
-
-
-let names_entity =
-  WCS.entity "name"
-    ~values: []
+let who_intent =
+  WCS.intent "Who"
+    ~description: "The user wants to know who is knocking at the door"
+    ~examples: [
+      "Who's there?";
+      "Who is there?";
+      "Who are you?";
+    ]
     ()
 
-let whoisthere_entity =
-  WCS.entity "whoisthere"
-    ~values: [("Who is there?",[])]
+let entity_name =
+  WCS.entity "BrokenPencil"
+    ~values: ["Broken Pencil", ["Dammaged Pen"; "Fractured Pencil"]]
     ()
 
-let mk_knock names_entity (name, answer) =
-  let value = WCS.value name () in
-  let names_entity = add_value names_entity value in
+let entity_value entity =
+  begin match entity.e_def_values with
+  | value::_ -> value.e_val_value
+  | _ -> "Unknown"
+  end
+
+let knock who_intent name_entity answer =
   let knock =
-    WCS.dialog_node ("KnockKnock "^name)
-      ~conditions_spel: (Spel.entity
-                           names_entity
-                           ~value:value
-                           ())
+    WCS.dialog_node ("KnockKnock")
+      ~conditions_spel: (Spel.bool true)
       ~text: "Knock knock"
       ()
   in
   let whoisthere =
-    WCS.dialog_node ("Whoisthere "^name)
-      ~conditions_spel: (Spel.entity
-                           whoisthere_entity
-                           ())
-      ~text: name
+    WCS.dialog_node ("Who")
+      ~conditions_spel: (Spel.intent who_intent)
+      ~text: (entity_value name_entity)
       ~parent: knock
       ()
   in
   let answer =
-    WCS.dialog_node ("Answer "^name)
-      ~conditions_spel: (Spel.entity
-                           names_entity
-                           ~value:value
-                           ())
+    WCS.dialog_node ("Answer")
+      ~conditions_spel: (Spel.entity name_entity ())
       ~text: answer
       ~parent: whoisthere
       ~context: (Json.set_skip_user_input `Null true)
       ()
   in
-  (names_entity, [knock; whoisthere; answer])
-
-let simple_dispatch  =
-  WCS.dialog_node "Dispatch"
-    ~conditions_spel: (Spel.of_bool true)
-    ~text: "Enter a name"
-    ()
+  [knock; whoisthere; answer]
 
 let knockknock =
-  let names_entity, nodes =
-    List.fold_left
-      (fun (names_entity, acc) joke ->
-         let names_entity, nodes = mk_knock names_entity joke in
-         (names_entity, acc@nodes))
-      (names_entity, []) jokes
-  in
   WCS.workspace "Knock Knock"
-    ~entities: [ names_entity; whoisthere_entity; ]
-    ~dialog_nodes: (nodes @ [ simple_dispatch ])
+    ~entities: [ entity_name ]
+    ~intents: [who_intent]
+    ~dialog_nodes: (knock who_intent entity_name "Nevermind it's pointless")
     ()
 
 let () =
