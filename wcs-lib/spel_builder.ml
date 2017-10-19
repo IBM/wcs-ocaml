@@ -33,7 +33,7 @@ let of_text s =
 let of_json j =
   Spel_parse.json_expression_from_json j
 
-let of_entity_def entity_def ?value () =
+let of_entity entity_def ?value () =
   begin match value with
   | None ->
       Spel_util.mk_expr (E_entity (entity_def.e_def_entity, None))
@@ -46,7 +46,7 @@ let of_entity_def entity_def ?value () =
         Log.error "Spel builder" None ("Undefined entity: " ^  value)
   end
 
-let of_intent_def intent_def =
+let of_intent intent_def =
   Spel_util.mk_expr (E_intent intent_def.i_def_intent)
 
 let of_bool b =

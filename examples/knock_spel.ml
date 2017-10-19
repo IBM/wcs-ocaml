@@ -1,8 +1,8 @@
 open Wcs_t
 open Spel_t
 open Spel_util
-module Mk = Wcs_builder
-module Mk_spel = Spel_builder
+module WCS = Wcs_builder
+module Spel = Spel_builder
 
 let add_value entity value =
   { entity with e_def_values = value::entity.e_def_values }
@@ -15,21 +15,21 @@ let jokes = [
 
 
 let names_entity =
-  Mk.entity "name"
+  WCS.entity "name"
     ~values: []
     ()
 
 let whoisthere_entity =
-  Mk.entity "whoisthere"
+  WCS.entity "whoisthere"
     ~values: [("Who is there?",[])]
     ()
 
 let mk_knock names_entity (name, answer) =
-  let value = Mk.value name () in
+  let value = WCS.value name () in
   let names_entity = add_value names_entity value in
   let knock =
-    Mk.dialog_node ("KnockKnock "^name)
-      ~conditions_spel: (Mk_spel.of_entity_def
+    WCS.dialog_node ("KnockKnock "^name)
+      ~conditions_spel: (Spel.of_entity
                            names_entity
                            ~value:value
                            ())
@@ -37,8 +37,8 @@ let mk_knock names_entity (name, answer) =
       ()
   in
   let whoisthere =
-    Mk.dialog_node ("Whoisthere "^name)
-      ~conditions_spel: (Mk_spel.of_entity_def
+    WCS.dialog_node ("Whoisthere "^name)
+      ~conditions_spel: (Spel.of_entity
                            whoisthere_entity
                            ())
       ~text: name
@@ -46,8 +46,8 @@ let mk_knock names_entity (name, answer) =
       ()
   in
   let answer =
-    Mk.dialog_node ("Answer "^name)
-      ~conditions_spel: (Mk_spel.of_entity_def
+    WCS.dialog_node ("Answer "^name)
+      ~conditions_spel: (Spel.of_entity
                            names_entity
                            ~value:value
                            ())
@@ -59,8 +59,8 @@ let mk_knock names_entity (name, answer) =
   (names_entity, [knock; whoisthere; answer])
 
 let simple_dispatch  =
-  Mk.dialog_node "Dispatch"
-    ~conditions_spel: (Mk_spel.of_bool true)
+  WCS.dialog_node "Dispatch"
+    ~conditions_spel: (Spel.of_bool true)
     ~text: "Enter a name"
     ()
 
@@ -72,7 +72,7 @@ let knockknock =
          (names_entity, acc@nodes))
       (names_entity, []) jokes
   in
-  Mk.workspace "Knock Knock"
+  WCS.workspace "Knock Knock"
     ~entities: [ names_entity; whoisthere_entity; ]
     ~dialog_nodes: (nodes @ [ simple_dispatch ])
     ()
