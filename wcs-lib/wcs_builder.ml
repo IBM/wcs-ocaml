@@ -224,7 +224,7 @@ let dialog_node
   in
   let conditions =
     begin match conditions, conditions_spel with
-    | None,None -> Some (Spel_builder.of_bool true)
+    | None,None -> Some (Spel_builder.bool true)
     | Some text, None -> Some (Spel_builder.of_string text)
     | None, Some expr -> Some expr
     | Some _, Some _ ->
