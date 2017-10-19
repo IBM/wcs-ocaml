@@ -53,3 +53,13 @@ val exec :
    defined in the context.  The return value is the value of the field
    [return].
 *)
+
+
+val get_credential : string option -> credential
+(**
+   [get_credential file_name] read the credential in json format from
+   the file [file_name]. If no file name is provided, the functions looks
+   up in the environment if the variable [WCS_CRED] contains the file name
+   with the credentials. If there is a problem while loading the credentials,
+   [Log.Error] is raised.
+*)

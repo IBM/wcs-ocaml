@@ -193,7 +193,7 @@ let exec
         msg_req_output = None; }
     in
     let ws_id, rsp, return = interpret ws_id req in
-      List.iter output rsp.msg_rsp_output.out_text;
+    List.iter output rsp.msg_rsp_output.out_text;
     begin match return with
     | Some v -> v
     | None ->
@@ -203,3 +203,19 @@ let exec
     end
   in
   loop workspace_id ctx_init txt_init
+
+let get_credential file_name_opt =
+  begin try
+    let file_name =
+      begin match file_name_opt with
+      | Some file_name -> file_name
+      | None -> Sys.getenv "WCS_CRED"
+      end
+    in
+    Json.read_json_file Wcs_j.read_credential file_name
+  with
+  | Not_found ->
+      Log.error "Wcs_bot" None ("no credential file")
+  | exn ->
+      Log.error "Wcs_bot" None (Printexc.to_string exn)
+  end
