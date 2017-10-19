@@ -295,6 +295,8 @@ and (expression_desc_to_yojson : expression_desc -> Json_t.safe) =
            ((fun x  -> expression_to_yojson x)) arg0;
            ((fun x  -> expression_to_yojson x)) arg1;
            ((fun x  -> expression_to_yojson x)) arg2]
+    | E_ident arg0 ->
+        `List [`String "E_ident"; ((fun x  -> `String x)) arg0]
     | E_variable arg0 ->
         `List [`String "E_variable"; ((fun x  -> `String x)) arg0]
     | E_intent arg0 ->
@@ -437,6 +439,11 @@ and (expression_desc_of_yojson :
               ((fun x  -> expression_of_yojson x) arg0) >>=
               (fun arg0  ->
                  Ok (E_conditional (arg0, arg1, arg2))))))
+    | `List ((`String "E_ident")::arg0::[]) ->
+        ((function
+         | `String x -> Ok x
+         | _ -> Error "Spel_t.expression_desc") arg0) >>=
+        ((fun arg0  -> Ok (E_ident arg0)))
     | `List ((`String "E_variable")::arg0::[]) ->
         ((function
          | `String x -> Ok x

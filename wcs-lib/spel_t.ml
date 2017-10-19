@@ -78,6 +78,7 @@ and expression_desc =
   | E_anything_else
   | E_input
   | E_entities (** entities *)
+  | E_ident of string (** v *)
   | E_variable of string (** $v *)
   | E_intent of string (** #intent *)
   | E_entity of (string * string option) (** @a or @a:(b) *)
