@@ -12,6 +12,7 @@ wcs-api/.merlin
 wcs-cli/.merlin
 wcs-lib/.merlin
 examples/.merlin
+.jbuilder-keep
 
 # emacs
 *~

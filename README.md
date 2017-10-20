@@ -36,6 +36,9 @@ or the Ocaml SDK (which will also install the api):
 opam install wcs-lib
 ```
 
+# Documentation
+
+[Here](http://htmlpreview.github.com/?https://github.com/IBM/wcs-ocaml/blob/master/docs/index.html)
 
 ## Building from source
 ### Prerequistes
