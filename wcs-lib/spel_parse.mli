@@ -16,11 +16,43 @@
  * limitations under the License.
  *)
 
-val expression_from_file : string -> Spel_t.expression
-val expression_from_string : string -> Spel_t.expression
+(** {6 desugaring} *)
 
-val expression_from_text_file : string -> Spel_t.expression
-val expression_from_text_string : string -> Spel_t.expression
+val desugar_spel : bool ref
+(** Set if builder should desugar spel expressions *)
 
-val json_expression_from_json : Json_t.json -> Spel_t.json_expression
+val desugar :
+  Spel_t.expression ->
+  Spel_t.expression
+(** [desugar expr] expands shorthand syntax for variables, entities
+and intents into their underlying Spel expressions. *)
+
+val resugar_spel : bool ref
+(** Set if builder should resugar spel expressions *)
+
+val resugar :
+  Spel_t.expression ->
+  Spel_t.expression
+(** [desugar expr] re-introduces shorthand syntax for variables,
+entities and intents. *)
+
+(** {6 parsers} *)
+
+val expr_from_file : string -> Spel_t.expression
+(** [expr_from_file f] parses file [f] as spel expression *)
+
+val expr_from_string : string -> Spel_t.expression
+(** [expr_from_string s] parses string [s] as spel expression *)
+
+val quoted_expr_from_file : string -> Spel_t.expression
+(** [quoted_expr_from_file f] parses file [f] as text containing
+quoted spel expressions *)
+
+val quoted_expr_from_string : string -> Spel_t.expression
+(** [quoted_expr_from_string f] parses string [s] as text containing
+quoted spel expression *)
+
+val json_expr_from_json : Json_t.json -> Spel_t.json_expression
+(** [json_expr_from_json j] parses strings literals in [j] as text
+containing quoted spel expressions *)
 

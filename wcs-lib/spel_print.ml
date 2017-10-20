@@ -124,12 +124,9 @@ let rec print_expr_aux (prec:int) (istop:bool) e : string =
   | E_list l ->
       escape istop
         ("{"  ^ (String.concat "," (List.map (print_expr_aux 0 false) l)) ^ "}")
-  | E_get_array (e, e_n) ->
+  | E_get (e1, e2) ->
       escape istop
-        ((print_expr_aux 0 false e) ^ "[" ^ (print_expr_aux 0 false e_n) ^ "]")
-  | E_get_dictionary (e, e_x) ->
-      escape istop
-        ((print_expr_aux 0 false e) ^ "[" ^ (print_expr_aux 0 false e_x) ^ "]")
+        ((print_expr_aux 0 false e1) ^ "[" ^ (print_expr_aux 0 false e2) ^ "]")
   | E_new_array (t, dims, Some init) ->
       paren prec 13
         (escape istop ("new "

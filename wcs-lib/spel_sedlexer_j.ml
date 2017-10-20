@@ -118,18 +118,11 @@ and colon_ident sbuff lexbuf =
 and colon_ident_rest sbuff colon_ident_name lexbuf =
   let buf = lexbuf.stream in
   begin match %sedlex buf with
-  | ':' -> colon_ident_value sbuff colon_ident_name lexbuf
-  | _ -> (colon_ident_name,None)
-  end
-
-and colon_ident_value sbuff colon_ident_name lexbuf =
-  let buf = lexbuf.stream in
-  begin match%sedlex buf with
-  | uident -> (colon_ident_name, Some (Sedlexing.Utf8.lexeme buf))
-  | '(' ->
+  | ':', uident -> (colon_ident_name, Some (Sedlexing.Utf8.lexeme buf))
+  | ':', '(' ->
       reset_string sbuff;
       (colon_ident_name, Some (qparen sbuff lexbuf))
-  | _ -> failwith "Unexpected character after ':'"
+  | _ -> (colon_ident_name,None)
   end
 
 and string sbuff lexbuf =
