@@ -138,7 +138,7 @@ let usage =
 
 
 let main () =
-  Arg.parse speclist anon_args usage;
+  Arg.parse (Arg.align speclist) anon_args usage;
   let wcs_credential =
     begin try
       Wcs_bot.get_credential !wcs_cred
