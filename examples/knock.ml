@@ -79,17 +79,18 @@ let main () =
   let deploy = ref false in
   let exec = ref false in
   let speclist =
-    [ "-cred", Arg.String (fun s -> wcs_cred_file := Some s),
-      "cred.json The file containing the Watson Conversation Service credentials.";
-      "-id", Arg.String (fun id -> ws_id := Some id),
-      "id The workspace id used to update in conjunction with -deploy.";
-      "-print", Arg.Set print,
-      " Print the workspace on stdout.";
-      "-deploy", Arg.Set deploy,
-      " Create or update the workspace on Watson Conversation Service.";
-      "-exec", Arg.Set exec,
-      " Execute the chatbot."
-    ]
+    Arg.align
+      [ "-cred", Arg.String (fun s -> wcs_cred_file := Some s),
+        "cred.json The file containing the Watson Conversation Service credentials.";
+        "-id", Arg.String (fun id -> ws_id := Some id),
+        "id The workspace id used to update in conjunction with -deploy.";
+        "-print", Arg.Set print,
+        " Print the workspace on stdout.";
+        "-deploy", Arg.Set deploy,
+        " Create or update the workspace on Watson Conversation Service.";
+        "-exec", Arg.Set exec,
+        " Execute the chatbot."
+      ]
   in
   let usage =
     "Usage: "^Sys.argv.(0)^" [options]"
