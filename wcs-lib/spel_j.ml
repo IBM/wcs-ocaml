@@ -216,8 +216,6 @@ and (expression_desc_to_yojson : expression_desc -> Json_t.safe) =
     function
     | E_lit arg0 ->
         `List [`String "E_lit"; ((fun x  -> literal_to_yojson x)) arg0]
-    | E_conversation_start  -> `List [`String "E_conversation_start"]
-    | E_anything_else  -> `List [`String "E_anything_else"]
     | E_prop (arg0,arg1) ->
         `List
           [`String "E_prop";
@@ -297,11 +295,24 @@ and (expression_desc_to_yojson : expression_desc -> Json_t.safe) =
            ((fun x  -> expression_to_yojson x)) arg2]
     | E_ident arg0 ->
         `List [`String "E_ident"; ((fun x  -> `String x)) arg0]
+    | E_anything_else  -> `List [`String "E_anything_else"]
+    | E_context  -> `List [`String "E_context"]
+    | E_conversation_start  -> `List [`String "E_conversation_start"]
+    | E_entities  -> `List [`String "E_entities"]
+    | E_input  -> `List [`String "E_input"]
+    | E_intents  -> `List [`String "E_intents"]
+    | E_output  -> `List [`String "E_output"]
     | E_variable arg0 ->
-        `List [`String "E_variable"; ((fun x  -> `String x)) arg0]
+        `List
+          [`String "E_variable";
+           ((fun (arg0,arg1)  ->
+              `List
+                [((fun x  -> `String x)) arg0;
+                 ((function
+                  | None  -> `Null
+                  | Some x -> ((fun x  -> `String x)) x)) arg1])) arg0]
     | E_intent arg0 ->
         `List [`String "E_intent"; ((fun x  -> `String x)) arg0]
-    | E_entities  -> `List [`String "E_entities"]
     | E_entity arg0 ->
         `List
           [`String "E_entity";
@@ -311,8 +322,7 @@ and (expression_desc_to_yojson : expression_desc -> Json_t.safe) =
                  ((function
                   | None  -> `Null
                   | Some x -> ((fun x  -> `String x)) x)) arg1])) arg0]
-    | E_error arg0 -> `List [`String "E_error"; `String arg0]
-    | E_input  -> `List [`String "E_input"])[@ocaml.warning "-A"])
+    | E_error arg0 -> `List [`String "E_error"; `String arg0])[@ocaml.warning "-A"])
 and (expression_desc_of_yojson :
        Json_t.safe ->
      expression_desc error_or)
@@ -322,10 +332,6 @@ and (expression_desc_of_yojson :
     | `List ((`String "E_lit")::arg0::[]) ->
         ((fun x  -> literal_of_yojson x) arg0) >>=
         ((fun arg0  -> Ok (E_lit arg0)))
-    | `List ((`String "E_conversation_start")::[]) ->
-        Ok E_conversation_start
-    | `List ((`String "E_anything_else")::[]) ->
-        Ok E_anything_else
     | `List ((`String "E_prop")::arg0::arg1::[]) ->
         ((function
          | `String x -> Ok x
@@ -444,9 +450,29 @@ and (expression_desc_of_yojson :
          | `String x -> Ok x
          | _ -> Error "Spel_t.expression_desc") arg0) >>=
         ((fun arg0  -> Ok (E_ident arg0)))
+    | `List ((`String "E_anything_else")::[]) -> Ok E_anything_else
+    | `List ((`String "E_context")::[]) -> Ok E_context
+    | `List ((`String "E_conversation_start")::[]) -> Ok E_conversation_start
+    | `List ((`String "E_entities")::[]) -> Ok E_entities
+    | `List ((`String "E_input")::[]) -> Ok E_input
+    | `List ((`String "E_intents")::[]) -> Ok E_intents
+    | `List ((`String "E_output")::[]) -> Ok E_output
     | `List ((`String "E_variable")::arg0::[]) ->
         ((function
-         | `String x -> Ok x
+         | `List (arg0::arg1::[]) ->
+             ((function
+              | `Null -> Ok None
+              | x ->
+                  ((function
+                   | `String x -> Ok x
+                   | _ -> Error "Spel_t.expression_desc") x) >>=
+                  ((fun x  -> Ok (Some x)))) arg1)
+             >>=
+             ((fun arg1  ->
+                ((function
+                 | `String x -> Ok x
+                 | _ -> Error "Spel_t.expression_desc") arg0)
+                >>= (fun arg0  -> Ok (arg0, arg1))))
          | _ -> Error "Spel_t.expression_desc") arg0) >>=
         ((fun arg0  -> Ok (E_variable arg0)))
     | `List ((`String "E_intent")::arg0::[]) ->
@@ -454,7 +480,6 @@ and (expression_desc_of_yojson :
          | `String x -> Ok x
          | _ -> Error "Spel_t.expression_desc") arg0) >>=
         ((fun arg0  -> Ok (E_intent arg0)))
-    | `List ((`String "E_entities")::[]) -> Ok E_entities
     | `List ((`String "E_entity")::arg0::[]) ->
         ((function
          | `List (arg0::arg1::[]) ->
@@ -476,7 +501,6 @@ and (expression_desc_of_yojson :
     | `List ((`String "E_error")::(`String arg0)::[]) ->
         ((fun x  -> Ok x) arg0) >>=
         ((fun arg0  -> Ok (E_error arg0)))
-    | `List ((`String "E_input")::[]) -> Ok E_input
     | _ -> Error "Spel_t.expression_desc")[@ocaml.warning "-A"])
 let rec (json_expression_to_yojson : json_expression -> Json_t.safe) =
   ((

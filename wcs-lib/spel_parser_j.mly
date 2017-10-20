@@ -27,18 +27,21 @@ open Spel_util
 %token <float> REAL
 %token <string> STRING
 
-(* Variables and Entities *)
-%token CONVERSATION_START
+(* Special WCS variables *)
 %token ANYTHING_ELSE
-%token INPUT
+%token CONTEXT
+%token CONVERSATION_START
 %token ENTITIES
+%token INPUT
+%token INTENTS
+%token OUTPUT
 
 (* Identifiers *)
 %token <string> IDENT                    (* foo *)
 %token <string> INTENT                   (* #foo *)
-%token <string * string option> ENTITY   (* @foo *)
-%token <string> VAR                      (* $foo *)
-%token <string * string> BODYVAR         (* $foo in a body *)
+%token <string * string option> ENTITY   (* @foo or @foo:(bar) *)
+%token <string * string option> VAR      (* $foo or $foo:(bar) *)
+%token <string * (string * string option)> BODYVAR (* $foo or $foo:(bar) in a body *)
 %token TRUE FALSE
 
 (* Symbols and operators *)
@@ -99,15 +102,21 @@ expr:
     { mk_expr (E_lit (L_int i)) }
 | f = REAL
     { mk_expr (E_lit (L_real f)) }
-(* Special thingies *)
+(* Special WCS variables *)
+| ANYTHING_ELSE
+    { mk_expr (E_lit (L_boolean true)) }
+| CONTEXT
+    { mk_expr E_context }
 | CONVERSATION_START
     { mk_expr E_conversation_start }
-| ANYTHING_ELSE (* Is just like true -- afaik *)
-    { mk_expr (E_lit (L_boolean true)) }
-| INPUT
-    { mk_expr E_input }
 | ENTITIES
     { mk_expr E_entities }
+| INPUT
+    { mk_expr E_input }
+| INTENTS
+    { mk_expr E_intents }
+| OUTPUT
+    { mk_expr E_output }
 (* Identifiers *)
 | id = IDENT
     { mk_expr (E_ident id) }
@@ -159,7 +168,7 @@ expr:
     { mk_expr (E_conditional (e1,e2,e3)) }
 
 (* Accessors *)
-| e1 = expr DOT id = IDENT
+| e1 = expr DOT id = dotident
     { mk_expr (E_prop (e1, id)) }
 | e1 = expr QUESTION DOT id = IDENT
     { mk_expr (E_prop_catch (e1, id)) }
@@ -173,6 +182,24 @@ expr:
     { mk_expr (E_new (id, el)) }
 | e1 = expr LBRACKET e2 = expr RBRACKET
     { mk_expr (E_get_array (e1, e2)) }
+
+dotident:
+| ANYTHING_ELSE
+    { "anything_else" }
+| CONTEXT
+    { "context" }
+| CONVERSATION_START
+    { "conversation_start" }
+| ENTITIES
+    { "entities" }
+| INPUT
+    { "input" }
+| INTENTS
+    { "intents" }
+| OUTPUT
+    { "output" }
+| id = IDENT
+    { id }
 
 elist:
 | (* Empty *)
@@ -191,8 +218,20 @@ body:
 | 
     { mk_expr (E_lit (L_string "")) }
 | bid = BODYVAR b = body
-    { let eout = let (s,id) = bid in mk_expr (E_op (Op_concat, [mk_expr (E_lit (L_string s)); mk_expr (E_op (Op_concat, [mk_expr (E_op (Op_toString, [mk_expr (E_variable id)]));b]))]))
+    { let eout =
+      let (s,id) = bid in
+        mk_expr (E_op (Op_concat,
+		       [mk_expr (E_lit (L_string s));
+			mk_expr (E_op (Op_concat,
+				       [mk_expr (E_op (Op_toString,
+						       [mk_expr (E_variable id)]));
+					b]))]))
       in spel_cleanup eout }
 | s = OPENEXPR e = expr CLOSEEXPR b = body
-    { let eout = mk_expr (E_op (Op_concat, [mk_expr (E_lit (L_string s)); mk_expr (E_op (Op_concat, [mk_expr (E_op (Op_toString, [e]));b]))]))
+    { let eout =
+        mk_expr (E_op (Op_concat,
+		       [mk_expr (E_lit (L_string s));
+			mk_expr (E_op (Op_concat,
+				       [mk_expr (E_op (Op_toString, [e]));
+					b]))]))
       in spel_cleanup eout }
