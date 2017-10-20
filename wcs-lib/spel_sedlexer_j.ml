@@ -27,14 +27,16 @@ let keyword_table =
         "and", AND;
         "not", NOT;
         "true", TRUE;
-        "anything_else", ANYTHING_ELSE;
         "false", FALSE;
         "null", NULL;
-        "conversation_start", CONVERSATION_START;
-        "input", INPUT;
-        "entities", ENTITIES;
         "new", NEW;
-        (* "output", OUTPUT; *)
+        "anything_else", ANYTHING_ELSE;
+        "context", CONTEXT;
+        "conversation_start", CONVERSATION_START;
+        "entities", ENTITIES;
+        "input", INPUT;
+        "intents", INTENTS;
+        "output", OUTPUT;
       ]; tbl
   end
 
@@ -87,8 +89,8 @@ let rec token sbuff lexbuf =
   | '"' -> reset_string sbuff; STRING (string sbuff lexbuf)
   | "'" -> reset_string sbuff; STRING (qstring sbuff lexbuf)
   | "#" -> intent sbuff lexbuf
-  | "@" -> entity sbuff lexbuf
-  | "$" -> VAR (variable sbuff lexbuf)
+  | "@" -> ENTITY (colon_ident sbuff lexbuf)
+  | "$" -> VAR (colon_ident sbuff lexbuf)
   | ident ->
       let s = Sedlexing.Utf8.lexeme buf in
       begin try Hashtbl.find keyword_table (String.lowercase_ascii s)
@@ -103,38 +105,31 @@ and intent sbuff lexbuf =
   let buf = lexbuf.stream in
   begin match%sedlex buf with
   | uintent -> INTENT (Sedlexing.Utf8.lexeme buf)
-  | _ -> failwith "Unexpected character after '#'"
+  | _ -> failwith "Unexpected character after"
   end
 
-and entity sbuff lexbuf =
+and colon_ident sbuff lexbuf =
   let buf = lexbuf.stream in
   begin match%sedlex buf with
-  | uident -> entity_rest sbuff (Sedlexing.Utf8.lexeme buf) lexbuf
-  | _ -> failwith "Unexpected character after '#'"
+  | uident -> colon_ident_rest sbuff (Sedlexing.Utf8.lexeme buf) lexbuf
+  | _ -> failwith "Unexpected character after"
   end
 
-and entity_rest sbuff entity_name lexbuf =
+and colon_ident_rest sbuff colon_ident_name lexbuf =
   let buf = lexbuf.stream in
   begin match %sedlex buf with
-  | ':' -> entity_value sbuff entity_name lexbuf
-  | _ -> ENTITY (entity_name,None)
+  | ':' -> colon_ident_value sbuff colon_ident_name lexbuf
+  | _ -> (colon_ident_name,None)
   end
 
-and entity_value sbuff entity_name lexbuf =
+and colon_ident_value sbuff colon_ident_name lexbuf =
   let buf = lexbuf.stream in
   begin match%sedlex buf with
-  | uident -> ENTITY (entity_name, Some (Sedlexing.Utf8.lexeme buf))
+  | uident -> (colon_ident_name, Some (Sedlexing.Utf8.lexeme buf))
   | '(' ->
       reset_string sbuff;
-      ENTITY (entity_name, Some (qparen sbuff lexbuf))
+      (colon_ident_name, Some (qparen sbuff lexbuf))
   | _ -> failwith "Unexpected character after ':'"
-  end
-
-and variable sbuff lexbuf =
-  let buf = lexbuf.stream in
-  begin match%sedlex buf with
-  | ident -> Sedlexing.Utf8.lexeme buf
-  | _ -> failwith "Unexpected character after '#'"
   end
 
 and string sbuff lexbuf =
@@ -175,7 +170,7 @@ and body sbuff lexbuf =
 and body_variable sbuff s lexbuf =
   let buf = lexbuf.stream in
   begin match%sedlex buf with
-  | ident -> BODYVAR (s,Sedlexing.Utf8.lexeme buf)
+  | uident -> BODYVAR (s,colon_ident_rest sbuff (Sedlexing.Utf8.lexeme buf) lexbuf)
   | _ -> add_string_to_string sbuff "$"; body sbuff lexbuf
   end
 

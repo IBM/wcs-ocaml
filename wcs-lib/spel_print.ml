@@ -116,15 +116,20 @@ let rec print_expr_aux (prec:int) (istop:bool) e : string =
   begin match e.expr_desc with
   | E_lit v -> print_lit istop v
   | E_prop (e, x) ->
-      paren prec 14 (escape istop ((print_expr_aux 14 false e) ^ "." ^ x))
+      paren prec 14
+        (escape istop ((print_expr_aux 14 false e) ^ "." ^ x))
   | E_prop_catch (e, x) ->
-      paren prec 14 (escape istop ((print_expr_aux 14 false e) ^ "?." ^ x))
+      paren prec 14
+        (escape istop ((print_expr_aux 14 false e) ^ "?." ^ x))
   | E_list l ->
-      escape istop ("{"  ^ (String.concat "," (List.map (print_expr_aux 0 false) l)) ^ "}")
+      escape istop
+        ("{"  ^ (String.concat "," (List.map (print_expr_aux 0 false) l)) ^ "}")
   | E_get_array (e, e_n) ->
-      escape istop ((print_expr_aux 0 false e) ^ "[" ^ (print_expr_aux 0 false e_n) ^ "]")
+      escape istop
+        ((print_expr_aux 0 false e) ^ "[" ^ (print_expr_aux 0 false e_n) ^ "]")
   | E_get_dictionary (e, e_x) ->
-      escape istop ((print_expr_aux 0 false e) ^ "[" ^ (print_expr_aux 0 false e_x) ^ "]")
+      escape istop
+        ((print_expr_aux 0 false e) ^ "[" ^ (print_expr_aux 0 false e_x) ^ "]")
   | E_new_array (t, dims, Some init) ->
       paren prec 13
         (escape istop ("new "
@@ -183,13 +188,17 @@ let rec print_expr_aux (prec:int) (istop:bool) e : string =
          ^ (print_expr_aux 2 istop e2)
          ^ ":"
          ^ (print_expr_aux 2 istop e3))
-  | E_conversation_start -> "conversation_start"
-  | E_anything_else -> "anything_else"
-  | E_input -> "input"
   | E_ident x -> x
-  | E_variable x -> "$" ^ x
-  | E_intent x -> "#" ^ x
+  | E_anything_else -> "anything_else"
+  | E_context -> "context"
+  | E_conversation_start -> "conversation_start"
   | E_entities -> "entities"
+  | E_input -> "input"
+  | E_intents -> "intents"
+  | E_output -> "output"
+  | E_variable (x, None) -> "$" ^ x
+  | E_variable (x, Some y) -> "$" ^ x ^ ":" ^ "(" ^ y ^ ")"
+  | E_intent x -> "#" ^ x
   | E_entity (x, None) -> "@" ^ x
   | E_entity (x, Some y) -> "@" ^ x ^ ":" ^ "(" ^ y ^ ")"
   | E_error msg ->
