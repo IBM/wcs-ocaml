@@ -28,6 +28,9 @@ test:
 doc:
 	$(JBUILDER) build @doc
 
+webdoc: doc
+	cp -rf _build/default/_doc/ docs/
+
 install:
 	$(JBUILDER) install
 
