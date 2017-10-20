@@ -78,11 +78,11 @@ let expression_from_string s =
     ast
   with
   | LexError msg ->
-      warning (Spel_util.mk_expr_lit (E_error msg) (Some s))
+      warning (Spel_util.mk_expr_text (E_error msg) (Some s))
         (Format.sprintf "[%s] in expression: '%s'" msg s)
   | _ ->
       warning
-        (Spel_util.mk_expr_lit
+        (Spel_util.mk_expr_text
            (E_error "Parse error in expression")
            (Some s))
         (Format.sprintf "error in expression: '%s'" s)
@@ -104,11 +104,11 @@ let expression_from_text_string s =
   with
   | LexError msg ->
       warning
-        (Spel_util.mk_expr_lit (E_error msg) (Some s))
+        (Spel_util.mk_expr_text (E_error msg) (Some s))
         (Format.sprintf "[%s] in text: '%s'" msg s)
   | _ ->
       warning
-        (Spel_util.mk_expr_lit (E_error "Parse error in text") (Some s))
+        (Spel_util.mk_expr_text (E_error "Parse error in text") (Some s))
         (Format.sprintf "in text: '%s'" s)
   end
 

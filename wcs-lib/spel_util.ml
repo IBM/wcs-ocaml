@@ -18,19 +18,22 @@
 
 open Spel_t
 
-let mk_expr_lit edesc text =
+let mk_expr_full edesc locs text =
+  { expr_desc = edesc;
+    expr_loc = locs;
+    expr_text = text }
+
+let mk_expr_text edesc text =
   let locs =
     begin try (Parsing.symbol_start_pos (), Parsing.symbol_end_pos ()) with
     | _ ->
         (Lexing.dummy_pos, Lexing.dummy_pos)
     end
   in
-  { expr_desc = edesc;
-    expr_loc = locs;
-    expr_text = text }
+  mk_expr_full edesc locs text
 
 let mk_expr edesc =
-  mk_expr_lit edesc None
+  mk_expr_text edesc None
 
 (* Cleanup *)
 

@@ -21,13 +21,6 @@
 
 open Spel_t
 
-(** {6 Spel checker *)
-
-val spel_check : string -> string
-(** [spel_check expr] parses the spel expression and prints it
-    back. Fall backs to the initial string with a warning in case of
-    error. *)
-
 (** {6 from OCaml types} *)
 
 val of_string :
@@ -63,4 +56,25 @@ val conversation_start :
 
 val anything_else :
   Spel_t.expression
+
+(** {6 Spel checker *)
+
+val spel_check : string -> string
+(** [spel_check expr] parses the spel expression and prints it
+    back. Fall backs to the initial string with a warning in case of
+    error. *)
+
+(** {6 desugaring} *)
+
+val desugar :
+  Spel_t.expression ->
+  Spel_t.expression
+(** [desugar expr] expands shorthand syntax for variables, entities
+and intents into their underlying Spel expressions. *)
+
+val resugar :
+  Spel_t.expression ->
+  Spel_t.expression
+(** [desugar expr] re-introduces shorthand syntax for variables,
+entities and intents. *)
 

@@ -73,13 +73,16 @@ and expression_desc =
   | E_call_catch of expression option * string * expression list (** e?.m(e1,e2...) *)
   | E_op of op * expression list
   | E_conditional of expression * expression * expression (** e1?e2:e3 *)
-  (* WCS extensions *)
-  | E_conversation_start
-  | E_anything_else
-  | E_input
-  | E_entities (** entities *)
   | E_ident of string (** v *)
-  | E_variable of string (** $v *)
+  (* WCS extensions *)
+  | E_anything_else (** anything_else *)
+  | E_context (** context *)
+  | E_conversation_start (** conversation_start *)
+  | E_entities (** entities *)
+  | E_input (** output *)
+  | E_intents (** entities *)
+  | E_output (** output *)
+  | E_variable of (string * string option) (** $v or $v:(w) *)
   | E_intent of string (** #intent *)
   | E_entity of (string * string option) (** @a or @a:(b) *)
   (* Fallback *)
