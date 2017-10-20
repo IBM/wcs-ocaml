@@ -226,14 +226,9 @@ and (expression_desc_to_yojson : expression_desc -> Json_t.safe) =
           [`String "E_prop_catch";
            ((fun x  -> expression_to_yojson x)) arg0;
            ((fun x  -> `String x)) arg1]
-    | E_get_array (arg0,arg1) ->
+    | E_get (arg0,arg1) ->
         `List
-          [`String "E_get_array";
-           ((fun x  -> expression_to_yojson x)) arg0;
-           ((fun x  -> expression_to_yojson x)) arg1]
-    | E_get_dictionary (arg0,arg1) ->
-        `List
-          [`String "E_get_dictionary";
+          [`String "E_get";
            ((fun x  -> expression_to_yojson x)) arg0;
            ((fun x  -> expression_to_yojson x)) arg1]
     | E_list arg0 ->
@@ -346,16 +341,11 @@ and (expression_desc_of_yojson :
         ((fun arg1  ->
            ((fun x  -> expression_of_yojson x) arg0) >>=
            (fun arg0  -> Ok (E_prop_catch (arg0, arg1)))))
-    | `List ((`String "E_get_array")::arg0::arg1::[]) ->
+    | `List ((`String "E_get")::arg0::arg1::[]) ->
         ((fun x  -> expression_of_yojson x) arg1) >>=
         ((fun arg1  ->
            ((fun x  -> expression_of_yojson x) arg0) >>=
-           (fun arg0  -> Ok (E_get_array (arg0, arg1)))))
-    | `List ((`String "E_get_dictionary")::arg0::arg1::[]) ->
-        ((fun x  -> expression_of_yojson x) arg1) >>=
-        ((fun arg1  ->
-           ((fun x  -> expression_of_yojson x) arg0) >>=
-           (fun arg0  -> Ok (E_get_dictionary (arg0, arg1)))))
+           (fun arg0  -> Ok (E_get (arg0, arg1)))))
     | `List ((`String "E_list")::arg0::[]) ->
         ((function
          | `List xs -> map_bind (fun x  -> expression_of_yojson x) [] xs

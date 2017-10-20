@@ -64,17 +64,3 @@ val spel_check : string -> string
     back. Fall backs to the initial string with a warning in case of
     error. *)
 
-(** {6 desugaring} *)
-
-val desugar :
-  Spel_t.expression ->
-  Spel_t.expression
-(** [desugar expr] expands shorthand syntax for variables, entities
-and intents into their underlying Spel expressions. *)
-
-val resugar :
-  Spel_t.expression ->
-  Spel_t.expression
-(** [desugar expr] re-introduces shorthand syntax for variables,
-entities and intents. *)
-

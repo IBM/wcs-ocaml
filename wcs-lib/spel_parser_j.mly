@@ -181,7 +181,7 @@ expr:
 | NEW id = IDENT LPAREN el = elist RPAREN
     { mk_expr (E_new (id, el)) }
 | e1 = expr LBRACKET e2 = expr RBRACKET
-    { mk_expr (E_get_array (e1, e2)) }
+    { mk_expr (E_get (e1, e2)) }
 
 dotident:
 | ANYTHING_ELSE

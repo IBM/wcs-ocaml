@@ -64,8 +64,7 @@ and expression_desc =
   | E_lit of literal
   | E_prop of expression * string (** e.x *)
   | E_prop_catch of expression * string (** e?.x *)
-  | E_get_array of expression * expression (** e\[n\] *)
-  | E_get_dictionary of expression * expression (** e\['x'\] *)
+  | E_get of expression * expression (** e1\[e2\] *)
   | E_list of expression list (** { e1, e2 .. } *)
   | E_new_array of spel_type * int option list * expression list option (** new T[]{ e1, e2 ... } *)
   | E_new of string * expression list (** new T(e1,e2...) *)
