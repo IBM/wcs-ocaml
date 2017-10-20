@@ -18,7 +18,7 @@
 
 (executables
  ((names (example knock knock_spel))
-  (libraries (wcs-lib))))
+  (libraries (wcs-lib wcs-api))))
 
 (alias
  ((name   runtest)
@@ -28,10 +28,10 @@
 (alias
  ((name   runtest)
   (deps   (knock.exe))
-  (action (run ${<}))))
+  (action (run ${<} -print))))
 
 (alias
  ((name   runtest)
   (deps   (knock_spel.exe))
-  (action (run ${<}))))
+  (action (run ${<} -print))))
 
