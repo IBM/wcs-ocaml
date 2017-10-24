@@ -118,7 +118,10 @@ and colon_ident sbuff lexbuf =
 and colon_ident_rest sbuff colon_ident_name lexbuf =
   let buf = lexbuf.stream in
   begin match %sedlex buf with
-  | ':', uident -> (colon_ident_name, Some (Sedlexing.Utf8.lexeme buf))
+  | ':', uident ->
+      let token = Sedlexing.Utf8.lexeme buf in
+      let ident = String.sub token 1 ((String.length token)-1) in
+      (colon_ident_name, Some ident)
   | ':', '(' ->
       reset_string sbuff;
       (colon_ident_name, Some (qparen sbuff lexbuf))

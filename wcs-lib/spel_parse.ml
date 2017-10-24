@@ -134,9 +134,17 @@ let desugar_spel = ref false
 
 let desugar_desc e =
   begin match e with
-  | E_variable (s,None) ->
+  (* Shorthand syntax for variables *)
+  | E_variable (v, None) ->
       E_get (Spel_util.mk_expr E_context,
-             Spel_util.mk_expr (E_lit (L_string s)))
+             Spel_util.mk_expr (E_lit (L_string v)))
+  | E_variable (v, Some s) ->
+      E_op (Op_eq,
+            [Spel_util.mk_expr
+               (E_get (Spel_util.mk_expr E_context,
+                       Spel_util.mk_expr (E_lit (L_string v))));
+             Spel_util.mk_expr
+               (E_lit (L_string s))])
   | _ -> e
   end
 
@@ -147,9 +155,16 @@ let resugar_spel = ref false
 
 let resugar_desc e =
   begin match e with
+  (* Shorthand syntax for variables *)
   | E_get ({ expr_desc = E_context },
            { expr_desc = E_lit (L_string s) }) ->
       E_variable (s,None)
+  (* XXX Keeps equality intact when resugaring
+  | E_op (Op_eq,
+          [{ expr_desc = E_get ({ expr_desc = E_context },
+                                { expr_desc = (E_lit (L_string v)) }) };
+           { expr_desc = E_lit (L_string s) }]) ->
+      E_variable (v, Some s) XXX *)
   | _ -> e
   end
 
