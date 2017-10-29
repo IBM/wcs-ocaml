@@ -158,15 +158,27 @@ val logs_request :
 
 val sys_number : entity_def
 
+(** {6. Message} *)
+
+val message_request :
+  ?text:string ->
+  ?input:input ->
+  ?alternate_intents:bool ->
+  ?context:json ->
+  ?entities:entity list ->
+  ?intents:intent list ->
+  ?output:output ->
+  unit ->
+  message_request
 
 (** {6 Tree modification} *)
 
 val add_tree:
-      dialog_node list ->
-      dialog_node list ->
-      dialog_node option ->
-      dialog_node option ->
-      dialog_node list
+  dialog_node list ->
+  dialog_node list ->
+  dialog_node option ->
+  dialog_node option ->
+  dialog_node list
 (** [add_tree tree subtree parent previous_sibling] add the tree
     [subtree] in the dialog [tree]. The root of [subtree] is attached
     at the position defined with [parent] and [previous_sibling]. If
