@@ -352,6 +352,45 @@ let sys_number : entity_def =
     ~source: "system.entities"
     ()
 
+(** {6. Message} *)
+
+let message_request
+      ?text
+      ?input
+      ?alternate_intents
+      ?context
+      ?entities
+      ?intents
+      ?output
+      ()
+  : message_request =
+  let input =
+    begin match text, input with
+    | Some text, None ->
+        { in_text = text }
+    | None, Some input -> input
+    | Some text, Some input ->
+        Log.error "Ws_builder"
+          (Some input)
+          "message_request: ~text and ~input cannot be present simultanously"
+    | None, None ->
+        Log.error "Ws_builder"
+          (Some { in_text = "" })
+          "message_request: ~text or ~input must be present"
+    end
+  in
+  let alternate_intents =
+    begin match alternate_intents with
+    | Some b -> b
+    | None -> false
+    end
+  in
+  { msg_req_input = input;
+    msg_req_alternate_intents = alternate_intents;
+    msg_req_context = context;
+    msg_req_entities = entities;
+    msg_req_intents = intents;
+    msg_req_output = output; }
 
 (** {6 Tree modifications} *)
 
