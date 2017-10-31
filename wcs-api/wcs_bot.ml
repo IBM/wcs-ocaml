@@ -49,7 +49,7 @@ let interpret
       ("Request:\n"^
        (Wcs_json.pretty_message_request req_msg));
     let resp =
-      Wcs.message wcs_cred ws_id req_msg
+      Wcs_api.message wcs_cred ws_id req_msg
     in
     Log.debug "Wcs_bot"
       ("Response:\n"^

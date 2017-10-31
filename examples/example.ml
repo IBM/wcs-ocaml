@@ -1,5 +1,5 @@
 open Wcs_t
-module Mk = Wcs_builder
+module Mk = Wcs
 
 let intent_help =
   Mk.intent "help"

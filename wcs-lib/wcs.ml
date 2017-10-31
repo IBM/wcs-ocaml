@@ -132,7 +132,7 @@ let mk_next_step_id = next_step_id (* alias to avoid hiding *)
 let output (* XX TODO : handle multiple outputs *)
       text
   : output_def =
-  Spel_builder.of_json (`Assoc [ "text", `String text ])
+  Spel.of_json (`Assoc [ "text", `String text ])
 
 let mk_output = output (* alias to avoid hiding *)
 
@@ -171,7 +171,7 @@ let dialog_node
     | Some text, None -> Some (mk_output text)
     | None, Some expr -> Some (mk_output (Spel_print.to_text expr))
     | Some _, Some _ ->
-        Log.error "Ws_builder"
+        Log.error "Wcs"
           (Some None)
           "dialog_node: ~text and ~text_spel cannot be present simultanously"
     end
@@ -179,10 +179,10 @@ let dialog_node
   let output =
     begin match output, output_spel with
     | None, None -> None
-    | Some output, None -> Some (Spel_builder.of_json output)
+    | Some output, None -> Some (Spel.of_json output)
     | None, Some json_expr -> Some json_expr
     | Some _, Some _ ->
-        Log.error "Ws_builder"
+        Log.error "Wcs"
           (Some None)
           "dialog_node: ~output and ~output_spel cannot be present simultanously"
     end
@@ -193,7 +193,7 @@ let dialog_node
     | Some text, None -> Some text
     | None, Some output -> Some output
     | Some _, Some _ ->
-        Log.error "Ws_builder"
+        Log.error "Wcs"
           (Some None)
           "dialog_node: ~text and ~output cannot be present simultanously"
     end
@@ -201,10 +201,10 @@ let dialog_node
   let context =
     begin match context, context_spel with
     | None, None -> None
-    | Some context, None -> Some (Spel_builder.of_json context)
+    | Some context, None -> Some (Spel.of_json context)
     | None, Some json_expr -> Some json_expr
     | Some _, Some _ ->
-        Log.error "Ws_builder"
+        Log.error "Wcs"
           (Some None)
           "dialog_node: ~context and ~context_spel cannot be present simultanously"
     end
@@ -217,18 +217,18 @@ let dialog_node
     | None, Some (node_id, selector) ->
         Some (mk_next_step_id node_id ~selector ())
     | Some _, Some _ ->
-        Log.error "Ws_builder"
+        Log.error "Wcs"
           (Some None)
           "dialog_node: ~next_step and ~next_step_id cannot be present simultanously"
     end
   in
   let conditions =
     begin match conditions, conditions_spel with
-    | None,None -> Some (Spel_builder.bool true)
-    | Some text, None -> Some (Spel_builder.of_string text)
+    | None,None -> Some (Spel.bool true)
+    | Some text, None -> Some (Spel.of_string text)
     | None, Some expr -> Some expr
     | Some _, Some _ ->
-        Log.error "Ws_builder"
+        Log.error "Wcs"
           (Some None)
           "dialog_node: ~conditions and ~conditions_spel cannot be present simultanously"
     end
@@ -370,11 +370,11 @@ let message_request
         { in_text = text }
     | None, Some input -> input
     | Some text, Some input ->
-        Log.error "Ws_builder"
+        Log.error "Wcs"
           (Some input)
           "message_request: ~text and ~input cannot be present simultanously"
     | None, None ->
-        Log.error "Ws_builder"
+        Log.error "Wcs"
           (Some { in_text = "" })
           "message_request: ~text or ~input must be present"
     end
@@ -455,7 +455,7 @@ let add_tree
     begin match get_root tree with
     | Some root -> root
     | None ->
-        Log.error "Ws_builder"
+        Log.error "Wcs"
           None
           "add_tree: tree has no root"
     end

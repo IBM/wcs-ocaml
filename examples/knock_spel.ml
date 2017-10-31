@@ -1,6 +1,6 @@
 open Wcs_t
-module WCS = Wcs_builder
-module Spel = Spel_builder
+module WCS = Wcs
+module Spel = Spel
 
 let who_intent =
   WCS.intent "Who"
@@ -87,10 +87,10 @@ let main () =
   end;
   begin match !deploy, !ws_id with
   | true, Some ws_id ->
-      let () = Wcs.update_workspace wcs_cred ws_id knockknock in
+      let () = Wcs_api.update_workspace wcs_cred ws_id knockknock in
       Format.printf "%s: updated@." ws_id
   | true, None ->
-      begin match Wcs.create_workspace wcs_cred knockknock with
+      begin match Wcs_api.create_workspace wcs_cred knockknock with
       | { crea_rsp_workspace_id = Some id } ->
           Format.printf "%s: created@." id;
           ws_id := Some id;

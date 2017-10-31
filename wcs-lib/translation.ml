@@ -22,19 +22,19 @@ open Dialog_t
 let mk_conditions cond =
   begin match cond with
   | None -> None
-  | Some cond -> Some (Spel_builder.of_string cond)
+  | Some cond -> Some (Spel.of_string cond)
   end
 
 let mk_context context =
   begin match context with
   | None -> None
-  | Some context -> Some (Spel_builder.of_json context)
+  | Some context -> Some (Spel.of_json context)
   end
 
 let mk_output output =
   begin match output with
   | None -> None
-  | Some output -> Some (Spel_builder.of_json output)
+  | Some output -> Some (Spel.of_json output)
   end
 
 let dialog_node_of_node (n : node) : dialog_node list =
@@ -93,11 +93,11 @@ let dialog_nodes_of_dialog (d: dialog) : dialog_node list =
           (fun (n, d) acc ->
              let children = compile d in
              let dn_tree = dialog_node_of_node n in
-             let root = Wcs_builder.get_root dn_tree in
+             let root = Wcs.get_root dn_tree in
              let dn_tree =
-               Wcs_builder.add_tree dn_tree children root None
+               Wcs.add_tree dn_tree children root None
              in
-             Wcs_builder.add_tree dn_tree acc None root)
+             Wcs.add_tree dn_tree acc None root)
           l []
     end
   in

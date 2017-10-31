@@ -45,7 +45,7 @@ let set_debug () =
   Log.debug_message := true
 
 let print_version () =
-  Format.printf "Watson Conversation Service API %s@." Wcs.version
+  Format.printf "Watson Conversation Service API %s@." Wcs_api.version
 
 let speclist =
   [ "-wcs-cred", Arg.String set_wcs_credential,
