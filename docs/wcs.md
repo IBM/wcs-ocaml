@@ -1,13 +1,7 @@
 # Watson Conversation Service command line interface
 
-The compilation produces a command line interface for Watson
-Conversation Service in:
-
-```
-./_build/install/default/bin/wcs
-```
-
-The command line interface support the following commands:
+The command line interface for Watson Conversation Service is called `wcs`.
+It supports the following commands:
   * `list` - List the workspaces associated with a Conversation service instance.
   * `create` - Create workspaces on the Conversation service instance.
   * `delete` - Delete workspaces from the Conversation service instance.
