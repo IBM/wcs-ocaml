@@ -16,7 +16,7 @@
  * limitations under the License.
  *)
 
-(** Spel utility *)
+(** Spel utilities. *)
 
 open Spel_t
 
