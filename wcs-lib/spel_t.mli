@@ -16,6 +16,8 @@
  * limitations under the License.
  *)
 
+(** Spel abstract syntax tree. *)
+
 type location = Lexing.position * Lexing.position
 
 (** {6 atomic types} *)

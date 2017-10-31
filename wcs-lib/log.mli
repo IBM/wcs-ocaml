@@ -17,7 +17,7 @@
  *)
 
 (**
-   Logging utility.
+   Logging utilities.
 *)
 
 (** {6 Errors} *)

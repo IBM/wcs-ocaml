@@ -17,7 +17,7 @@
  *)
 
 
-(** Spel data structure constructors *)
+(** Spel constructors. *)
 
 open Spel_t
 

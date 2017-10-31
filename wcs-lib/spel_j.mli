@@ -16,6 +16,8 @@
  * limitations under the License.
  *)
 
+(** Spel/JSON conversions. *)
+
 type ('a, 'b) result =
   | Ok of 'a
   | Error of 'b
