@@ -67,14 +67,14 @@ let list_usage cmd_name =
 
 let list wcs_cred =
   let req =
-    Wcs_builder.list_workspaces_request
+    Wcs.list_workspaces_request
       ?page_limit:!list_page_limit
       ?include_count:!list_include_count
       ?sort:!list_sort
       ?cursor:!list_cursor
       ()
   in
-  let rsp = Wcs.list_workspaces wcs_cred req in
+  let rsp = Wcs_api.list_workspaces wcs_cred req in
   begin match !list_short with
   | false ->
       Format.printf "%s@." (Wcs_json.pretty_list_workspaces_response rsp)
@@ -112,7 +112,7 @@ let create wcs_cred =
        let ws =
          Json.read_json_file Wcs_j.read_workspace fname
        in
-       let rsp = Wcs.create_workspace wcs_cred ws in
+       let rsp = Wcs_api.create_workspace wcs_cred ws in
        let name =
          begin match rsp.crea_rsp_name with
          | Some name -> name
@@ -147,7 +147,7 @@ let delete_usage cmd_name =
 let delete wcs_cred =
   List.iter
     (fun id ->
-       Wcs.delete_workspace wcs_cred id;
+       Wcs_api.delete_workspace wcs_cred id;
        Format.printf "Workspace %s deleted@." id)
     !delete_ws_ids
 
@@ -177,9 +177,9 @@ let get wcs_cred =
     List.fold_left
       (fun acc id ->
          let req =
-           Wcs_builder.get_workspace_request ?export:!get_export id
+           Wcs.get_workspace_request ?export:!get_export id
          in
-         let ws = Wcs.get_workspace wcs_cred req in
+         let ws = Wcs_api.get_workspace wcs_cred req in
          (Wcs_json.json_of_workspace ws) :: acc)
       [] !get_ws_ids
   in
@@ -224,7 +224,7 @@ let update wcs_cred cmd_name =
       let ws =
         Json.read_json_file Wcs_j.read_workspace fname
       in
-      Wcs.update_workspace wcs_cred id ws
+      Wcs_api.update_workspace wcs_cred id ws
   | _ ->
       let usage =
         Format.sprintf "%s update: workspace file and workspace id required"
@@ -280,14 +280,14 @@ let logs wcs_cred =
   List.iter
     (fun id ->
        let req =
-         Wcs_builder.logs_request
+         Wcs.logs_request
            ?filter:!logs_filter
            ?sort:!logs_sort
            ?page_limit:!logs_page_limit
            ?cursor:!logs_cursor
            ()
        in
-       let rsp = Wcs.logs wcs_cred id req in
+       let rsp = Wcs_api.logs wcs_cred id req in
        Format.printf "%s@." (Wcs_json.pretty_logs_response rsp))
     !logs_ws_ids
 
