@@ -16,6 +16,8 @@
  * limitations under the License.
  *)
 
+(** Spel utility *)
+
 open Spel_t
 
 let mk_expr_full edesc locs text =

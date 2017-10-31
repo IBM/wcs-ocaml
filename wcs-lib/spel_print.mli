@@ -16,6 +16,8 @@
  * limitations under the License.
  *)
 
+(** Spel pretty-printers *)
+
 (** {6 Top level printer for Spel expressions} *)
 val to_string : Spel_t.expression -> string
 

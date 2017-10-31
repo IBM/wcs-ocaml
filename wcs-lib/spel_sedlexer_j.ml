@@ -16,6 +16,8 @@
  * limitations under the License.
  *)
 
+(** Spel lexer *)
+
 open Spel_util
 open Spel_parser_j
 

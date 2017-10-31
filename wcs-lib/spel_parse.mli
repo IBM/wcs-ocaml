@@ -16,8 +16,9 @@
  * limitations under the License.
  *)
 
-(** {6 desugaring} *)
+(** Spel parsers *)
 
+(** {6 desugaring} *)
 val desugar_spel : bool ref
 (** Set if builder should desugar spel expressions *)
 
