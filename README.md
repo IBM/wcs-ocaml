@@ -17,11 +17,7 @@ the directory (docs)[./docs].
 
 ## Quick install with Opam
 
-The easiest way to install wcs-ocaml is through the Opam package manager for OCaml.
-Instructions to install Opam on you system can be found on the website:
-http://opam.ocaml.org/doc/Install.html
-
-Then you can install wcs-ocaml with the following command:
+You can install wcs-ocaml with the following command:
 ```
 opam install wcs
 ```
@@ -31,15 +27,6 @@ This will install the three main packages:
 - wcs-api, and,
 - wcs
 
-Alternatively, you can only install the WCS API:
-```
-opam install wcs-api
-```
-
-or the Ocaml SDK (which will also install the api):
-```
-opam install wcs-lib
-```
 
 ## Building from source
 ### Prerequistes
