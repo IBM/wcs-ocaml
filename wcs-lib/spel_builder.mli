@@ -57,7 +57,7 @@ val conversation_start :
 val anything_else :
   Spel_t.expression
 
-(** {6 Spel checker *)
+(** {6 Spel checker} *)
 
 val spel_check : string -> string
 (** [spel_check expr] parses the spel expression and prints it

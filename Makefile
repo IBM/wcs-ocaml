@@ -30,6 +30,7 @@ doc:
 
 webdoc: doc
 	cp -rf _build/default/_doc/ docs/
+	rm -f docs/index.html
 
 install:
 	$(JBUILDER) install
