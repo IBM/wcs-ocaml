@@ -21,6 +21,7 @@
 
 open Spel_t
 open Wcs_t
+open Spel_util
 
 (** {6 from OCaml types} *)
 
@@ -33,29 +34,131 @@ let of_json j = Spel_parse.json_expr_from_json j
 let entity entity_def ?value () =
   begin match value with
   | None ->
-      Spel_util.mk_expr (E_entity (entity_def.e_def_entity, None))
+      mk_expr (E_entity (entity_def.e_def_entity, None))
   | Some value_def ->
       let value = value_def.e_val_value in
       if List.mem value (List.map (fun ev -> ev.e_val_value) entity_def.e_def_values)
       then
-        Spel_util.mk_expr (E_entity (entity_def.e_def_entity, Some value))
+        mk_expr (E_entity (entity_def.e_def_entity, Some value))
       else
         Log.error "Spel builder" None ("Undefined entity: " ^  value)
   end
 
 let intent intent_def =
-  Spel_util.mk_expr (E_intent intent_def.i_def_intent)
+  mk_expr (E_intent intent_def.i_def_intent)
 
 let bool b =
-  Spel_util.mk_expr (E_lit (L_boolean b))
+  mk_expr (E_lit (L_boolean b))
+
+(** {6 expression constructors} *)
+
+let prop e x =
+  mk_expr (E_prop (e, x))
+
+let prop_catch e x =
+  mk_expr (E_prop_catch (e, x))
+
+let get e1 e2  =
+  mk_expr (E_get (e1, e2))
+
+let list l =
+  mk_expr (E_list l)
+
+let new_array t l1 l2 =
+  mk_expr (E_new_array (t, l1, l2))
+
+let new_ t l =
+  mk_expr (E_new (t, l))
+
+let call e m l =
+  mk_expr (E_call (e, m ,l ))
+
+let call_catch e m l =
+  mk_expr (E_call_catch (e, m ,l ))
+
+let op op l =
+  mk_expr (E_op (op, l))
+
+let eq e1 e2 =
+  op Op_eq [ e1; e2; ]
+
+let ne e1 e2 =
+  op Op_ne [ e1; e2; ]
+
+let lt e1 e2 =
+  op Op_lt [ e1; e2; ]
+
+let gt e1 e2 =
+  op Op_gt [ e1; e2; ]
+
+let ge e1 e2 =
+  op Op_ge [ e1; e2; ]
+
+let not e =
+  op Op_not [ e; ]
+
+let and_ e1 e2 =
+  op Op_and [ e1; e2; ]
+
+let or_ e1 e2 =
+  op Op_or [ e1; e2; ]
+
+let plus e1 e2 =
+  op Op_plus [ e1; e2; ]
+
+let minus e1 e2 =
+  op Op_minus [ e1; e2; ]
+
+let uminus e =
+  op Op_uminus [ e; ]
+
+let mult e1 e2 =
+  op Op_mult [ e1; e2; ]
+
+let div e1 e2 =
+  op Op_div [ e1; e2; ]
+
+let mod_ e1 e2 =
+  op Op_mod [ e1; e2; ]
+
+let concat e1 e2 =
+  op Op_concat [ e1; e2; ]
+
+let to_string e =
+  op Op_toString [ e; ]
+
+let conditional e1 e2 e3 =
+  mk_expr (E_conditional (e1, e2, e3))
+
+let ident v =
+  mk_expr (E_ident v)
 
 (** {6 other constructors} *)
 
-let conversation_start =
-  Spel_util.mk_expr E_conversation_start
-
 let anything_else =
-  Spel_util.mk_expr E_anything_else
+  mk_expr E_anything_else
+
+let context =
+  mk_expr E_context
+
+let conversation_start =
+  mk_expr E_conversation_start
+
+let entitites =
+  mk_expr E_entities
+
+let input =
+  mk_expr E_input
+
+let intents =
+  mk_expr E_intents
+
+let output =
+  mk_expr E_output
+
+let variable v =
+  mk_expr (E_variable (v, None))
+
 
 (** {6 Spel checker *)
 
