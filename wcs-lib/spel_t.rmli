@@ -16,6 +16,8 @@
  * limitations under the License.
  *)
 
+(** Spel abstract syntax tree. *)
+
 type location = Lexing.position * Lexing.position
 
 (** {6 atomic types} *)
@@ -62,27 +64,31 @@ type expression =
 and expression_desc =
   (* Spel expressions *)
   | E_lit of literal
-  | E_prop of expression * string (** e.x *)
-  | E_prop_catch of expression * string (** e?.x *)
-  | E_get_array of expression * expression (** e\[n\] *)
-  | E_get_dictionary of expression * expression (** e\['x'\] *)
-  | E_list of expression list (** { e1, e2 .. } *)
-  | E_new_array of spel_type * int option list * expression list option (** new T[]{ e1, e2 ... } *)
-  | E_new of string * expression list (** new T(e1,e2...) *)
-  | E_call of expression option * string * expression list (** e.m(e1,e2...) *)
-  | E_call_catch of expression option * string * expression list (** e?.m(e1,e2...) *)
+  | E_prop of expression * string (** [e.x] *)
+  | E_prop_catch of expression * string (** [e?.x] *)
+  | E_get of expression * expression (** [e1[e2]] *)
+  | E_list of expression list (** [{ e1, e2 .. }] *)
+  | E_new_array of spel_type * int option list * expression list option (** [new T[]{ e1, e2 ... }] *)
+  | E_new of string * expression list (** [new T(e1,e2...)] *)
+  | E_call of expression option * string * expression list (** [e.m(e1,e2...)] *)
+  | E_call_catch of expression option * string * expression list (** [e?.m(e1,e2...)] *)
   | E_op of op * expression list
-  | E_conditional of expression * expression * expression (** e1?e2:e3 *)
+  | E_conditional of expression * expression * expression (** [e1?e2:e3] *)
+  | E_ident of string (** [v] *)
   (* WCS extensions *)
-  | E_conversation_start (** conversation_start *)
-  | E_anything_else (** anything_else *)
-  | E_input
-  | E_entities (** entities *)
-  | E_variable of string (** $v *)
-  | E_intent of string (** #intent *)
-  | E_entity of (string * string option) (** @a or @a:(b) *)
+  | E_anything_else (** [anything_else] *)
+  | E_context (** [context] *)
+  | E_conversation_start (** [conversation_start] *)
+  | E_entities (** [entities] *)
+  | E_input (** [input] *)
+  | E_intents (** [entities] *)
+  | E_output (** [output] *)
+  | E_variable of (string * string option) (** [$v] or [$v:(w)] *)
+  | E_intent of string (** [#intent] *)
+  | E_entity of (string * string option) (** [@a] or [@a:(b)] *)
   (* Fallback *)
   | E_error of string
 
 (** {6 JSON with embedded expressions} *)
 type json_expression
+
