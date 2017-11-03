@@ -19,6 +19,8 @@
 let ws_fact =
   let fact = Spel.variable "fact" in
   let n = Spel.variable "n" in
+  let return = Spel.variable "return" in
+  let res = Spel.variable "res" in
   let base =
     Wcs.dialog_node "Base"
       ~conditions_spel:
@@ -50,6 +52,15 @@ let ws_fact =
                ~result_variable: "context.res"
                ()
            ])
+      ()
+  in
+  let compute =
+    Wcs.dialog_node "Compute"
+      ~parent: inductif
+      ~conditions_spel: (Spel.bool true)
+      ~context_spel: (`Assoc ["return", `Expr (Spel.mult res n)])
+      ~text_spel:
+        (Spel.concat [Spel.string "fact "; n; Spel.string " = "; return])
       ()
   in
   let start =
@@ -96,6 +107,7 @@ let ws_fact =
     ~dialog_nodes: [
       base;
       inductif;
+      compute;
       start;
       finish;
       help;
