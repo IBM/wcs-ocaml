@@ -50,6 +50,13 @@ let intent intent_def =
 let bool b =
   mk_expr (E_lit (L_boolean b))
 
+let int n =
+  mk_expr (E_lit (L_int n))
+
+let string s =
+  mk_expr (E_lit (L_string s))
+
+
 (** {6 expression constructors} *)
 
 let prop e x =
@@ -121,8 +128,8 @@ let div e1 e2 =
 let mod_ e1 e2 =
   op Op_mod [ e1; e2; ]
 
-let concat e1 e2 =
-  op Op_concat [ e1; e2; ]
+let concat l =
+  op Op_concat l
 
 let to_string e =
   op Op_toString [ e; ]

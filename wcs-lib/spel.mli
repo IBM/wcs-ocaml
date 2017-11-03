@@ -47,6 +47,14 @@ val bool :
   bool ->
   Spel_t.expression
 
+val int :
+  int ->
+  Spel_t.expression
+
+val string :
+  string ->
+  Spel_t.expression
+
 (** {6 expression constructors} *)
 
 val prop :
@@ -142,7 +150,7 @@ val mod_ :
   Spel_t.expression
 
 val concat :
-  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression list ->
   Spel_t.expression
 
 val conditional :
