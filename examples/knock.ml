@@ -107,7 +107,9 @@ let main () =
         "-deploy", Arg.Set deploy,
         " Create or update the workspace on Watson Conversation Service.";
         "-exec", Arg.Set exec,
-        " Execute the chatbot."
+        " Execute the chatbot.";
+        "-debug", Arg.Set Log.debug_message,
+        " Print debug messages.";
       ]
   in
   let usage =

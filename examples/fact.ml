@@ -16,11 +16,11 @@
  * limitations under the License.
  *)
 
-Log.debug_message := true;; (* XXXXXXXXXXXX *)
-
 let ws_fact =
   let fact = Spel.variable "fact" in
   let n = Spel.variable "n" in
+  let return = Spel.variable "return" in
+  let res = Spel.variable "res" in
   let base =
     Wcs.dialog_node "Base"
       ~conditions_spel:
@@ -54,6 +54,15 @@ let ws_fact =
            ])
       ()
   in
+  let compute =
+    Wcs.dialog_node "Compute"
+      ~parent: inductif
+      ~conditions_spel: (Spel.bool true)
+      ~context_spel: (`Assoc ["return", `Expr (Spel.mult res n)])
+      ~text_spel:
+        (Spel.concat [Spel.string "fact "; n; Spel.string " = "; return])
+      ()
+  in
   let start =
     Wcs.dialog_node "Start"
       ~conditions_spel: (Spel.entity Wcs.sys_number ())
@@ -62,7 +71,11 @@ let ws_fact =
                       Spel.entity Wcs.sys_number ()])
       ~context:
         (Json.set_actions
-           (Json.set_skip_user_input Json.null true)
+           (Json.set_skip_user_input
+              (Spel_print.to_json (`Assoc [
+                 ("n", `Expr (Spel.entity Wcs.sys_number ()));
+               ]))
+              true)
            [ Wcs.action (Spel_print.to_text fact)
                ~parameters:
                  (Spel_print.to_json (`Assoc [
@@ -80,8 +93,8 @@ let ws_fact =
     Wcs.dialog_node "Finish"
       ~parent: start
       ~text_spel:
-        (Spel.concat [Spel.string "fact "; n; Spel.string " = ";
-                      Spel.variable "res";])
+        (Spel.concat [Spel.string "Final result: fact "; n;
+                      Spel.string " = "; Spel.variable "res";])
       ~context:
         (Json.set_return Json.null
            (Spel_print.to_json (`Expr (Spel.variable "res"))))
@@ -98,6 +111,7 @@ let ws_fact =
     ~dialog_nodes: [
       base;
       inductif;
+      compute;
       start;
       finish;
       help;
@@ -122,7 +136,9 @@ let main () =
         "-deploy", Arg.Set deploy,
         " Create or update the workspace on Watson Conversation Service.";
         "-exec", Arg.Set exec,
-        " Execute the chatbot."
+        " Execute the chatbot.";
+        "-debug", Arg.Set Log.debug_message,
+        " Print debug messages.";
       ]
   in
   let usage =
