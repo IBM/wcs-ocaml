@@ -17,7 +17,7 @@
 (jbuild_version 1)
 
 (executables
- ((names (example knock knock_spel))
+ ((names (example knock knock_spel fact))
   (libraries (wcs-lib wcs-api))))
 
 (alias
@@ -34,4 +34,9 @@
  ((name   runtest)
   (deps   (knock_spel.exe))
   (action (run ${<} -print))))
+
+(alias
+ ((name   runtest)
+  (deps   (fact.exe))
+  (action (run ${<}))))
 
