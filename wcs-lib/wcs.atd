@@ -257,7 +257,7 @@ type log_message = {
 type output = {
     log_messages : log_message list;
     text : string list;
-    nodes_visited : string list;
+    ~nodes_visited <ocaml default="[]"> : string list;
     ?error : string nullable;
   } <ocaml field_prefix="out_">
 

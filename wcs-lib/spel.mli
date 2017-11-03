@@ -19,8 +19,6 @@
 
 (** Spel constructors. *)
 
-open Spel_t
-
 (** {6 from OCaml types} *)
 
 val of_string :
@@ -49,13 +47,151 @@ val bool :
   bool ->
   Spel_t.expression
 
+val int :
+  int ->
+  Spel_t.expression
+
+val string :
+  string ->
+  Spel_t.expression
+
+(** {6 expression constructors} *)
+
+val prop :
+  Spel_t.expression -> string ->
+  Spel_t.expression
+
+val prop_catch :
+  Spel_t.expression -> string ->
+  Spel_t.expression
+
+val get :
+  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val list :
+  Spel_t.expression list ->
+  Spel_t.expression
+
+val new_array :
+  Spel_t.spel_type -> int option list -> Spel_t.expression list option ->
+  Spel_t.expression
+
+val new_ :
+  string -> Spel_t.expression list ->
+  Spel_t.expression
+
+val call :
+  Spel_t.expression option -> string -> Spel_t.expression list ->
+  Spel_t.expression
+
+val call_catch :
+  Spel_t.expression option -> string -> Spel_t.expression list ->
+  Spel_t.expression
+
+val op :
+  Spel_t.op -> Spel_t.expression list ->
+  Spel_t.expression
+
+val eq :
+  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val ne :
+  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val lt :
+  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val gt :
+  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val ge :
+  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val not :
+  Spel_t.expression ->
+  Spel_t.expression
+
+val and_ :
+  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val or_ :
+  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val plus :
+  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val minus :
+  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val uminus :
+  Spel_t.expression ->
+  Spel_t.expression
+
+val mult :
+  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val div :
+  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val mod_ :
+  Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val concat :
+  Spel_t.expression list ->
+  Spel_t.expression
+
+val conditional :
+  Spel_t.expression -> Spel_t.expression -> Spel_t.expression ->
+  Spel_t.expression
+
+val to_string :
+  Spel_t.expression ->
+  Spel_t.expression
+
+val ident :
+  string ->
+  Spel_t.expression
+
 (** {6 other constructors} *)
+
+val anything_else :
+  Spel_t.expression
+
+val context :
+  Spel_t.expression
 
 val conversation_start :
   Spel_t.expression
 
-val anything_else :
+val entitites :
   Spel_t.expression
+
+val input :
+  Spel_t.expression
+
+val intents :
+  Spel_t.expression
+
+val output :
+  Spel_t.expression
+
+val variable :
+  string ->
+  Spel_t.expression
+
 
 (** {6 Spel checker} *)
 

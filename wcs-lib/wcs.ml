@@ -345,7 +345,19 @@ let logs_request
     logs_page_limit = page_limit;
     logs_cursor = cursor; }
 
-
+let action
+      name
+      ?(agent="client")
+      ?(type_="conversation")
+      ?(parameters=Json.null)
+      ?result_variable
+      ()
+  : action =
+  { act_name = name;
+    act_agent = agent;
+    act_type_ = type_;
+    act_parameters = parameters;
+    act_result_variable = result_variable; }
 
 let sys_number : entity_def =
   entity "sys-number"

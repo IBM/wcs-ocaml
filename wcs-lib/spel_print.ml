@@ -96,8 +96,9 @@ let print_op (prec:int) (op: Spel_t.op) (l: string list) : string =
       paren prec 12 (v1 ^ " / " ^ v2)
   | Op_mod, [v1; v2] ->
       paren prec 12 (v1 ^ " % " ^ v2)
-  | Op_concat, [v1; v2] ->
-      paren prec 11 (v1 ^ " + " ^ v2)
+  | Op_concat, (v :: l) ->
+      paren prec 11
+        (List.fold_left (fun acc v -> acc ^ " + " ^ v) v l)
   | Op_toString, [v1] ->
       paren prec 14 (v1 ^ ".toString()")
   | _ -> "[bad number of arguments for operator]"
