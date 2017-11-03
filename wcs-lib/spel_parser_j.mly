@@ -208,30 +208,29 @@ elist:
   { e1 :: [] }
 | e1 = expr COMMA el = elist
   { e1 :: el }
-    
+
 body_main:
 | b = body s = EOF
     { let eout = mk_expr (E_op (Op_concat, [b;mk_expr (E_lit (L_string s))]))
       in spel_cleanup eout }
 
 body:
-| 
+| (* Empty *)
     { mk_expr (E_lit (L_string "")) }
 | bid = BODYVAR b = body
     { let eout =
       let (s,id) = bid in
-        mk_expr (E_op (Op_concat,
-		       [mk_expr (E_lit (L_string s));
-			mk_expr (E_op (Op_concat,
-				       [mk_expr (E_op (Op_toString,
-						       [mk_expr (E_variable id)]));
-					b]))]))
+      mk_expr (E_op (Op_concat,
+                     [mk_expr (E_lit (L_string s));
+                      mk_expr (E_op (Op_concat,
+                                     [mk_expr (E_variable id);
+                                      b]))]))
       in spel_cleanup eout }
 | s = OPENEXPR e = expr CLOSEEXPR b = body
     { let eout =
         mk_expr (E_op (Op_concat,
-		       [mk_expr (E_lit (L_string s));
-			mk_expr (E_op (Op_concat,
-				       [mk_expr (E_op (Op_toString, [e]));
-					b]))]))
+                       [mk_expr (E_lit (L_string s));
+                        mk_expr (E_op (Op_concat,
+                                       [e;
+                                        b]))]))
       in spel_cleanup eout }
