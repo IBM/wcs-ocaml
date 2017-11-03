@@ -71,7 +71,11 @@ let ws_fact =
                       Spel.entity Wcs.sys_number ()])
       ~context:
         (Json.set_actions
-           (Json.set_skip_user_input Json.null true)
+           (Json.set_skip_user_input
+              (Spel_print.to_json (`Assoc [
+                 ("n", `Expr (Spel.entity Wcs.sys_number ()));
+               ]))
+              true)
            [ Wcs.action (Spel_print.to_text fact)
                ~parameters:
                  (Spel_print.to_json (`Assoc [
@@ -89,8 +93,8 @@ let ws_fact =
     Wcs.dialog_node "Finish"
       ~parent: start
       ~text_spel:
-        (Spel.concat [Spel.string "fact "; n; Spel.string " = ";
-                      Spel.variable "res";])
+        (Spel.concat [Spel.string "Final result: fact "; n;
+                      Spel.string " = "; Spel.variable "res";])
       ~context:
         (Json.set_return Json.null
            (Spel_print.to_json (`Expr (Spel.variable "res"))))
