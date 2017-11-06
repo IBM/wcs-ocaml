@@ -301,6 +301,14 @@ type get_workspace_request = {
 
 (** {6 Action} *)
 
+type action_def = {
+    name : string;
+    ~agent <ocaml default="\"client\""> : string;
+    ~type_ <json name="type"> <ocaml default="\"conversation\""> : string;
+    ~parameters <ocaml default="`Null"> : json_spel;
+    ?result_variable : string nullable;
+  } <ocaml field_prefix="act_def_">
+
 type action = {
     name : string;
     ~agent <ocaml default="\"client\""> : string;

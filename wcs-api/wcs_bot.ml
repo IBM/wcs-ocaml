@@ -212,7 +212,7 @@ let get_credential file_name_opt =
       | None -> Sys.getenv "WCS_CRED"
       end
     in
-    Json.read_json_file Wcs_j.read_credential file_name
+    Wcs_json.read_json_file Wcs_j.read_credential file_name
   with
   | Not_found ->
       Log.error "Wcs_bot" None ("no credential file")
