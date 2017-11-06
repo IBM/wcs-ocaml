@@ -345,6 +345,20 @@ let logs_request
     logs_page_limit = page_limit;
     logs_cursor = cursor; }
 
+let action_def
+      name
+      ?(agent="client")
+      ?(type_="conversation")
+      ?(parameters=Json_spel.null)
+      ?result_variable
+      ()
+  : action_def =
+  { act_def_name = name;
+    act_def_agent = agent;
+    act_def_type_ = type_;
+    act_def_parameters = parameters;
+    act_def_result_variable = result_variable; }
+
 let action
       name
       ?(agent="client")

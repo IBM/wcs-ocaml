@@ -19,6 +19,25 @@
 
 (** Conversion of Wcs data structures to JSON. *)
 
+(** {6 Utility function} *)
+
+let read_json_file reader f =
+  begin try
+    let lexstate = Yojson.init_lexer ~fname:f () in
+    let ch = open_in f in
+    let lexbuf = Lexing.from_channel ch in
+    let json = reader lexstate lexbuf in
+    close_in ch;
+    json
+  with
+  | Yojson.Json_error err ->
+      Log.error "Json_util" None
+        ("Unable to parse file "^f^": "^err)
+  | exn ->
+      Log.error "Json_util" None
+        ("Unable to read file "^f^": "^(Printexc.to_string exn))
+  end
+
 (** {6 workspace_response} *)
 
 let json_of_workspace_response rsp =
@@ -205,6 +224,14 @@ let json_of_log_entry x =
 
 let pretty_log_entry x =
   Yojson.Basic.pretty_to_string (json_of_log_entry x)
+
+
+(** {6 Action} *)
+
+let json_of_action x =
+  Yojson.Basic.from_string (Wcs_j.string_of_action x)
+let pretty_action x =
+  Yojson.Basic.pretty_to_string (json_of_action x)
 
 
 (** {6 logs_request} *)

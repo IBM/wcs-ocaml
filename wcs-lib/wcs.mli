@@ -158,6 +158,15 @@ val logs_request :
 
 val sys_number : entity_def
 
+val action_def :
+  string ->
+  ?agent: string ->
+  ?type_: string ->
+  ?parameters: json_spel ->
+  ?result_variable: string ->
+  unit ->
+  action_def
+
 val action :
   string ->
   ?agent: string ->

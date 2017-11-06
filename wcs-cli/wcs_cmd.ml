@@ -110,7 +110,7 @@ let create wcs_cred =
   List.iter
     (fun fname ->
        let ws =
-         Json.read_json_file Wcs_j.read_workspace fname
+         Wcs_json.read_json_file Wcs_j.read_workspace fname
        in
        let rsp = Wcs_api.create_workspace wcs_cred ws in
        let name =
@@ -222,7 +222,7 @@ let update wcs_cred cmd_name =
   begin match !update_ws_id, !update_ws_fname with
   | Some id, Some fname ->
       let ws =
-        Json.read_json_file Wcs_j.read_workspace fname
+        Wcs_json.read_json_file Wcs_j.read_workspace fname
       in
       Wcs_api.update_workspace wcs_cred id ws
   | _ ->
