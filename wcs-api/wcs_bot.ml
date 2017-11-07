@@ -63,7 +63,7 @@ let interpret
           { act_name = ws_id;
             act_agent = "client";
             act_type_= "conversation";
-            act_parameters = Json.set `Null "context" ctx;
+            act_parameters = Json.assoc ["context", ctx];
             act_result_variable = act.act_result_variable; }
         in
         let act_ctx =
@@ -114,9 +114,10 @@ let interpret
                 in
                 if k_skip_user_input then
                   let k_parameters =
-                    Json.set
-                      (Json.set_string k.act_parameters "text" k_txt)
-                      "context" k_ctx
+                    Json.assign
+                      [ k.act_parameters;
+                        Json.assoc ["text", Json.string k_txt];
+                        Json.assoc ["context", k_ctx]; ]
                   in
                   let k = { k with act_parameters = k_parameters } in
                   interpret_action k output
