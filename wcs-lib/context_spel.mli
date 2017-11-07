@@ -21,6 +21,9 @@
 open Wcs_t
 (** {8 The ["skip_user_input"] field} *)
 
+val skip_user_input : bool -> json_spel
+(** [skip_user_input b] creates the JSON object [{ "skip_user_input" : b }]. *)
+
 val set_skip_user_input : json_spel -> bool -> json_spel
 (**
    [set_skip_user_input ctx b] set the field ["skip_user_input"] of
@@ -35,6 +38,9 @@ val take_skip_user_input : json_spel -> json_spel * bool
 
 
 (** {8 The ["actions"] field} *)
+
+val actions : action list -> json_spel
+(** [actions acts] creates the JSON object [{ "actions" : acts }]. *)
 
 val set_actions : json_spel -> action list -> json_spel
 (**

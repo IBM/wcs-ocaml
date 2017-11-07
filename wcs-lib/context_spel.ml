@@ -23,17 +23,24 @@ open Wcs_t
 
 (** {6. skip_user_input} *)
 
+let skip_user_input (b: bool) : json_spel =
+  Json_spel.assoc [Context.skip_user_input_lbl, Json_spel.bool b]
+
 let set_skip_user_input (ctx: json_spel) (b: bool) : json_spel =
-  Json_spel.set ctx "skip_user_input" (`Bool b)
+  Json_spel.set ctx Context.skip_user_input_lbl (`Bool b)
 
 let take_skip_user_input (ctx: json_spel) : json_spel * bool =
-  begin match Json_spel.take ctx "skip_user_input" with
+  begin match Json_spel.take ctx Context.skip_user_input_lbl with
   | ctx, Some (`Bool b) -> ctx, b
   | _ -> ctx, false
   end
 
 
 (** {6. Actions} *)
+
+let actions (acts: action list) : json_spel =
+  Json_spel.assoc
+    [Context.actions_lbl, Json_spel.list (List.map Json_spel.of_action acts)]
 
 let json_spel_of_action (act : action) : json_spel =
   let json = Json.of_action act in
@@ -45,21 +52,21 @@ let action_of_json_spel (act : json_spel) : action =
 
 let set_actions ctx (acts: action list) : json_spel =
   let js_acts = List.map json_spel_of_action acts in
-  Json_spel.set ctx "actions" (`List js_acts)
+  Json_spel.set ctx Context.actions_lbl (`List js_acts)
 
 let take_actions (ctx: json_spel) : json_spel * action list option =
-  begin match Json_spel.take ctx "actions" with
+  begin match Json_spel.take ctx Context.actions_lbl with
   | ctx', Some (`List acts) ->
       begin try
         ctx', Some (List.map action_of_json_spel acts)
       with _ ->
-        Log.warning "Json"
+        Log.warning "Context_spel"
           (Format.sprintf "illed formed actions:\n%s@."
              (Yojson.Basic.pretty_to_string (Spel_print.to_json (`List acts))));
         ctx, None
       end
   | _, Some o ->
-      Log.warning "Json"
+      Log.warning "Context_spel"
         (Format.sprintf "illed formed actions:\n%s@."
            (Yojson.Basic.pretty_to_string (Spel_print.to_json o)));
       ctx, None
@@ -93,7 +100,7 @@ let take_continuation (ctx: json_spel) : json_spel * action option =
       begin try
         ctx', Some (action_of_json_spel act)
       with _ ->
-        Log.warning "Json"
+        Log.warning "Context_spel"
           (Format.sprintf "illed formed continuation:\n%s@."
              (Yojson.Basic.pretty_to_string (Spel_print.to_json act)));
         ctx, None

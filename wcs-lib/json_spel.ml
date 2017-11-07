@@ -108,11 +108,11 @@ let pop (ctx: json_spel) (lbl: string) : json_spel * json_spel option =
 let set_bool (ctx: json_spel) (lbl: string) (b: bool) : json_spel =
   set ctx lbl (`Bool b)
 
-(* let get_bool (ctx: json_spel) (lbl: string) : bool option =
-   begin match Yojson.Basic.Util.member lbl ctx with
-   | `Bool b -> Some b
-   | _ -> None
-   end *)
+let get_bool (ctx: json_spel) (lbl: string) : bool option =
+  begin match get ctx lbl with
+  | Some (`Bool b) -> Some b
+  | _ -> None
+  end
 
 (** {8 String} *)
 
@@ -131,3 +131,76 @@ let set_string (ctx: json_spel) (lbl: string) (s: string) : json_spel =
    | ctx, _ -> ctx, None
    end *)
 
+(** {6 Conversion of Wcs data structures to JSON} *)
+
+let of_workspace_response rsp =
+  Spel_parse.json_expr_from_json (Json.of_workspace_response rsp)
+
+let of_pagination_response rsp =
+  Spel_parse.json_expr_from_json (Json.of_pagination_response rsp)
+
+let of_list_workspaces_request req =
+  Spel_parse.json_expr_from_json (Json.of_list_workspaces_request req)
+
+let of_list_workspaces_response rsp =
+  Spel_parse.json_expr_from_json (Json.of_list_workspaces_response rsp)
+
+let of_intent_example x =
+  Spel_parse.json_expr_from_json (Json.of_intent_example x)
+
+let of_intent_def x =
+  Spel_parse.json_expr_from_json (Json.of_intent_def x)
+
+let of_entity_value x =
+  Spel_parse.json_expr_from_json (Json.of_entity_value x)
+
+let of_entity_def x =
+  Spel_parse.json_expr_from_json (Json.of_entity_def x)
+
+let of_next_step x =
+  Spel_parse.json_expr_from_json (Json.of_next_step x)
+
+let of_output_def x =
+  Spel_parse.json_expr_from_json (Json.of_output_def x)
+
+let of_dialog_node x =
+  Spel_parse.json_expr_from_json (Json.of_dialog_node x)
+
+let of_workspace x =
+  Spel_parse.json_expr_from_json (Json.of_workspace x)
+
+let of_input x =
+  Spel_parse.json_expr_from_json (Json.of_input x)
+
+let of_entity x =
+  Spel_parse.json_expr_from_json (Json.of_entity x)
+
+let of_output x =
+  Spel_parse.json_expr_from_json (Json.of_output x)
+
+let of_message_request x =
+  Spel_parse.json_expr_from_json (Json.of_message_request x)
+
+let of_message_response x =
+  Spel_parse.json_expr_from_json (Json.of_message_response x)
+
+let of_create_response x =
+  Spel_parse.json_expr_from_json (Json.of_create_response x)
+
+let of_get_workspace_request x =
+  Spel_parse.json_expr_from_json (Json.of_get_workspace_request x)
+
+let of_log_entry x =
+  Spel_parse.json_expr_from_json (Json.of_log_entry x)
+
+let of_action x =
+  Spel_parse.json_expr_from_json (Json.of_action x)
+
+let of_action_def x =
+  Spel_parse.json_expr_from_json (Json.of_action_def x)
+
+let of_logs_request x =
+  Spel_parse.json_expr_from_json (Json.of_logs_request x)
+
+let of_logs_response x =
+  Spel_parse.json_expr_from_json (Json.of_logs_response x)
