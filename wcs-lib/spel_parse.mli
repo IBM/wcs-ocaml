@@ -53,7 +53,7 @@ val quoted_expr_from_string : string -> Spel_t.expression
 (** [quoted_expr_from_string f] parses string [s] as text containing
 quoted spel expression *)
 
-val json_expr_from_json : Json_t.json -> Spel_t.json_expression
+val json_expr_from_json : Json_t.json -> Json_spel_t.json_spel (* XXX TODO XXX *)
 (** [json_expr_from_json j] parses strings literals in [j] as text
 containing quoted spel expressions *)
 

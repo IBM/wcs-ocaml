@@ -30,7 +30,7 @@ let ws_fact =
       ~text_spel:
         (Spel.concat [Spel.string "fact "; n; Spel.string " = "; n])
       ~context:
-        (Json.set_return Json.null (Spel_print.to_json (`Expr n)))
+        (Context.set_return Json.null (Spel_print.to_json (`Expr n)))
       ()
   in
   let inductif =
@@ -39,8 +39,8 @@ let ws_fact =
       ~text_spel:
         (Spel.concat [Spel.string "Let's compute fact "; n])
       ~context:
-        (Json.set_actions
-           (Json.set_skip_user_input Json.null true)
+        (Context.set_actions
+           (Context.set_skip_user_input Json.null true)
            [ Wcs.action (Spel_print.to_string fact)
                ~parameters:
                  (Spel_print.to_json (`Assoc [
@@ -70,8 +70,8 @@ let ws_fact =
         (Spel.concat [Spel.string "Start computation of fact ";
                       Spel.entity Wcs.sys_number ()])
       ~context:
-        (Json.set_actions
-           (Json.set_skip_user_input
+        (Context.set_actions
+           (Context.set_skip_user_input
               (Spel_print.to_json (`Assoc [
                  ("n", `Expr (Spel.entity Wcs.sys_number ()));
                ]))
@@ -96,7 +96,7 @@ let ws_fact =
         (Spel.concat [Spel.string "Final result: fact "; n;
                       Spel.string " = "; Spel.variable "res";])
       ~context:
-        (Json.set_return Json.null
+        (Context.set_return Json.null
            (Spel_print.to_json (`Expr (Spel.variable "res"))))
       ()
   in
@@ -148,7 +148,7 @@ let main () =
   let wcs_cred = Wcs_bot.get_credential !wcs_cred_file in
   begin match !print with
   | true ->
-      print_endline (Wcs_json.pretty_workspace ws_fact)
+      print_endline (Wcs_pretty.workspace ws_fact)
   | false ->
       ()
   end;

@@ -16,14 +16,13 @@
  * limitations under the License.
  *)
 
-(** Spel pretty-printers. *)
+(** JSON Spel/yojson conversions. *)
 
-(** {6 Top level printer for Spel expressions} *)
-val to_string : Spel_t.expression -> string
+type ('a, 'b) result = ('a, 'b) Spel_j.result =
+  | Ok of 'a
+  | Error of 'b
 
-(** {6 Top level printer for JSON with embedded Spel expressions} *)
-val to_json : Json_spel_t.json_spel -> Json_t.json
-
-(** {6 Auxiliary printer for text expressions} *)
-val to_text : Spel_t.expression -> string
+(** {6 JSON serialization/deserialization for JSON with embedded Spel expressions as AST} *)
+val json_spel_of_yojson : Json_t.safe -> (Json_spel_t.json_spel, string) result
+val json_spel_to_yojson : Json_spel_t.json_spel -> Json_t.safe
 

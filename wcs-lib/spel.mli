@@ -19,7 +19,7 @@
 
 (** Spel constructors. *)
 
-(** {6 from OCaml types} *)
+(** {6 parsers} *)
 
 val of_string :
   string ->
@@ -27,11 +27,13 @@ val of_string :
 
 val of_json :
   Json_t.json ->
-  Spel_t.json_expression
+  Json_spel_t.json_spel
 
 val of_text :
   string ->
   Spel_t.expression
+
+(** {6 from OCaml types} *)
 
 val entity :
   Wcs_t.entity_def ->

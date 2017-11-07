@@ -87,14 +87,3 @@ and expression_desc =
   (* Fallback *)
   | E_error of string
 
-(** {6 JSON with embedded expressions} *)
-type json_expression = [
-    `Assoc of (string * json_expression) list
-  | `Bool of bool
-  | `Float of float
-  | `Int of int
-  | `List of json_expression list
-  | `Null
-  | `Expr of expression
-]
-
