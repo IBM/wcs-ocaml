@@ -22,17 +22,27 @@ open Wcs_t
 
 (** {6. skip_user_input} *)
 
+let skip_user_input_lbl = "skip_user_input"
+
+let skip_user_input (b: bool) : json =
+  Json.assoc [skip_user_input_lbl, Json.bool b]
+
 let set_skip_user_input (ctx: json) (b: bool) : json =
-  Json.set ctx "skip_user_input" (`Bool b)
+  Json.set ctx skip_user_input_lbl (`Bool b)
 
 let take_skip_user_input (ctx: json) : json * bool =
-  begin match Json.take ctx "skip_user_input" with
+  begin match Json.take ctx skip_user_input_lbl with
   | ctx, Some (`Bool b) -> ctx, b
   | _ -> ctx, false
   end
 
 
 (** {6. Actions} *)
+
+let actions_lbl = "actions"
+
+let actions (acts: action list) : json =
+  Json.assoc [actions_lbl, Json.list (List.map Json.of_action acts)]
 
 let yojson_of_action (act : action) : json =
   Json.of_action act
@@ -42,21 +52,21 @@ let action_of_yojson (act : json) : action =
 
 let set_actions ctx (acts: action list) : json =
   let js_acts = List.map yojson_of_action acts in
-  Json.set ctx "actions" (`List js_acts)
+  Json.set ctx actions_lbl (`List js_acts)
 
 let take_actions (ctx: json) : json * action list option =
-  begin match Json.take ctx "actions" with
+  begin match Json.take ctx actions_lbl with
   | ctx', Some (`List acts) ->
       begin try
         ctx', Some (List.map action_of_yojson acts)
       with _ ->
-        Log.warning "Json"
+        Log.warning "Context"
           (Format.sprintf "illed formed actions:\n%s@."
              (Yojson.Basic.pretty_to_string (`List acts)));
         ctx, None
       end
   | _, Some o ->
-      Log.warning "Json"
+      Log.warning "Context"
         (Format.sprintf "illed formed actions:\n%s@."
            (Yojson.Basic.pretty_to_string o));
       ctx, None
@@ -90,7 +100,7 @@ let take_continuation (ctx: json) : json * action option =
       begin try
         ctx', Some (action_of_yojson act)
       with _ ->
-        Log.warning "Json"
+        Log.warning "Context"
           (Format.sprintf "illed formed continuation:\n%s@."
              (Yojson.Basic.pretty_to_string act));
         ctx, None

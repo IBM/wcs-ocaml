@@ -22,6 +22,12 @@ open Wcs_t
 
 (** {8 The ["skip_user_input"] field} *)
 
+val skip_user_input_lbl : string
+(** The ["skip_user_input"] string. *)
+
+val skip_user_input : bool -> json
+(** [skip_user_input b] creates the JSON object [{ "skip_user_input" : b }]. *)
+
 val set_skip_user_input : json -> bool -> json
 (**
    [set_skip_user_input ctx b] set the field ["skip_user_input"] of
@@ -36,6 +42,12 @@ val take_skip_user_input : json -> json * bool
 
 
 (** {8 The ["actions"] field} *)
+
+val actions_lbl : string
+(** The ["actions"] string. *)
+
+val actions : action list -> json
+(** [actions acts] creates the JSON object [{ "actions" : acts }]. *)
 
 val set_actions : json -> action list -> json
 (**
