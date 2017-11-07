@@ -16,15 +16,34 @@
  * limitations under the License.
  *)
 
-(** Json utilities. *)
+(** Json with embedded expressions utilities. *)
 
 open Wcs_t
 open Json_spel_t
 
-(** {6 JSON serialization/deserialization} *)
+
+(** {6 Builders} *)
 
 val null : json_spel
 (** The [null] value of JSON. *)
+
+val int : int -> json_spel
+(** [int n] build the value of JSON [n]. *)
+
+val bool : bool -> json_spel
+(** [bool b] build the value of JSON [b]. *)
+
+val string : string -> json_spel
+(** [string s] build the value of JSON [s]. *)
+
+val assoc : (string * json_spel) list -> json_spel
+(** [assoc o] build the JSON object [o]. *)
+
+val list : json_spel list -> json_spel
+(** [list l] build the JSON list [l]. *)
+
+
+(** {6 Manipulation functions} *)
 
 val set : json_spel -> string -> json_spel -> json_spel
 (**
@@ -45,7 +64,6 @@ val take : json_spel -> string -> json_spel * json_spel option
    field.
 *)
 
-
 val assign : json_spel list -> json_spel
 (**
    [assign [o1; ...; on]] create a json object that contains all the
@@ -53,6 +71,16 @@ val assign : json_spel list -> json_spel
    function [Object.assing({}, o1, ... on)].
 *)
 
+val push : json_spel -> string -> json_spel -> json_spel
+(**
+   [push o x v] add the value [v] in the list stored in a field [x]
+   of the object [o]. It the field [x] doesn't exists, it creates it.
+*)
+
+val pop : json_spel -> string -> json_spel * json_spel option
+(**
+   [pop o x] take a value in a list stored in the field [x] of [o].
+*)
 
 
 (** {6 Settes and getters} *)

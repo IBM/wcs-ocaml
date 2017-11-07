@@ -20,9 +20,21 @@ open Wcs_t
 
 type json_spel = Json_spel_t.json_spel
 
-(** {6. Utils} *)
+(** {6 Builders} *)
 
 let null : json_spel = `Null
+
+let int (n: int) : json_spel = `Int n
+
+let bool (b: bool) : json_spel = `Bool b
+
+let string (s: string) : json_spel = `Expr (Spel.string s)
+
+let assoc (o: (string * json_spel) list) : json_spel = `Assoc o
+
+let list (l: json_spel list) : json_spel = `List l
+
+(** {6 Manipulation functions} *)
 
 let set (ctx: json_spel) (lbl: string) (v: json_spel) : json_spel =
   begin match ctx with
@@ -68,6 +80,25 @@ let assign (os: json_spel list) : json_spel =
         Log.error "Json" (Some acc) ""
     end)
     null os
+
+let push (ctx: json_spel) (lbl: string) (v: json_spel) : json_spel =
+  begin match take ctx lbl with
+  | ctx, (None | Some `Null) ->
+      set ctx lbl (`List [ v ])
+  | ctx, Some (`List l) ->
+      set ctx lbl (`List (l @ [ v ]))
+  | ctc, Some _ ->
+      Log.error "Json"
+        (Some ctx)
+        "Unable to push an element in a non-list property"
+  end
+
+let pop (ctx: json_spel) (lbl: string) : json_spel * json_spel option =
+  begin match take ctx lbl with
+  | ctx, Some (`List (v :: l)) ->
+      set ctx lbl (`List l), Some v
+  | _ -> ctx, None
+  end
 
 
 (** {6 Settes and getters} *)

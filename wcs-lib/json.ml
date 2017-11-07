@@ -38,7 +38,23 @@ let read_json_file reader f =
         ("Unable to read file "^f^": "^(Printexc.to_string exn))
   end
 
+
+(** {6 Builders} *)
+
 let null : json = `Null
+
+let int (n: int) : json = `Int n
+
+let bool (b: bool) : json = `Bool b
+
+let string (s: string) : json = `String s
+
+let assoc (o: (string * json) list) : json = `Assoc o
+
+let list (l: json list) : json = `List l
+
+
+(** {6 Manipulation functions} *)
 
 let set (ctx: json) (lbl: string) (v: json) : json =
   begin match ctx with
@@ -83,6 +99,25 @@ let assign (os: json list) : json =
         Log.error "Json" (Some acc) ""
     end)
     null os
+
+let push (ctx: json) (lbl: string) (v: json) : json =
+  begin match take ctx lbl with
+  | ctx, (None | Some `Null) ->
+      set ctx lbl (`List [ v ])
+  | ctx, Some (`List l) ->
+      set ctx lbl (`List (l @ [ v ]))
+  | ctc, Some _ ->
+      Log.error "Json"
+        (Some ctx)
+        "Unable to push an element in a non-list property"
+  end
+
+let pop (ctx: json) (lbl: string) : json * json option =
+  begin match take ctx lbl with
+  | ctx, Some (`List (v :: l)) ->
+      set ctx lbl (`List l), Some v
+  | _ -> ctx, None
+  end
 
 
 (** {6 Settes and getters} *)

@@ -35,7 +35,7 @@ let take_skip_user_input (ctx: json) : json * bool =
 (** {6. Actions} *)
 
 let yojson_of_action (act : action) : json =
-  Yojson.Basic.from_string (Wcs_j.string_of_action act)
+  Json.of_action act
 
 let action_of_yojson (act : json) : action =
   Wcs_j.action_of_string (Yojson.Basic.to_string act)
