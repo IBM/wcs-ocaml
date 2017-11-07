@@ -249,7 +249,7 @@ let quoted_expr_from_string s =
   sugarer (expression_from_quoted_string s)
 
 (** {6 JSON AST with embedded Spel expressions} *)
-let rec json_expr_from_json (j:Json_t.json) : json_expression =
+let rec json_expr_from_json (j:Json_t.json) : Json_spel_t.json_spel =
   begin match j with
   | `Assoc l ->
       `Assoc (List.map (fun x -> (fst x, json_expr_from_json (snd x))) l)

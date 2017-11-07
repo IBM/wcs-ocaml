@@ -97,9 +97,9 @@ val dialog_node :
   ?text:string ->
   ?text_spel:Spel_t.expression ->
   ?output:json ->
-  ?output_spel:Spel_t.json_expression ->
+  ?output_spel:json_spel ->
   ?context:json ->
-  ?context_spel:Spel_t.json_expression ->
+  ?context_spel:json_spel ->
   ?metadata:json ->
   ?next_step:dialog_node * selector ->
   ?next_step_id:string * selector ->
@@ -119,9 +119,9 @@ val response_condition :
   ?text:string ->
   ?text_spel:Spel_t.expression ->
   ?output:json ->
-  ?output_spel:Spel_t.json_expression ->
+  ?output_spel:json_spel ->
   ?context:json ->
-  ?context_spel:Spel_t.json_expression ->
+  ?context_spel:json_spel ->
   ?metadata:json ->
   ?created:string ->
   ?updated:string ->

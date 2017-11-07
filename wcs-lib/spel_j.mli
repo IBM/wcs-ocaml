@@ -25,8 +25,3 @@ type ('a, 'b) result =
 (** {6 JSON serialization/deserialization for Spel expressions} *)
 val expression_of_yojson : Json_t.safe -> (Spel_t.expression, string) result
 val expression_to_yojson : Spel_t.expression -> Json_t.safe
-
-(** {6 JSON serialization/deserialization for JSON with embedded Spel expressions} *)
-val json_expression_of_yojson : Json_t.safe -> (Spel_t.json_expression, string) result
-val json_expression_to_yojson : Spel_t.json_expression -> Json_t.safe
-

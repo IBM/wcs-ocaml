@@ -66,7 +66,7 @@ let mk_knock names_entity (name, answer) =
       ~conditions: (spel_string_of_entity_value names_entity value)
       ~text: answer
       ~parent: whoisthere
-      ~context: (Json.set_skip_user_input `Null true)
+      ~context: (Context.set_skip_user_input `Null true)
       ()
   in
   (names_entity, [knock; whoisthere; answer])
@@ -119,7 +119,7 @@ let main () =
   let wcs_cred = Wcs_bot.get_credential !wcs_cred_file in
   begin match !print with
   | true ->
-      print_endline (Wcs_json.pretty_workspace knockknock)
+      print_endline (Wcs_pretty.workspace knockknock)
   | false ->
       ()
   end;

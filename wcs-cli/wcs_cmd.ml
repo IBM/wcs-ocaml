@@ -77,7 +77,7 @@ let list wcs_cred =
   let rsp = Wcs_api.list_workspaces wcs_cred req in
   begin match !list_short with
   | false ->
-      Format.printf "%s@." (Wcs_json.pretty_list_workspaces_response rsp)
+      Format.printf "%s@." (Wcs_pretty.list_workspaces_response rsp)
   | true ->
       List.iter
         (fun ws ->
@@ -110,7 +110,7 @@ let create wcs_cred =
   List.iter
     (fun fname ->
        let ws =
-         Wcs_json.read_json_file Wcs_j.read_workspace fname
+         Json.read_json_file Wcs_j.read_workspace fname
        in
        let rsp = Wcs_api.create_workspace wcs_cred ws in
        let name =
@@ -180,7 +180,7 @@ let get wcs_cred =
            Wcs.get_workspace_request ?export:!get_export id
          in
          let ws = Wcs_api.get_workspace wcs_cred req in
-         (Wcs_json.json_of_workspace ws) :: acc)
+         (Json.of_workspace ws) :: acc)
       [] !get_ws_ids
   in
   begin match workspaces with
@@ -222,7 +222,7 @@ let update wcs_cred cmd_name =
   begin match !update_ws_id, !update_ws_fname with
   | Some id, Some fname ->
       let ws =
-        Wcs_json.read_json_file Wcs_j.read_workspace fname
+        Json.read_json_file Wcs_j.read_workspace fname
       in
       Wcs_api.update_workspace wcs_cred id ws
   | _ ->
@@ -288,7 +288,7 @@ let logs wcs_cred =
            ()
        in
        let rsp = Wcs_api.logs wcs_cred id req in
-       Format.printf "%s@." (Wcs_json.pretty_logs_response rsp))
+       Format.printf "%s@." (Wcs_pretty.logs_response rsp))
     !logs_ws_ids
 
 

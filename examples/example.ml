@@ -38,7 +38,7 @@ let is_number =
   Mk.dialog_node "Is number"
     ~conditions: "@sys-number"
     ~text: "You have selected the number @sys-number."
-    ~context: (Json.set_skip_user_input `Null true)
+    ~context: (Context.set_skip_user_input `Null true)
     ()
 
 let win =
@@ -46,7 +46,7 @@ let win =
     ~parent: is_number
     ~conditions: "@sys-number == 42"
     ~text: "You win!"
-    ~context: (Json.set_return `Null (`Bool true))
+    ~context: (Context.set_return `Null (`Bool true))
     ()
 
 let lost =
@@ -93,4 +93,4 @@ let example1 =
 
 let () =
   print_endline
-    (Wcs_json.pretty_workspace example1)
+    (Wcs_pretty.workspace example1)

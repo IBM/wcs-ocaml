@@ -60,7 +60,7 @@ let knock who_intent name_entity answer =
       ~conditions_spel: (Spel.entity name_entity ())
       ~text: answer
       ~parent: whoisthere
-      ~context: (Json.set_skip_user_input `Null true)
+      ~context: (Context.set_skip_user_input `Null true)
       ()
   in
   [knock; whoisthere; answer]
@@ -100,7 +100,7 @@ let main () =
   let wcs_cred = Wcs_bot.get_credential !wcs_cred_file in
   begin match !print with
   | true ->
-      print_endline (Wcs_json.pretty_workspace knockknock)
+      print_endline (Wcs_pretty.workspace knockknock)
   | false ->
       ()
   end;

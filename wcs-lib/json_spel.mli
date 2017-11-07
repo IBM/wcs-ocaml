@@ -19,8 +19,9 @@
 (** Json utilities. *)
 
 open Wcs_t
+open Json_spel_t
 
-type json_spel = Spel_t.json_expression
+(** {6 JSON serialization/deserialization} *)
 
 val null : json_spel
 (** The [null] value of JSON. *)
@@ -53,84 +54,8 @@ val assign : json_spel list -> json_spel
 *)
 
 
-(** {8 The ["skip_user_input"] field} *)
 
-val set_skip_user_input : json_spel -> bool -> json_spel
-(**
-   [set_skip_user_input ctx b] set the field ["skip_user_input"] of
-   the object [ctx] with value [b].
-*)
-
-val take_skip_user_input : json_spel -> json_spel * bool
-(**
-   [take_skip_user_input ctx] take the field ["skip_user_input"] of
-   the object [ctx]. If the field is the defined, it returns [false].
-*)
-
-
-(** {8 The ["actions"] field} *)
-
-val set_actions : json_spel -> action list -> json_spel
-(**
-   [set_actions ctx l] set the field ["actions"] of
-   the object [ctx] with the list of actions [l].
-*)
-
-val take_actions : json_spel -> json_spel * action list option
-(**
-   [take_actions ctx] take the field ["actions"] of the object
-   [ctx].
-*)
-
-val push_action : json_spel -> action -> json_spel
-(**
-   [push_action ctx act] add the action [act] in the list of actions
-   stored in the field ["actions"] of ctx. It the field ["actions"]
-   doesn't exists, it creates it.
-*)
-
-val pop_action : json_spel -> json_spel * action option
-(**
-   [pop_action ctx] take an action [act] in the list of actions
-   stored in the field ["actions"] of ctx.
-*)
-
-
-(** {8 The ["continuation"] field} *)
-
-val set_continuation : json_spel -> action -> json_spel
-(**
-   [set_continuation ctx act] set the field ["continuation"] of
-   the object [ctx] with the action [act].
-*)
-
-val get_continuation : json_spel -> action option
-(**
-   [get_continuation ctx] get the value of the field ["continuation"]
-   of the object [ctx].
-*)
-
-val take_continuation : json_spel -> json_spel * action option
-(**
-   [take_continuation ctx] take the value of the field ["continuation"]
-   of the object [ctx].
-*)
-
-
-(** {8 The ["return"] field} *)
-
-val set_return : json_spel -> json_spel -> json_spel
-(**
-   [set_return ctx v] set the field ["return"] of
-   the object [ctx] with the value [v].
-*)
-
-val get_return : json_spel -> json_spel option
-(**
-   [get_return ctx] get the value of the field ["return"]
-   of the object [ctx].
-*)
-
+(** {6 Settes and getters} *)
 
 (** {8 Boolean fields} *)
 

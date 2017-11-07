@@ -47,17 +47,17 @@ let interpret
     let req_msg = before req_msg in
     Log.debug "Wcs_bot"
       ("Request:\n"^
-       (Wcs_json.pretty_message_request req_msg));
+       (Wcs_pretty.message_request req_msg));
     let resp =
       Wcs_api.message wcs_cred ws_id req_msg
     in
     Log.debug "Wcs_bot"
       ("Response:\n"^
-       (Wcs_json.pretty_message_response resp));
+       (Wcs_pretty.message_response resp));
     let resp = after resp in
     let ctx = resp.msg_rsp_context in
     let output = resp.msg_rsp_output in
-    begin match Json.take_actions ctx with
+    begin match Context.take_actions ctx with
     | ctx, Some [ act ] ->
         let k =
           { act_name = ws_id;
@@ -74,7 +74,7 @@ let interpret
         in
         let act_parameters =
           Json.set act.act_parameters "context"
-            (Json.set_continuation act_ctx k)
+            (Context.set_continuation act_ctx k)
         in
         let act = { act with act_parameters = act_parameters } in
         interpret_action act output
@@ -82,10 +82,10 @@ let interpret
         assert false (* XXX TODO XXX *)
     | ctx, Some []
     | ctx, None ->
-        let ctx, skip_user_input = Json.take_skip_user_input ctx in
-        begin match Json.get_return ctx with
+        let ctx, skip_user_input = Context.take_skip_user_input ctx in
+        begin match Context.get_return ctx with
         | Some v ->
-            begin match Json.get_continuation ctx with
+            begin match Context.get_continuation ctx with
             | Some k ->
                 let k_txt =
                   if skip_user_input then
@@ -110,7 +110,7 @@ let interpret
                   end
                 in
                 let k_ctx, k_skip_user_input =
-                  Json.take_skip_user_input k_ctx
+                  Context.take_skip_user_input k_ctx
                 in
                 if k_skip_user_input then
                   let k_parameters =
@@ -124,7 +124,7 @@ let interpret
                   let k_resp =
                     { resp with msg_rsp_context = k_ctx }
                   in
-                  (k.act_name, k_resp, Json.get_return k_ctx)
+                  (k.act_name, k_resp, Context.get_return k_ctx)
             | None ->
                 (ws_id, resp, Some v)
             end
@@ -212,7 +212,7 @@ let get_credential file_name_opt =
       | None -> Sys.getenv "WCS_CRED"
       end
     in
-    Wcs_json.read_json_file Wcs_j.read_credential file_name
+    Json.read_json_file Wcs_j.read_credential file_name
   with
   | Not_found ->
       Log.error "Wcs_bot" None ("no credential file")

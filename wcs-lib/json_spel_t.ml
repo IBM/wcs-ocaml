@@ -16,14 +16,16 @@
  * limitations under the License.
  *)
 
-(** Spel pretty-printers. *)
+(** JSON with embedded expressions. *)
 
-(** {6 Top level printer for Spel expressions} *)
-val to_string : Spel_t.expression -> string
 
-(** {6 Top level printer for JSON with embedded Spel expressions} *)
-val to_json : Json_spel_t.json_spel -> Json_t.json
-
-(** {6 Auxiliary printer for text expressions} *)
-val to_text : Spel_t.expression -> string
+type json_spel = [
+    `Assoc of (string * json_spel) list
+  | `Bool of bool
+  | `Float of float
+  | `Int of int
+  | `List of json_spel list
+  | `Null
+  | `Expr of Spel_t.expression
+]
 
