@@ -28,6 +28,29 @@ This will install the three main packages:
 - wcs
 
 
+## Install fron source with Opam
+
+Opam can also be used to compile and install from the source
+directory. For that you first need to pin the source directory.
+So, from this directory, do:
+```
+opam pin add wcs-lib .
+opam pin add wcs-api .
+opam pin add wcs .
+```
+
+Then you can install using the command:
+```
+opam install wcs
+```
+
+If the source files are modified, the packages must be reinstalled
+with the command:
+```
+opam reinstall wcs-lib
+```
+
+
 ## Building from source
 ### Prerequistes
 
@@ -49,27 +72,6 @@ To compile, do:
 make
 ```
 
-### Compiling with Opam
-
-Opam can also be used to compile and install from the source
-directory. For that you first need to pin the source directory.
-So, from this directory, do:
-```
-opam pin add wcs-lib .
-opam pin add wcs-api .
-opam pin add wcs .
-```
-
-Then you can install using the command:
-```
-opam install wcs
-```
-
-If the source files are modified, the packages must be reinstalled
-with the command:
-```
-opam reinstall wcs-lib
-```
 
 # Contribute
 
