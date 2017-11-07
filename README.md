@@ -28,7 +28,7 @@ This will install the three main packages:
 - wcs
 
 
-## Install fron source with Opam
+## Install from source with Opam
 
 Opam can also be used to compile and install from the source
 directory. For that you first need to pin the source directory.
