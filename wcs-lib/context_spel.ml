@@ -42,6 +42,12 @@ let actions (acts: action list) : json_spel =
   Json_spel.assoc
     [Context.actions_lbl, Json_spel.list (List.map Json_spel.of_action acts)]
 
+let actions_def (acts: action_def list) : json_spel =
+  Json_spel.assoc
+    [Context.actions_lbl,
+     Json_spel.list (List.map Json_spel.of_action_def acts)]
+
+
 let json_spel_of_action (act : action) : json_spel =
   let json = Json.of_action act in
   let json_spel = Spel_parse.json_expr_from_json json in
@@ -92,10 +98,10 @@ let pop_action (ctx: json_spel) : json_spel * action option =
 (** {6. Continuation} *)
 
 let set_continuation (ctx: json_spel) (k: action) : json_spel =
-  Json_spel.set ctx "continuation" (json_spel_of_action k)
+  Json_spel.set ctx Context.continuation_lbl (json_spel_of_action k)
 
 let take_continuation (ctx: json_spel) : json_spel * action option =
-  begin match Json_spel.take ctx "continuation" with
+  begin match Json_spel.take ctx Context.continuation_lbl with
   | ctx', Some act ->
       begin try
         ctx', Some (action_of_json_spel act)
@@ -115,8 +121,11 @@ let get_continuation (ctx: json_spel) : action option =
 
 (** {6. Return} *)
 
+let return (v: json_spel) : json_spel =
+  Json_spel.assoc [Context.return_lbl, v]
+
 let set_return (ctx: json_spel) (x: json_spel) : json_spel =
-  Json_spel.set ctx "return" x
+  Json_spel.set ctx Context.return_lbl x
 
 let get_return (ctx: json_spel) : json_spel option =
-  Json_spel.get ctx "return"
+  Json_spel.get ctx Context.return_lbl

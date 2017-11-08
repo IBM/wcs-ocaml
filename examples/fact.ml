@@ -29,8 +29,8 @@ let ws_fact =
            (Spel.eq n (Spel.int 1)))
       ~text_spel:
         (Spel.concat [Spel.string "fact "; n; Spel.string " = "; n])
-      ~context:
-        (Context.set_return Json.null (Spel_print.to_json (`Expr n)))
+      ~context_spel:
+        (Context_spel.return (`Expr n))
       ()
   in
   let inductif =
@@ -38,27 +38,28 @@ let ws_fact =
       ~conditions_spel: (Spel.gt n (Spel.int 1))
       ~text_spel:
         (Spel.concat [Spel.string "Let's compute fact "; n])
-      ~context:
-        (Context.set_actions
-           (Context.set_skip_user_input Json.null true)
-           [ Wcs.action (Spel_print.to_string fact)
-               ~parameters:
-                 (Spel_print.to_json (`Assoc [
-                    "context", (`Assoc [
-                      ("n", `Expr (Spel.minus n (Spel.int 1)));
-                      ("fact", `Expr fact)
-                    ])
-                  ]))
-               ~result_variable: "context.res"
-               ()
-           ])
+      ~context_spel:
+        (Json_spel.assign
+           [ Context_spel.skip_user_input true;
+             Context_spel.actions_def
+               [ Wcs.action_def (Spel_print.to_string fact)
+                   ~parameters:
+                     (`Assoc [
+                        "context", (`Assoc [
+                          ("n", `Expr (Spel.minus n (Spel.int 1)));
+                          ("fact", `Expr fact)
+                        ])
+                      ])
+                   ~result_variable: "context.res"
+                   ()
+               ]])
       ()
   in
   let compute =
     Wcs.dialog_node "Compute"
       ~parent: inductif
       ~conditions_spel: (Spel.bool true)
-      ~context_spel: (`Assoc ["return", `Expr (Spel.mult res n)])
+      ~context_spel: (Context_spel.return (`Expr (Spel.mult res n)))
       ~text_spel:
         (Spel.concat [Spel.string "fact "; n; Spel.string " = "; return])
       ()
@@ -69,23 +70,22 @@ let ws_fact =
       ~text_spel:
         (Spel.concat [Spel.string "Start computation of fact ";
                       Spel.entity Wcs.sys_number ()])
-      ~context:
-        (Context.set_actions
-           (Context.set_skip_user_input
-              (Spel_print.to_json (`Assoc [
-                 ("n", `Expr (Spel.entity Wcs.sys_number ()));
-               ]))
-              true)
-           [ Wcs.action (Spel_print.to_text fact)
-               ~parameters:
-                 (Spel_print.to_json (`Assoc [
-                    "context", (`Assoc [
-                      ("n", `Expr (Spel.entity Wcs.sys_number ()));
-                      ("fact", `Expr fact)
-                    ])
-                  ]))
-               ~result_variable: "context.res"
-               ()
+      ~context_spel:
+        (Json_spel.assign
+           [ `Assoc [ "n", `Expr (Spel.entity Wcs.sys_number ()) ];
+             Context_spel.skip_user_input true;
+             Context_spel.actions_def
+               [ Wcs.action_def (Spel_print.to_text fact)
+                   ~parameters:
+                     (`Assoc [
+                        "context", (`Assoc [
+                          ("n", `Expr (Spel.entity Wcs.sys_number ()));
+                          ("fact", `Expr fact)
+                        ])
+                      ])
+                   ~result_variable: "context.res"
+                   ()
+               ];
            ])
       ()
   in
@@ -95,9 +95,8 @@ let ws_fact =
       ~text_spel:
         (Spel.concat [Spel.string "Final result: fact "; n;
                       Spel.string " = "; Spel.variable "res";])
-      ~context:
-        (Context.set_return Json.null
-           (Spel_print.to_json (`Expr (Spel.variable "res"))))
+      ~context_spel:
+        (Context_spel.return (`Expr (Spel.variable "res")))
       ()
   in
   let help =

@@ -19,76 +19,54 @@
 open Wcs_t
 module Mk = Wcs
 
-let add_value entity value =
-  { entity with e_def_values = value::entity.e_def_values }
-
-let spel_string_of_entity entity =
-  "@" ^ entity.e_def_entity
-
-let spel_string_of_entity_value entity value =
-  "@" ^ entity.e_def_entity ^ ":(" ^ value.e_val_value ^ ")"
-
-
-let jokes = [
-  ("Broken Pencil", "Nevermind it's pointless");
-  ("Boo", "Boohoohoo");
-]
-
-
-let names_entity =
-  Mk.entity "name"
-    ~values: []
+let who_intent =
+  Wcs.intent "Who"
+    ~examples: [
+      "Who's there?";
+      "Who is there?";
+      "Who are you?";
+    ]
     ()
 
-let whoisthere_entity =
-  Mk.entity "whoisthere"
-    ~values: [("Who is there?",[])]
+let char_entity =
+  Wcs.entity "Characters"
+    ~values: [ "Broken Pencil", ["Dammaged Pen"; "Fractured Pencil"] ]
     ()
 
-let mk_knock names_entity (name, answer) =
-  let value = Mk.value name () in
-  let names_entity = add_value names_entity value in
+let entity_value entity =
+  begin match entity.e_def_values with
+  | value::_ -> value.e_val_value
+  | _ -> "Unknown"
+  end
+
+let knockknock who_intent char_entity answer =
   let knock =
-    Mk.dialog_node ("KnockKnock "^name)
-      ~conditions: (spel_string_of_entity_value names_entity value)
-      ~text: "Knock knock"
-      ()
+    Wcs.dialog_node "Knock"
+      ~conditions: "true"
+      ~text: "Knock knock" ()
   in
   let whoisthere =
-    Mk.dialog_node ("Whoisthere "^name)
-      ~conditions: (spel_string_of_entity whoisthere_entity)
-      ~text: name
-      ~parent: knock
-      ()
+    Wcs.dialog_node "WhoIsThere"
+      ~conditions: "#Who"
+      ~text: (entity_value char_entity)
+      ~parent: knock ()
   in
   let answer =
-    Mk.dialog_node ("Answer "^name)
-      ~conditions: (spel_string_of_entity_value names_entity value)
+    Wcs.dialog_node "Answer"
+      ~conditions: "@Characters"
       ~text: answer
       ~parent: whoisthere
-      ~context: (Context.set_skip_user_input `Null true)
-      ()
+      ~context: (`Assoc ["return", `Bool true]) ()
   in
-  (names_entity, [knock; whoisthere; answer])
+  [ knock; whoisthere; answer ]
 
-let simple_dispatch  =
-  Mk.dialog_node "Dispatch"
-    ~conditions: "true"
-    ~text: "Enter a name"
+let ws_knockknock =
+  Wcs.workspace "Knock Knock"
+    ~entities: [ char_entity ] ~intents: [ who_intent ]
+    ~dialog_nodes:
+      (knockknock who_intent char_entity "Nevermind it's pointless")
     ()
 
-let knockknock =
-  let names_entity, nodes =
-    List.fold_left
-      (fun (names_entity, acc) joke ->
-         let names_entity, nodes = mk_knock names_entity joke in
-         (names_entity, acc@nodes))
-      (names_entity, []) jokes
-  in
-  Mk.workspace "Knock Knock"
-    ~entities: [ names_entity; whoisthere_entity; ]
-    ~dialog_nodes: (nodes @ [ simple_dispatch ])
-    ()
 
 let main () =
   let wcs_cred_file = ref None in
@@ -119,16 +97,16 @@ let main () =
   let wcs_cred = Wcs_bot.get_credential !wcs_cred_file in
   begin match !print with
   | true ->
-      print_endline (Wcs_pretty.workspace knockknock)
+      print_endline (Wcs_pretty.workspace ws_knockknock)
   | false ->
       ()
   end;
   begin match !deploy, !ws_id with
   | true, Some ws_id ->
-      let () = Wcs_api.update_workspace wcs_cred ws_id knockknock in
+      let () = Wcs_api.update_workspace wcs_cred ws_id ws_knockknock in
       Format.printf "%s: updated@." ws_id
   | true, None ->
-      begin match Wcs_api.create_workspace wcs_cred knockknock with
+      begin match Wcs_api.create_workspace wcs_cred ws_knockknock with
       | { crea_rsp_workspace_id = Some id } ->
           Format.printf "%s: created@." id;
           ws_id := Some id;

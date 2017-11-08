@@ -42,6 +42,9 @@ val take_skip_user_input : json_spel -> json_spel * bool
 val actions : action list -> json_spel
 (** [actions acts] creates the JSON object [{ "actions" : acts }]. *)
 
+val actions_def : action_def list -> json_spel
+(** [actions_def acts] creates the JSON object [{ "actions" : acts }]. *)
+
 val set_actions : json_spel -> action list -> json_spel
 (**
    [set_actions ctx l] set the field ["actions"] of
@@ -90,6 +93,9 @@ val take_continuation : json_spel -> json_spel * action option
 
 
 (** {8 The ["return"] field} *)
+
+val return : json_spel -> json_spel
+(** [return v] creates the JSON object [{ "return" : v }]. *)
 
 val set_return : json_spel -> json_spel -> json_spel
 (**

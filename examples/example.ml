@@ -38,7 +38,7 @@ let is_number =
   Mk.dialog_node "Is number"
     ~conditions: "@sys-number"
     ~text: "You have selected the number @sys-number."
-    ~context: (Context.set_skip_user_input `Null true)
+    ~context: (Context.skip_user_input true)
     ()
 
 let win =
@@ -46,7 +46,7 @@ let win =
     ~parent: is_number
     ~conditions: "@sys-number == 42"
     ~text: "You win!"
-    ~context: (Context.set_return `Null (`Bool true))
+    ~context: (Context.return (Json.bool true))
     ()
 
 let lost =
@@ -91,6 +91,70 @@ let example1 =
                           "It is a game where you have to guest a number."))
     ()
 
-let () =
-  print_endline
-    (Wcs_pretty.workspace example1)
+
+
+let main () =
+  let wcs_cred_file = ref None in
+  let ws_id = ref None in
+  let print = ref false in
+  let deploy = ref false in
+  let exec = ref false in
+  let speclist =
+    Arg.align
+      [ "-cred", Arg.String (fun s -> wcs_cred_file := Some s),
+        "cred.json The file containing the Watson Conversation Service credentials.";
+        "-id", Arg.String (fun id -> ws_id := Some id),
+        "id The workspace id used to update in conjunction with -deploy.";
+        "-print", Arg.Set print,
+        " Print the workspace on stdout.";
+        "-deploy", Arg.Set deploy,
+        " Create or update the workspace on Watson Conversation Service.";
+        "-exec", Arg.Set exec,
+        " Execute the chatbot.";
+        "-debug", Arg.Set Log.debug_message,
+        " Print debug messages.";
+      ]
+  in
+  let usage =
+    "Usage: "^Sys.argv.(0)^" [options]"
+  in
+  Arg.parse speclist (fun _ -> ()) usage;
+  let wcs_cred = Wcs_bot.get_credential !wcs_cred_file in
+  begin match !print with
+  | true ->
+      print_endline (Wcs_pretty.workspace example1)
+  | false ->
+      ()
+  end;
+  begin match !deploy, !ws_id with
+  | true, Some ws_id ->
+      let () = Wcs_api.update_workspace wcs_cred ws_id example1 in
+      Format.printf "%s: updated@." ws_id
+  | true, None ->
+      begin match Wcs_api.create_workspace wcs_cred example1 with
+      | { crea_rsp_workspace_id = Some id } ->
+          Format.printf "%s: created@." id;
+          ws_id := Some id;
+      | _ -> assert false
+      end
+  | false, _ -> ()
+  end;
+  begin match !exec, !ws_id with
+  | true, Some id ->
+      let _ = Wcs_bot.exec wcs_cred id (`Assoc [ "fact", `String id]) "" in
+      ()
+  | false, _ ->
+      ()
+  | true, None ->
+      Arg.usage speclist "no worksapce to execute";
+      exit 1
+  end
+
+let _ =
+  begin try
+    main ()
+  with
+  | Log.Error (module_name, msg) when not !Log.debug_message ->
+      Format.eprintf "%s@." msg;
+      exit 1
+  end
