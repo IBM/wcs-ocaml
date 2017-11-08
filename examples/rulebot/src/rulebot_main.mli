@@ -20,12 +20,12 @@ open Cnl_t
 
 type mode =
   | M_nothing
-  | M_wcs of string
+  | M_bot
   | M_ws_gen
   | M_ws_delete
 
 val rulebot_mode : mode ref
-val wcs_credential : Wcs_t.credential option ref
+val wcs_credential : string option ref
 val workspaces_config : Dialog_interface_t.config option ref
 val ws_update : bool ref
 val is_slack : bool ref
@@ -41,4 +41,6 @@ val bmd : string option ref
 val args : (Arg.key * Arg.spec * Arg.doc) list
 val anon_args : string -> unit
 val usage : string
-val main : unit -> unit
+
+val workspaces_generation : string * Bmd_t.bmd_schema -> unit
+val workspaces_delete : Wcs_t.credential -> unit

@@ -22,12 +22,24 @@ open Cnl_builder
 
 (** Empty rule *)
 
-let rule_init () =
+let empty_init () =
   let evnt = mk_evnt_undefined () in
   let cond = mk_cond_undefined () in
   let actns = mk_actns_undefined () in
   let r0 = mk_rule_f evnt cond actns in
   index_rule r0
+
+let rule_init =
+  ref None
+
+let set_rule_init r =
+  rule_init := Some r
+
+let rule_init () =
+  begin match !rule_init with
+  | None -> empty_init ()
+  | Some r -> r
+  end
 
 (** Partial ASTs *)
 

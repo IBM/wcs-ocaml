@@ -191,14 +191,13 @@ let load_ws_ids wcs_cred workspaces_config ws_update bmd =
 (* Command line *)
 type mode =
   | M_nothing
-  | M_wcs of string
+  | M_bot
   | M_ws_gen
   | M_ws_delete
 
-let rulebot_mode : mode ref = ref (M_wcs "rml")
+let rulebot_mode : mode ref = ref M_bot
 let set_ws_delete_mode f = rulebot_mode := M_ws_delete
 let set_ws_gen_mode f = rulebot_mode := M_ws_gen
-let set_wcs_mode main = rulebot_mode := M_wcs main
 
 let bom_io = ref None
 let set_bom_io file =
@@ -208,9 +207,9 @@ let bmd = ref None
 let set_bmd file =
   bmd := Some file
 
-let wcs_credential : Wcs_t.credential option ref = ref None
+let wcs_credential : string option ref = ref None
 let set_wcs_credential f =
-  wcs_credential := Some (read_json_file "credential" Wcs_j.read_credential f)
+  wcs_credential := Some f
 
 
 let workspaces_config = ref None
@@ -235,9 +234,8 @@ let set_slackbot cmd =
 
 
 let rule_init : cnl_rule ref = ref (Cnl_samples.rule_init ())
-let set_init_rule f = rule_init := parse_rule f
-let focus_init : int ref = ref 0
-let set_init_focus i = focus_init := i
+let set_init_rule f =
+  Cnl_samples.set_rule_init (parse_rule f)
 
 let anon_args f = raise (Failure "rulebot expects no parameters")
 
@@ -245,8 +243,6 @@ let args =
   Arg.align
     [ ("-wcs-cred", Arg.String set_wcs_credential,
        "file The file containing the Watson Conversation Service credentials");
-      ("-wcs", Arg.String set_wcs_mode,
-       "main Select the main program (requires -wcs-cred)");
       ("-bom-io", Arg.String set_bom_io,
        "io.json replace workspace entities using I/O file");
       ("-bmd", Arg.String set_bmd,
@@ -268,9 +264,7 @@ let args =
       ("-slackbot", Arg.String set_slackbot,
        "cmd Set the slackbot-stdio command");
       ("-rule", Arg.String set_init_rule,
-       "r Initial rule");
-      ("-focus", Arg.Int set_init_focus,
-       "n Initial focus");
+       "r Set an initial rule");
     ]
 
 let usage = "rulebot [options]"
@@ -305,13 +299,7 @@ let workspaces_generation bmd =
 
 (* Workspace deletion *)
 
-let workspaces_delete () =
-  let wcs_cred =
-    begin match !wcs_credential with
-    | Some cred -> cred
-    | None -> raise (Failure ("Watson Conversation credentials required"))
-    end
-  in
+let workspaces_delete wcs_cred =
   let ws_conf =
     begin match !workspaces_config with
     | Some conf -> conf
@@ -329,25 +317,3 @@ let workspaces_delete () =
   oiter (Wcs_api.delete_workspace wcs_cred) ws_conf.ws_actn_id;
   oiter (Wcs_api.delete_workspace wcs_cred) ws_conf.ws_accept_id;
   ()
-
-(* Top *)
-let main () =
-  let bmd =
-    begin match !bmd with
-    | None ->
-	begin match !bom_io with
-	| None ->
-	    ("[Sample BMD]", Bmd_samples.creditcard_schema)
-	| Some io_file ->
-	    let io_j = load_io io_file
-	    in ("[BMD from IO]", Io_to_bmd.bmd_of_io io_j)
-	end
-	| Some file ->
-	    (Parser_util.string_of_file file, Bmd_spec_to_bmd.bmd_schema_of_spec (Parser_util.parse_bmd_spec_from_file file))
-    end
-  in
-  begin match !rulebot_mode with
-  | M_nothing -> Arg.usage args usage
-  | M_ws_gen -> workspaces_generation bmd
-  | M_ws_delete -> workspaces_delete ()
-  end

@@ -75,8 +75,8 @@ let fill_hole =
   dialog_node "Fill Hole"
     ~conditions: "(#fill || #replace) && intents[0].confidence > 0.9 && @sys-number"
     ~text: "Ok, let's try to fill hole number @sys-number."
-    ~context: (Context.set_dispatch
-                 (Context.set_skip_user_input `Null true)
+    ~context: (Ctx.set_dispatch
+                 (Ctx.set_skip_user_input `Null true)
                  "dispatch" dsp)
     ()
 
@@ -92,8 +92,8 @@ let fill_when =
   dialog_node "Fill when"
     ~conditions: "(#fill || #replace) && @rule_part:when"
     ~text: "Let's fill the when part of the rule."
-    ~context: (Context.set_dispatch
-                 (Context.set_skip_user_input `Null true)
+    ~context: (Ctx.set_dispatch
+                 (Ctx.set_skip_user_input `Null true)
                  "dispatch" dsp)
     ()
 
@@ -109,8 +109,8 @@ let fill_cond =
   dialog_node "Fill cond"
     ~conditions: "(#fill || #replace) && @rule_part:cond"
     ~text: "Sounds good"
-    ~context: (Context.set_dispatch
-                 (Context.set_skip_user_input `Null true)
+    ~context: (Ctx.set_dispatch
+                 (Ctx.set_skip_user_input `Null true)
                  "dispatch" dsp)
     ()
 
@@ -126,8 +126,8 @@ let fill_then =
   dialog_node "Fill then"
     ~conditions: "(#fill || #replace) && @rule_part:then"
     ~text: "Let's go fill the action part of the rule."
-    ~context: (Context.set_dispatch
-                 (Context.set_skip_user_input `Null true)
+    ~context: (Ctx.set_dispatch
+                 (Ctx.set_skip_user_input `Null true)
                  "dispatch" dsp)
     ()
 
@@ -143,8 +143,8 @@ let fill_previous =
   dialog_node "Fill previous"
     ~text: "Ok, let's try to change previous hole."
     ~conditions: "(#fill || #replace) && intents[0].confidence > 0.9"
-    ~context: (Context.set_dispatch
-                 (Context.set_skip_user_input `Null true)
+    ~context: (Ctx.set_dispatch
+                 (Ctx.set_skip_user_input `Null true)
                  "dispatch" dsp)
     ()
 
@@ -167,8 +167,8 @@ let reset_yes =
     ~parent: reset
     ~conditions: "@yes"
     ~text: "Ok let's reset!"
-    ~context: (Context.set_dispatch
-                 (Context.set_skip_user_input `Null true)
+    ~context: (Ctx.set_dispatch
+                 (Ctx.set_skip_user_input `Null true)
                  "dispatch" dsp)
     ()
 
@@ -185,8 +185,8 @@ let reset_no =
     ~parent: reset
     ~conditions: "@no"
     ~text: "Ok let's continue"
-    ~context: (Context.set_dispatch
-                 (Context.set_skip_user_input `Null true)
+    ~context: (Ctx.set_dispatch
+                 (Ctx.set_skip_user_input `Null true)
                  "dispatch" dsp)
     ()
 
@@ -213,8 +213,8 @@ let help =
     ~text: ("You can edit any part of the rule by asking 'change' and giving the number of the part to modify.\n"^
             "You can also ask 'change when', 'change if', or 'change then'\n"^
             "You can restart with a new rule with 'reset'.")
-    ~context: (Context.set_dispatch
-                 (Context.set_skip_user_input `Null true)
+    ~context: (Ctx.set_dispatch
+                 (Ctx.set_skip_user_input `Null true)
                  "dispatch" dsp)
     ()
 
@@ -230,8 +230,8 @@ let help_bmd bmd =
   dialog_node "Help BMD"
     ~conditions: "#mk_help && intents[0].confidence > 0.9 && @bmd"
     ~text: ("The current BMD is " ^ "```" ^ bmd ^ "```")
-    ~context: (Context.set_dispatch
-                 (Context.set_skip_user_input `Null true)
+    ~context: (Ctx.set_dispatch
+                 (Ctx.set_skip_user_input `Null true)
                  "dispatch" dsp)
     ()
 
@@ -247,8 +247,8 @@ let anything_else =
   in
   dialog_node "Anything else"
     ~conditions: "anything_else"
-    ~context: (Context.set_dispatch
-                 (Context.set_skip_user_input `Null true)
+    ~context: (Ctx.set_dispatch
+                 (Ctx.set_skip_user_input `Null true)
                  "dispatch" dsp)
     ()
 

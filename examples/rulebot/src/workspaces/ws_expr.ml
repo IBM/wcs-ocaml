@@ -332,7 +332,7 @@ let ws_expr bmd =
                              ~conditions: "#mk_integer && entities['sys-number']"
                              ~text: "An integer with value @sys-number"
                              ~context: (json_replace "L_int_as_string" "L_int" (* XXX Hack XXX *)
-                                          (Context.set_expr `Null "expr" expr))
+                                          (Ctx.set_expr `Null "expr" expr))
                              () in
                          let expr_integer =
                            add_dialog_node "Integer"
@@ -346,7 +346,7 @@ let ws_expr bmd =
                              ~conditions: "entities['sys-number']"
                              ~text: "An integer with value @sys-number"
                              ~context: (json_replace "L_int_as_string" "L_int" (* XXX Hack XXX *)
-                                          (Context.set_expr `Null "expr" expr))
+                                          (Ctx.set_expr `Null "expr" expr))
                              () in
                          add_usage "Integer" "what integer" expr_integer ["integers"]
                        end in
@@ -358,7 +358,7 @@ let ws_expr bmd =
                           ~conditions: "#mk_real && entities['sys-number']"
                           ~text: "A real with value @sys-number"
                           ~context: (json_replace "L_real_as_string" "L_real" (* XXX Hack XXX *)
-                                       (Context.set_expr `Null "expr" expr))
+                                       (Ctx.set_expr `Null "expr" expr))
                           () in
                       let expr_real =
                         add_dialog_node "Real"
@@ -372,7 +372,7 @@ let ws_expr bmd =
                           ~conditions: "entities['sys-number']"
                           ~text: "A real (floating point) number with value @sys-number"
                           ~context: (json_replace "L_real_as_string" "L_real" (* XXX Hack XXX *)
-                                       (Context.set_expr `Null "expr" expr))
+                                       (Ctx.set_expr `Null "expr" expr))
                           () in
                       add_usage "Real" "what real number" expr_real ["real (floating point) numbers"]
                     end in
@@ -398,7 +398,7 @@ let ws_expr bmd =
                            add_dialog_node "Boolean literal with value"
                              ~conditions: "#mk_boolean && entities['boolean']"
                              ~context: (json_replace "L_boolean_as_string" "L_boolean" (* XXX Hack XXX *)
-                                          (Context.set_expr `Null "expr" expr))
+                                          (Ctx.set_expr `Null "expr" expr))
                              ()
                          in
                          let _expr_literal_boolean_value =
@@ -406,7 +406,7 @@ let ws_expr bmd =
                            add_dialog_node "Boolean value"
                              ~conditions: "entities['boolean']"
                              ~context: (json_replace "L_boolean_as_string" "L_boolean" (* XXX Hack XXX *)
-                                          (Context.set_expr `Null "expr" expr))
+                                          (Ctx.set_expr `Null "expr" expr))
                              () in
                          let expr_literal_boolean_literal =
                            add_dialog_node "Boolean literal"
@@ -420,7 +420,7 @@ let ws_expr bmd =
                              ~parent: expr_literal_boolean_literal
                              ~conditions: "entities['boolean']"
                              ~context: (json_replace "L_boolean_as_string" "L_boolean" (* XXX Hack XXX *)
-                                          (Context.set_expr `Null "expr" expr))
+                                          (Ctx.set_expr `Null "expr" expr))
                              () in
                          add_usage "Boolean" "which boolean" expr_literal_boolean_literal ["true"; "false"]
                        end in
@@ -429,7 +429,7 @@ let ws_expr bmd =
                           let expr = mk_string_f "$has_string" in
                           add_dialog_node "String with content"
                             ~conditions: "#mk_string && $has_string"
-                            ~context: (Context.set_expr `Null "expr" expr)
+                            ~context: (Ctx.set_expr `Null "expr" expr)
                             () in
                         let expr_string =
                           add_dialog_node "String"
@@ -441,7 +441,7 @@ let ws_expr bmd =
                           add_dialog_node "String content"
                             ~parent: expr_string
                             ~text: "A string with content '<? input.text ?>'"
-                            ~context: (Context.set_expr `Null "expr" expr)
+                            ~context: (Ctx.set_expr `Null "expr" expr)
                             () in
                         ()
                       end in
@@ -450,7 +450,7 @@ let ws_expr bmd =
                         let expr = mk_enum_f "@enum" in
                         add_dialog_node "Enumeration"
                           ~conditions: "#mk_enum && entities['enum']"
-                          ~context: (Context.set_expr `Null "expr" expr)
+                          ~context: (Ctx.set_expr `Null "expr" expr)
                           () in
                       let expr_enum_missing =
                         add_dialog_node "Enumeration - missing enum"
@@ -462,7 +462,7 @@ let ws_expr bmd =
                         add_dialog_node "Enumeration - fill enum"
                           ~parent:expr_enum_missing
                           ~conditions: "entities['enum']"
-                          ~context: (Context.set_expr `Null "expr" expr)
+                          ~context: (Ctx.set_expr `Null "expr" expr)
                           () in
                       add_usage "Enum" "which enumeration value" expr_enum_missing (Ws_common.bmd_enumerations bmd);
                     end in
@@ -488,7 +488,7 @@ let ws_expr bmd =
                             let expr = mk_var_f "$has_string" in
                             add_dialog_node "Variable with content"
                               ~conditions: "#mk_variable && $has_string"
-                              ~context: (Context.set_expr `Null "expr" expr)
+                              ~context: (Ctx.set_expr `Null "expr" expr)
                               () in
                           let expr_variable =
                             add_dialog_node "Variable"
@@ -500,7 +500,7 @@ let ws_expr bmd =
                             add_dialog_node "Variable name"
                               ~parent: expr_variable
                               ~text: "A variable with name '<? input.text ?>'"
-                              ~context: (Context.set_expr `Null "expr" expr)
+                              ~context: (Ctx.set_expr `Null "expr" expr)
                               () in
                           () ;
                         end in
@@ -509,7 +509,7 @@ let ws_expr bmd =
                             let expr = mk_get_f (mk_expr_undefined()) "@field" in
                             dialog_node "Property"
                               ~conditions: "#mk_prop && entities['field']"
-                              ~context: (Context.set_expr `Null "expr" expr)
+                              ~context: (Ctx.set_expr `Null "expr" expr)
                               ()
                           in add_node expr_prop ;
 
@@ -525,7 +525,7 @@ let ws_expr bmd =
                             dialog_node "Property - fill field"
                               ~parent:expr_prop_missing
                               ~conditions: "entities['field']"
-                              ~context: (Context.set_expr `Null "expr" expr)
+                              ~context: (Ctx.set_expr `Null "expr" expr)
                               ()
                           in add_node expr_prop_fillin ;
 
@@ -547,7 +547,7 @@ let ws_expr bmd =
                                let expr = mk_aggregate_f (mk_expr_undefined()) op "@field" in
                                dialog_node (agg_dname ^"full")
                                  ~conditions: ("#"^op_desc.intent_desc_name ^ " && entities['field']")
-                                 ~context: (Context.set_expr `Null "expr" expr)
+                                 ~context: (Ctx.set_expr `Null "expr" expr)
                                  () in
                              add_node expr_agg_full ;
                              let expr_agg_missing_field =
@@ -562,7 +562,7 @@ let ws_expr bmd =
                                dialog_node (agg_dname ^"- missing field - field")
                                  ~parent:expr_agg_missing_field
                                  ~conditions: "entities['field']"
-                                 ~context: (Context.set_expr `Null "expr" expr)
+                                 ~context: (Ctx.set_expr `Null "expr" expr)
                                  () in
                              add_node expr_agg_missing_field_field ;
 
@@ -573,7 +573,7 @@ let ws_expr bmd =
                                dialog_node (agg_dname ^"- missing both - op and field")
                                  ~parent:expr_agg_missing_both
                                  ~conditions: ("#" ^ op_desc.intent_desc_name ^ " && entities['field']")
-                                 ~context: (Context.set_expr `Null "expr" expr)
+                                 ~context: (Ctx.set_expr `Null "expr" expr)
                                  () in
                              add_node expr_agg_missing_both_op_and_field ;
 
@@ -590,7 +590,7 @@ let ws_expr bmd =
                                dialog_node (agg_dname ^"- missing both - op - field")
                                  ~parent:expr_agg_missing_both_op
                                  ~conditions: "entities['field']"
-                                 ~context: (Context.set_expr `Null "expr" expr)
+                                 ~context: (Ctx.set_expr `Null "expr" expr)
                                  () in
                              add_node expr_agg_missing_both_op_field
 
@@ -608,7 +608,7 @@ let ws_expr bmd =
                                     dialog_node intent_desc.intent_desc_node_name
                                       ~conditions: ("#" ^ intent_desc.intent_desc_name)
                                       ~text: ("Alright, let's build an " ^ intent_desc.intent_desc_output)
-                                      ~context: (Context.set_expr `Null "expr" expr)
+                                      ~context: (Ctx.set_expr `Null "expr" expr)
                                       ()
                                   in List.iter (fun b -> add_node (expr_binary b))
                                        binary_op_list;
@@ -631,7 +631,7 @@ let ws_expr bmd =
                                    dialog_node intent_desc.intent_desc_node_name
                                      ~conditions: ("#" ^ intent_desc.intent_desc_name)
                                      ~text: ("Alright, let's build an " ^ intent_desc.intent_desc_output)
-                                     ~context: (Context.set_expr `Null "expr" expr)
+                                     ~context: (Ctx.set_expr `Null "expr" expr)
                                      ()
                                  in List.iter (fun b -> add_node (expr_unary b))
                                       unary_op_list;
@@ -651,7 +651,7 @@ let ws_expr bmd =
                         let expr = mk_this_f "@entity" in
                         add_dialog_node "this"
                           ~conditions: "#mk_this && @entity"
-                          ~context: (Context.set_expr `Null "expr" expr)
+                          ~context: (Ctx.set_expr `Null "expr" expr)
                           () in
                       let expr_this_missing =
                         add_dialog_node "this - missing event"
@@ -663,7 +663,7 @@ let ws_expr bmd =
                         add_dialog_node "this - fill event"
                           ~parent:expr_this_missing
                           ~conditions: "@entity"
-                          ~context: (Context.set_expr `Null "expr" expr)
+                          ~context: (Ctx.set_expr `Null "expr" expr)
                           () in
                       add_usage "This" "which entity" expr_this_missing (Ws_common.bmd_entities bmd)
                     end in
@@ -678,7 +678,7 @@ let ws_expr bmd =
                        let expr = mk_new_event_for_concept_f ename fnames in
                        dialog_node ("new_with_" ^ ename)
                          ~conditions: ("#mk_new && entities['entity']?.contains('" ^ ename ^ "')")
-                         ~context: (Context.set_expr `Null "expr" expr)
+                         ~context: (Ctx.set_expr `Null "expr" expr)
                          ()
                      in
                      let expr_new_for_entity ename fnames =
@@ -686,7 +686,7 @@ let ws_expr bmd =
                        dialog_node ("new_missing_" ^ ename)
                          ~parent:expr_new
                          ~conditions: ("entities['entity']?.contains('" ^ ename ^ "')")
-                         ~context: (Context.set_expr `Null "expr" expr)
+                         ~context: (Ctx.set_expr `Null "expr" expr)
                          ()
                      in
                      (* returns a pair of top level combined node and child node *)

@@ -72,8 +72,8 @@ let ws_actn bmd =
                        ~description: "Specify a when clause"
                        ~conditions: "#mk_print && intents[0].confidence > 0.9"
                        ~text: "Ok, I'm adding a new print action."
-                       ~context: (Context.set_actn_desc
-                                    (Context.set_skip_user_input `Null true)
+                       ~context: (Ctx.set_actn_desc
+                                    (Ctx.set_skip_user_input `Null true)
                                     "actn_desc" instr)
                        ()
                    in add_node print_action ;
@@ -83,8 +83,8 @@ let ws_actn bmd =
                      dialog_node "Emit Action"
                        ~conditions: "#mk_emit && intents[0].confidence > 0.9"
                        ~text: "Ok, I'm adding a new emit action."
-                       ~context: (Context.set_actn_desc
-                                    (Context.set_skip_user_input `Null true)
+                       ~context: (Ctx.set_actn_desc
+                                    (Ctx.set_skip_user_input `Null true)
                                     "actn_desc" instr)
                        ()
                    in add_node emit_action ;
@@ -94,8 +94,8 @@ let ws_actn bmd =
                      dialog_node "Define Action Filled"
                        ~conditions: "#mk_define && intents[0].confidence > 0.9  && $has_string"
                        ~text: "Ok, I'm adding a new definition for variable '$has_string'."
-                       ~context: (Context.set_actn_desc
-                                    (Context.set_skip_user_input `Null false)
+                       ~context: (Ctx.set_actn_desc
+                                    (Ctx.set_skip_user_input `Null false)
                                     "actn_desc" instr)
                        ()
                    in add_node define_action_filled ;
@@ -112,8 +112,8 @@ let ws_actn bmd =
                      dialog_node "Variable Name"
                        ~parent: define_action
                        ~text: "Ok, I'm adding a new definition for variable '<? input.text ?>'."
-                       ~context: (Context.set_actn_desc
-                                    (Context.set_skip_user_input `Null false)
+                       ~context: (Ctx.set_actn_desc
+                                    (Ctx.set_skip_user_input `Null false)
                                     "actn_desc" instr)
                        ()
                    in add_node variable_name ;
@@ -136,8 +136,8 @@ let ws_actn bmd =
                        ~parent: set_action_cont
                        ~text: "Ok, I'm adding a new set action for the field @field of variable '$variable'."
                        ~conditions: "entities['field']"
-                       ~context: (Context.set_actn_desc
-                                    (Context.set_skip_user_input `Null false)
+                       ~context: (Ctx.set_actn_desc
+                                    (Ctx.set_skip_user_input `Null false)
                                     "actn_desc" instr)
                        ()
                    in
