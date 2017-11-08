@@ -30,3 +30,17 @@ type json_spel = [
 ]
 (** JSON with embedded expressions. *)
 
+
+
+(** {6 [json]/[json_spel] conversion}
+    All these functions represents Spel expressions as string in the
+    concret syntax, not the AST as JSON.
+*)
+
+val yojson_of_json_spel : json_spel -> Json_t.basic
+
+val json_spel_of_yojson : Json_t.basic -> json_spel
+
+val write_json_spel : Json_t.bi_outbuf_t -> json_spel -> unit
+val read_json_spel : Json_t.lexer_state -> Lexing.lexbuf -> json_spel
+val to_string : json_spel -> string

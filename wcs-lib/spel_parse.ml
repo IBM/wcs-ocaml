@@ -56,7 +56,7 @@ let mk_body_lexer () =
 (** {6 desugaring} *)
 
 let rec fold_expr f e =
-  let desc = 
+  let desc =
     begin match e.expr_desc with
     | E_lit l -> E_lit l
     | E_prop (e, s) -> E_prop (fold_expr f e, s)
@@ -160,7 +160,7 @@ let resugar_desc e =
            { expr_desc = E_lit (L_string s) }) ->
       E_variable (s,None)
   (* XXX Keeps equality intact when resugaring
-  | E_op (Op_eq,
+     | E_op (Op_eq,
           [{ expr_desc = E_get ({ expr_desc = E_context },
                                 { expr_desc = (E_lit (L_string v)) }) };
            { expr_desc = E_lit (L_string s) }]) ->
@@ -248,17 +248,4 @@ let expression_from_quoted_string s =
 let quoted_expr_from_string s =
   sugarer (expression_from_quoted_string s)
 
-(** {6 JSON AST with embedded Spel expressions} *)
-let rec json_expr_from_json (j:Json_t.json) : Json_spel_t.json_spel =
-  begin match j with
-  | `Assoc l ->
-      `Assoc (List.map (fun x -> (fst x, json_expr_from_json (snd x))) l)
-  | `Bool b -> `Bool b
-  | `Float f -> `Float f
-  | `Int i -> `Int i
-  | `List l -> `List (List.map json_expr_from_json l)
-  | `Null -> `Null
-  | `String s -> `Expr (quoted_expr_from_string s)
-  (* This catches parse errors at the expression level *)
-  end
 

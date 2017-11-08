@@ -28,13 +28,13 @@ let mk_conditions cond =
 let mk_context context =
   begin match context with
   | None -> None
-  | Some context -> Some (Spel.of_json context)
+  | Some context -> Some (Json_spel.of_json context)
   end
 
 let mk_output output =
   begin match output with
   | None -> None
-  | Some output -> Some (Spel.of_json output)
+  | Some output -> Some (Json_spel.of_json output)
   end
 
 let dialog_node_of_node (n : node) : dialog_node list =

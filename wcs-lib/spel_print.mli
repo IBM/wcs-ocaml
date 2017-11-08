@@ -21,9 +21,6 @@
 (** {6 Top level printer for Spel expressions} *)
 val to_string : Spel_t.expression -> string
 
-(** {6 Top level printer for JSON with embedded Spel expressions} *)
-val to_json : Json_spel_t.json_spel -> Json_t.json
-
 (** {6 Auxiliary printer for text expressions} *)
 val to_text : Spel_t.expression -> string
 

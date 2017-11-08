@@ -50,11 +50,11 @@ let actions_def (acts: action_def list) : json_spel =
 
 let json_spel_of_action (act : action) : json_spel =
   let json = Json.of_action act in
-  let json_spel = Spel_parse.json_expr_from_json json in
+  let json_spel = Json_spel.of_json json in
   json_spel
 
 let action_of_json_spel (act : json_spel) : action =
-  Wcs_j.action_of_string (Yojson.Basic.to_string (Spel_print.to_json act))
+  Wcs_j.action_of_string (Yojson.Basic.to_string (Json_spel.to_json act))
 
 let set_actions ctx (acts: action list) : json_spel =
   let js_acts = List.map json_spel_of_action acts in
@@ -68,13 +68,13 @@ let take_actions (ctx: json_spel) : json_spel * action list option =
       with _ ->
         Log.warning "Context_spel"
           (Format.sprintf "illed formed actions:\n%s@."
-             (Yojson.Basic.pretty_to_string (Spel_print.to_json (`List acts))));
+             (Yojson.Basic.pretty_to_string (Json_spel.to_json (`List acts))));
         ctx, None
       end
   | _, Some o ->
       Log.warning "Context_spel"
         (Format.sprintf "illed formed actions:\n%s@."
-           (Yojson.Basic.pretty_to_string (Spel_print.to_json o)));
+           (Yojson.Basic.pretty_to_string (Json_spel.to_json o)));
       ctx, None
   | _, None ->
       ctx, None
@@ -108,7 +108,7 @@ let take_continuation (ctx: json_spel) : json_spel * action option =
       with _ ->
         Log.warning "Context_spel"
           (Format.sprintf "illed formed continuation:\n%s@."
-             (Yojson.Basic.pretty_to_string (Spel_print.to_json act)));
+             (Yojson.Basic.pretty_to_string (Json_spel.to_json act)));
         ctx, None
       end
   | _ -> ctx, None
