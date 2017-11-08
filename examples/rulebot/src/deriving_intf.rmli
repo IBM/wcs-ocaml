@@ -1,0 +1,2 @@
+type ('a, 'b) deriving_result
+type 'a deriving_error_or
