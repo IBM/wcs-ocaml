@@ -1,5 +1,7 @@
 (*
- * Copyright 2015-2016 IBM Corporation
+ *  This file is part of the Watson Conversation Service OCaml API project.
+ *
+ * Copyright 2016-2017 IBM Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +69,7 @@ opt_with_clause:
     { [] }
 | WITH other_fields = with_clause
     { other_fields }
-    
+
 opt_identified_clause:
 | (* Empty *)
     { [] }
@@ -76,7 +78,7 @@ opt_identified_clause:
 | TIMESTAMPED BY A fname = long_ident btype = opt_type
   (* XXX Elide time-stamps for now XXX *)
     { [(* (fname,btype) *)] }
-    
+
 with_clause:
 | A fname = long_ident btype = opt_type
     { [(fname,btype)] }

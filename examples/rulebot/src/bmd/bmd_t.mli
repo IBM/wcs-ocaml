@@ -1,25 +1,43 @@
+(*
+ *  This file is part of the Watson Conversation Service OCaml API project.
+ *
+ * Copyright 2016-2017 IBM Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *)
+
 (** {6. Locations} *)
 
 type location = Lexing.position * Lexing.position
 
 (** BMD AST *)
-      
+
 type bmd_schema = {
-    schema_desc : bmd_schema_desc;
-    schema_loc : location;
-  }
+  schema_desc : bmd_schema_desc;
+  schema_loc : location;
+}
 and bmd_schema_desc = bmd_concept list
 
 and bmd_concept = {
-    concept_desc : bmd_concept_desc;
-    concept_loc : location;
-  }
+  concept_desc : bmd_concept_desc;
+  concept_loc : location;
+}
 and bmd_concept_desc = bmd_concept_name * bmd_concept_name option * bmd_type (* First name is current concept ; Second name is the concept it derives from *)
 
 and bmd_type = {
-    type_desc : bmd_type_desc;
-    type_loc : location;
-  }
+  type_desc : bmd_type_desc;
+  type_loc : location;
+}
 
 and bmd_type_desc =
   | BT_string

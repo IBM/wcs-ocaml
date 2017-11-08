@@ -1,3 +1,21 @@
+(*
+ *  This file is part of the Watson Conversation Service OCaml API project.
+ *
+ * Copyright 2016-2017 IBM Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *)
+
 open Cnl_t
 open Cnl_util
 open Cnl_instr_t
@@ -25,10 +43,10 @@ let notyet instr =
 (* Replace instructions *)
 
 let replace_desc
-    (id:int)
-    (new_x: 'a)
-    (node: 'a node)
-    : 'a node =
+      (id:int)
+      (new_x: 'a)
+      (node: 'a node)
+  : 'a node =
   begin match node with
   | N_undefined (Some id')
   | N_filled (Some id', _)
@@ -185,14 +203,14 @@ let insert_action r =
       (fun x -> x)
       (fun x -> x)
       (fun actns ->
-        let node =
-          Cnl2cnl.node_sh_map
-            (fun desc ->
-              { list_elems = desc.list_elems @ [Cnl_builder.mk_actn_undefined ()];
-                list_closed = desc.list_closed; })
-            actns.actns_node
-        in
-        { actns with actns_node = node })
+         let node =
+           Cnl2cnl.node_sh_map
+             (fun desc ->
+                { list_elems = desc.list_elems @ [Cnl_builder.mk_actn_undefined ()];
+                  list_closed = desc.list_closed; })
+             actns.actns_node
+         in
+         { actns with actns_node = node })
       r
   in
   index_rule r
@@ -216,6 +234,6 @@ let cnl_instr_apply instr (r:cnl_rule) : cnl_rule =
     | I_conf_rule (id,b) -> confirm id b r
     | I_insr_actn -> insert_action r
     end;
-  (* Always re-index the rule to add missing identifiers *)
+    (* Always re-index the rule to add missing identifiers *)
   in
   index_rule r_applied

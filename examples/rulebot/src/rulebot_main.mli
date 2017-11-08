@@ -1,11 +1,25 @@
+(*
+ *  This file is part of the Watson Conversation Service OCaml API project.
+ *
+ * Copyright 2016-2017 IBM Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *)
+
 open Cnl_t
 
 type mode =
   | M_nothing
-  | M_samples
-  | M_script_samples
-  | M_parse of string
-  | M_script of string
   | M_wcs of string
   | M_ws_gen
   | M_ws_delete
@@ -21,7 +35,7 @@ val load_io : string -> Io_t.io
 
 val load_ws_ids : Wcs_t.credential ->
   Dialog_interface_t.config option ->
-    bool -> string * Bmd_t.bmd_schema -> Dialog_util.workspace_ids
+  bool -> string * Bmd_t.bmd_schema -> Dialog_util.workspace_ids
 
 val bmd : string option ref
 val args : (Arg.key * Arg.spec * Arg.doc) list

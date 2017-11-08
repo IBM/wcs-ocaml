@@ -1,3 +1,21 @@
+(*
+ *  This file is part of the Watson Conversation Service OCaml API project.
+ *
+ * Copyright 2016-2017 IBM Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *)
+
 open Wcs_j
 open Bmd_t
 open Bmd_util
@@ -118,10 +136,10 @@ let patch_wcs_workspace wcs_cred ws_id ws_name bmd =
   in
   Wcs_api.update_workspace wcs_cred ws_id ws
 
-let bmd_find_entity entity_def_list entity_name = 
+let bmd_find_entity entity_def_list entity_name =
   List.find (fun x -> x.e_def_entity = entity_name) entity_def_list
 
 let bmd_getentity_values bmd entity_name =
-  try 
+  try
     List.map (fun (x:Wcs_j.entity_value) -> x.e_val_value) ((bmd_find_entity (entities_of_bmd bmd) entity_name).e_def_values)
-   with Not_found -> []
+  with Not_found -> []
