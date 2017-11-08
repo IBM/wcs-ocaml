@@ -18,7 +18,9 @@
 
 open Cnl_t
 
+val set_rule_init : cnl_rule -> unit
 val rule_init : unit -> cnl_rule
+val empty_init : unit -> cnl_rule
 val cond_init : unit -> cnl_cond_desc
 val actns_init : unit -> cnl_actns_desc
 val print_init : unit -> cnl_actn_desc

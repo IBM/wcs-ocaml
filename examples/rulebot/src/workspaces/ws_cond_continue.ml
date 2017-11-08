@@ -40,8 +40,8 @@ let present_condition =
     ~parent: create_condition
     ~conditions: "@yes"
     ~text: "Ok, there is an additional condition for this rule"
-    ~context: (Context.set_bool
-                 (Context.set_skip_user_input `Null true)
+    ~context: (Ctx.set_bool
+                 (Ctx.set_skip_user_input `Null true)
                  "more_cond" true)
     ()
 
@@ -50,7 +50,7 @@ let empty_condition =
     ~parent: create_condition
     ~conditions: "@no"
     ~text: "Ok no more condition"
-    ~context: (Context.set_bool `Null "more_cond" false)
+    ~context: (Ctx.set_bool `Null "more_cond" false)
     ()
 
 let response_handler =

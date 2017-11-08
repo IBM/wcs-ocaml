@@ -30,7 +30,7 @@ let when_node =
     ~description: "Specify a when clause"
     ~conditions: "@entity"
     ~text: "Ok, @entity."
-    ~context: (Context.set_evnt_desc `Null "evnt_desc" instr)
+    ~context: (Ctx.set_evnt_desc `Null "evnt_desc" instr)
     ()
 
 let prompt =

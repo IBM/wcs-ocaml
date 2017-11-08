@@ -36,7 +36,7 @@ let expr1 =
     ~parent: select_example
     ~conditions: "@sys-number == 1"
     ~text: "Here is the expression 1."
-    ~context: (Context.set_rule `Null "rule" Cnl_samples.rule1)
+    ~context: (Ctx.set_rule `Null "rule" Cnl_samples.rule1)
     ()
 
 let expr2 =
@@ -44,7 +44,7 @@ let expr2 =
     ~parent: select_example
     ~conditions: "@sys-number == 2"
     ~text: "Here is the expression 2."
-    ~context: (Context.set_rule `Null "rule" Cnl_samples.rule2)
+    ~context: (Ctx.set_rule `Null "rule" Cnl_samples.rule2)
     ()
 
 let expr_unknown =

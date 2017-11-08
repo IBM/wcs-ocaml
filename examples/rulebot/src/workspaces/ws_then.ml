@@ -32,7 +32,7 @@ let entities =
 (*   dialog_node "Create Rule" *)
 (*     ~description: "The top of the create/rule flow" *)
 (*     ~text: "Let's build the then part." *)
-(*     ~context: (Context.set_actns_desc `Null "actns_desc" instr) *)
+(*     ~context: (Ctx.set_actns_desc `Null "actns_desc" instr) *)
 (*     () *)
 
 let prompt =
@@ -44,8 +44,8 @@ let add_element =
   dialog_node "Add element"
     ~conditions: "@yes"
     ~parent: prompt
-    ~context: (Context.set_bool
-                 (Context.set_skip_user_input `Null true)
+    ~context: (Ctx.set_bool
+                 (Ctx.set_skip_user_input `Null true)
                  "actns_closed" false)
     ()
 
@@ -53,7 +53,7 @@ let do_not_add_element =
   dialog_node "Do not add element"
     ~conditions: "@no"
     ~parent: prompt
-    ~context: (Context.set_bool `Null "actns_closed" true)
+    ~context: (Ctx.set_bool `Null "actns_closed" true)
     ()
 
 let handler =

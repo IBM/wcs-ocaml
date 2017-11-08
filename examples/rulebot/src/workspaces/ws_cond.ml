@@ -41,8 +41,8 @@ let present_condition =
     ~parent: create_condition
     ~conditions: "@yes"
     ~text: "Ok, there is a condition for this rule"
-    ~context: (Context.set_cond_desc
-                 (Context.set_skip_user_input `Null true)
+    ~context: (Ctx.set_cond_desc
+                 (Ctx.set_skip_user_input `Null true)
                  "cond_desc" instr)
     ()
 
@@ -52,7 +52,7 @@ let empty_condition =
     ~parent: create_condition
     ~conditions: "@no"
     ~text: "Ok the condition for this rule is empty"
-    ~context: (Context.set_cond_desc `Null "cond_desc" instr)
+    ~context: (Ctx.set_cond_desc `Null "cond_desc" instr)
     ()
 
 let response_handler =

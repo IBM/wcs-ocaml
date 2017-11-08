@@ -98,7 +98,7 @@ let process get_value wcs_cred
         emit_resp computer_output resp;
         let resp = postprocessing resp in
         let ctx = resp.msg_rsp_context in
-        let ctx, skip_user_input = Context.take_skip_user_input ctx in
+        let ctx, skip_user_input = Ctx.take_skip_user_input ctx in
         begin match matcher resp with
         | Some v ->
             if skip_user_input then (txt, v)
@@ -132,8 +132,8 @@ let process replace_expr wcs_cred
     in
     let txt, expr =
       run get_value wcs_cred ws_expr_id user_input computer_output
-        (Context.build_cnl (K_expr expr_kind) focus prompt) txt_init
-        (fun rsp -> Context.get_expr rsp.msg_rsp_context "expr")
+        (Ctx.build_cnl (K_expr expr_kind) focus prompt) txt_init
+        (fun rsp -> Ctx.get_expr rsp.msg_rsp_context "expr")
         bypass_expr
         (fun req ->
             begin match match_string req.msg_req_input.in_text with
@@ -141,10 +141,10 @@ let process replace_expr wcs_cred
                 let ctx =
                   begin match req.msg_req_context with
                   | Some ctx -> ctx
-                  | None -> Context.null
+                  | None -> Ctx.null
                   end
                 in
-                let ctx = Context.set_string ctx "has_string" string in
+                let ctx = Ctx.set_string ctx "has_string" string in
                 { msg_req_input = { in_text = txt };
                   msg_req_alternate_intents = req.msg_req_alternate_intents ;
                   msg_req_context = Some ctx;
@@ -155,7 +155,7 @@ let process replace_expr wcs_cred
             end)
         (fun rsp ->
           let ctx = rsp.msg_rsp_context in
-          let ctx = fst (Context.take_string ctx "has_string") in
+          let ctx = fst (Ctx.take_string ctx "has_string") in
           { msg_rsp_input = rsp.msg_rsp_input;
             msg_rsp_alternate_intents = rsp.msg_rsp_alternate_intents;
             msg_rsp_context = ctx;
@@ -178,8 +178,8 @@ let process replace_evnt wcs_cred
   let txt, when_fragment =
     run get_value wcs_cred ws_when_id
       user_input computer_output
-      Context.null txt_init
-      (fun rsp -> Context.get_evnt_desc rsp.msg_rsp_context "evnt_desc")
+      Ctx.null txt_init
+      (fun rsp -> Ctx.get_evnt_desc rsp.msg_rsp_context "evnt_desc")
       bypass_empty
       (fun req -> req) (fun rsp -> rsp)
   in
@@ -194,8 +194,8 @@ let process replace_cond wcs_cred
     run get_value wcs_cred
       ws_ids.ws_cond_id
       user_input computer_output
-      Context.null txt_init
-      (fun rsp -> Context.get_cond_desc rsp.msg_rsp_context "cond_desc")
+      Ctx.null txt_init
+      (fun rsp -> Ctx.get_cond_desc rsp.msg_rsp_context "cond_desc")
       bypass_empty
       (fun req -> req) (fun rsp -> rsp)
   in
@@ -219,9 +219,9 @@ let process replace_cond wcs_cred
                 let txt, more_cond =
                   run get_value wcs_cred ws_ids.ws_cond_continue_id
                     user_input computer_output
-                    Context.null ""
+                    Ctx.null ""
                     (fun rsp ->
-                      Context.get_bool rsp.msg_rsp_context "more_cond")
+                      Ctx.get_bool rsp.msg_rsp_context "more_cond")
                     bypass_empty
                     (fun req -> req) (fun rsp -> rsp)
                 in
@@ -258,8 +258,8 @@ let process replace_actns_closed wcs_cred
   let txt, closed =
     run get_value wcs_cred ws_then_id
       user_input computer_output
-      Context.null txt_init
-      (fun rsp -> Context.get_bool rsp.msg_rsp_context "actns_closed")
+      Ctx.null txt_init
+      (fun rsp -> Ctx.get_bool rsp.msg_rsp_context "actns_closed")
       bypass_empty
       (fun req -> req) (fun rsp -> rsp)
   in
@@ -275,8 +275,8 @@ let process replace_actn wcs_cred
     run get_value wcs_cred
       ws_actn_id
       user_input computer_output
-      Context.null txt_init
-      (fun rsp -> Context.get_actn_desc rsp.msg_rsp_context "actn_desc")
+      Ctx.null txt_init
+      (fun rsp -> Ctx.get_actn_desc rsp.msg_rsp_context "actn_desc")
       bypass_empty
         (fun req ->
             begin match match_string req.msg_req_input.in_text with
@@ -284,10 +284,10 @@ let process replace_actn wcs_cred
                 let ctx =
                   begin match req.msg_req_context with
                   | Some ctx -> ctx
-                  | None -> Context.null
+                  | None -> Ctx.null
                   end
                 in
-                let ctx = Context.set_string ctx "has_string" string in
+                let ctx = Ctx.set_string ctx "has_string" string in
                 { msg_req_input = { in_text = txt };
                   msg_req_alternate_intents = req.msg_req_alternate_intents ;
                   msg_req_context = Some ctx;
@@ -298,7 +298,7 @@ let process replace_actn wcs_cred
             end)
         (fun rsp ->
           let ctx = rsp.msg_rsp_context in
-          let ctx = fst (Context.take_string ctx "has_string") in
+          let ctx = fst (Ctx.take_string ctx "has_string") in
           { msg_rsp_input = rsp.msg_rsp_input;
             msg_rsp_alternate_intents = rsp.msg_rsp_alternate_intents;
             msg_rsp_context = ctx;
@@ -371,8 +371,8 @@ let process accept wcs_cred ws_accept
   let txt, is_accepted =
     run get_value wcs_cred ws_accept
       user_input computer_output
-      (Context.build_cnl kind focus "") txt_init
-      (fun rsp -> Context.get_bool rsp.msg_rsp_context "accept")
+      (Ctx.build_cnl kind focus "") txt_init
+      (fun rsp -> Ctx.get_bool rsp.msg_rsp_context "accept")
       bypass_empty
       (fun req -> req) (fun rsp -> rsp)
   in
@@ -413,8 +413,8 @@ let process dispatch wcs_cred ws_dispatch_id user_input computer_output =
   let txt = run user_input in
   run get_value wcs_cred ws_dispatch_id
     user_input computer_output
-    Context.null txt
-    (fun rsp -> Context.get_dispatch rsp.msg_rsp_context "dispatch")
+    Ctx.null txt
+    (fun rsp -> Ctx.get_dispatch rsp.msg_rsp_context "dispatch")
     bypass_empty
     (fun req -> req) (fun rsp -> rsp)
 
