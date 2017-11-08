@@ -17,12 +17,9 @@
  *)
 
 open Wcs_t
-module WCS = Wcs
-module Spel = Spel
 
 let who_intent =
-  WCS.intent "Who"
-    ~description: "The user wants to know who is knocking at the door"
+  Wcs.intent "Who"
     ~examples: [
       "Who's there?";
       "Who is there?";
@@ -30,9 +27,9 @@ let who_intent =
     ]
     ()
 
-let entity_name =
-  WCS.entity "BrokenPencil"
-    ~values: ["Broken Pencil", ["Dammaged Pen"; "Fractured Pencil"]]
+let char_entity =
+  Wcs.entity "Characters"
+    ~values: [ "Broken Pencil", ["Dammaged Pen"; "Fractured Pencil"] ]
     ()
 
 let entity_value entity =
@@ -41,35 +38,32 @@ let entity_value entity =
   | _ -> "Unknown"
   end
 
-let knock who_intent name_entity answer =
+let knockknock who_intent char_entity answer =
   let knock =
-    WCS.dialog_node ("KnockKnock")
+    Wcs.dialog_node "Knock"
       ~conditions_spel: (Spel.bool true)
-      ~text: "Knock knock"
-      ()
+      ~text: "Knock knock" ()
   in
   let whoisthere =
-    WCS.dialog_node ("Who")
+    Wcs.dialog_node "WhoIsThere"
       ~conditions_spel: (Spel.intent who_intent)
-      ~text: (entity_value name_entity)
-      ~parent: knock
-      ()
+      ~text: (entity_value char_entity)
+      ~parent: knock ()
   in
   let answer =
-    WCS.dialog_node ("Answer")
-      ~conditions_spel: (Spel.entity name_entity ())
+    Wcs.dialog_node "Answer"
+      ~conditions_spel: (Spel.entity char_entity ())
       ~text: answer
       ~parent: whoisthere
-      ~context: (Context.set_skip_user_input `Null true)
-      ()
+      ~context: (`Assoc ["return", `Bool true]) ()
   in
-  [knock; whoisthere; answer]
+  [ knock; whoisthere; answer ]
 
-let knockknock =
-  WCS.workspace "Knock Knock"
-    ~entities: [ entity_name ]
-    ~intents: [who_intent]
-    ~dialog_nodes: (knock who_intent entity_name "Nevermind it's pointless")
+let ws_knockknock =
+  Wcs.workspace "Knock Knock"
+    ~entities: [ char_entity ] ~intents: [ who_intent ]
+    ~dialog_nodes:
+      (knockknock who_intent char_entity "Nevermind it's pointless")
     ()
 
 let main () =
@@ -100,16 +94,16 @@ let main () =
   let wcs_cred = Wcs_bot.get_credential !wcs_cred_file in
   begin match !print with
   | true ->
-      print_endline (Wcs_pretty.workspace knockknock)
+      print_endline (Wcs_pretty.workspace ws_knockknock)
   | false ->
       ()
   end;
   begin match !deploy, !ws_id with
   | true, Some ws_id ->
-      let () = Wcs_api.update_workspace wcs_cred ws_id knockknock in
+      let () = Wcs_api.update_workspace wcs_cred ws_id ws_knockknock in
       Format.printf "%s: updated@." ws_id
   | true, None ->
-      begin match Wcs_api.create_workspace wcs_cred knockknock with
+      begin match Wcs_api.create_workspace wcs_cred ws_knockknock with
       | { crea_rsp_workspace_id = Some id } ->
           Format.printf "%s: created@." id;
           ws_id := Some id;

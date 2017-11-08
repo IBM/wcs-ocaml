@@ -77,6 +77,9 @@ val pop_action : json -> json * action option
 
 (** {8 The ["continuation"] field} *)
 
+val continuation_lbl : string
+(** The ["continuation"] string. *)
+
 val set_continuation : json -> action -> json
 (**
    [set_continuation ctx act] set the field ["continuation"] of
@@ -97,6 +100,12 @@ val take_continuation : json -> json * action option
 
 
 (** {8 The ["return"] field} *)
+
+val return_lbl : string
+(** The ["return"] string. *)
+
+val return : json -> json
+(** [return v] creates the JSON object [{ "return" : v }]. *)
 
 val set_return : json -> json -> json
 (**

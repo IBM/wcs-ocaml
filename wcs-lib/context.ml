@@ -91,11 +91,13 @@ let pop_action (ctx: json) : json * action option =
 
 (** {6. Continuation} *)
 
+let continuation_lbl = "continuation"
+
 let set_continuation (ctx: json) (k: action) : json =
-  Json.set ctx "continuation" (yojson_of_action k)
+  Json.set ctx continuation_lbl (yojson_of_action k)
 
 let take_continuation (ctx: json) : json * action option =
-  begin match Json.take ctx "continuation" with
+  begin match Json.take ctx continuation_lbl with
   | ctx', Some act ->
       begin try
         ctx', Some (action_of_yojson act)
@@ -114,6 +116,11 @@ let get_continuation (ctx: json) : action option =
 
 
 (** {6. Return} *)
+
+let return_lbl = "return"
+
+let return (v: json) : json =
+  Json.assoc [return_lbl, v]
 
 let set_return (ctx: json) (x: json) : json =
   Json.set ctx "return" x
