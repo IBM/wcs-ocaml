@@ -45,7 +45,7 @@ GENERATED= bmd/io_t.ml \
 
 all: $(RMAIN)
 
-.PHONY: $(RMAIN).$(TARGET)
+.PHONY: $(RMAIN).$(TARGET) clean cleanall
 
 $(RMAIN): $(RMAIN).$(TARGET)
 	cp _build/$< $@
