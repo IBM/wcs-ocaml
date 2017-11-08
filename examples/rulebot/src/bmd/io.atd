@@ -1,0 +1,36 @@
+(**
+   Data structured used in Q*cert I/O files.
+*)
+
+type json <ocaml module="Json_t"> = abstract
+(** Type of arbitrary JSON values. *)
+
+type derives_from = {
+    sub : string;
+    sup : string;
+  } <ocaml field_prefix="io_">
+
+type brand_type = {
+    brand : string;
+    typeName : string;
+  } <ocaml field_prefix="io_">
+
+type type_def = {
+    typeName : string;
+    typeDef : json;
+  } <ocaml field_prefix="io_">
+
+type schema = {
+    hierarchy : derives_from list;
+    brandTypes : brand_type list;
+    typeDefs : type_def list;
+    globals : json;
+  } <ocaml field_prefix="io_">
+(** {6 I/O Format} *)
+
+type io = {
+    schema : schema;
+    ~input <ocaml default="`Null"> : json;
+    ~output <ocaml default="`Null"> : json;
+  } <ocaml field_prefix="io_">
+

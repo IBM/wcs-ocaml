@@ -1,0 +1,78 @@
+let process read_input_server get_input new_input text =
+  let input text =
+    let txt = get_input () in
+    Rml_async.safe_emit text txt
+  in
+  loop
+    await new_input;
+    run Rml_async.proc_of_fun input text
+  end
+
+
+let process print_output_server print_output computer_output =
+  loop
+    await computer_output (rule_opt, msg) in
+    print_output rule_opt msg
+  end
+
+let () =
+  Arg.parse Rulebot_main.args Rulebot_main.anon_args Rulebot_main.usage;
+  begin match !Rulebot_main.rulebot_mode, !Rulebot_main.wcs_credential with
+  | Rulebot_main.M_wcs "rml", Some wcs_cred ->
+      let bmd =
+        begin match !Rulebot_main.bmd with
+        | None ->
+	    begin match !Rulebot_main.bom_io with
+	    | None ->
+	        ("[Sample BMD]", Bmd_samples.creditcard_schema)
+	    | Some io_file ->
+	        let io_j = Rulebot_main.load_io io_file
+	        in ("[BMD from IO]", Io_to_bmd.bmd_of_io io_j)
+	    end
+	| Some file ->
+	    (Parser_util.string_of_file file, Bmd_spec_to_bmd.bmd_schema_of_spec (Parser_util.parse_bmd_spec_from_file file))
+        end
+      in
+      let computer_output_gather (r1, s1) (r2, s2) =
+        let r =
+          begin match r1, r2 with
+          | Some r, None | None, Some r -> Some r
+          | Some r, Some _ -> Some r
+          | None, None -> None
+          end
+        in
+        r, s2 ^ s1
+      in
+      signal text default "" gather (fun x y -> x) in
+      signal new_input default () gather (fun () () -> ()) in
+      signal stop default () gather (fun () () -> ()) in
+      signal computer_output default (None, "") gather computer_output_gather in
+      let ws_ids =
+        Rulebot_main.load_ws_ids wcs_cred
+          !Rulebot_main.workspaces_config
+          !Rulebot_main.ws_update
+          bmd
+      in
+      let get_input, print_output =
+        if !Rulebot_main.is_slack then
+          Slack_io.launch !Rulebot_main.slackbot
+        else (Io_util.get_input_stdin, Io_util.print_output_stdout)
+      in
+      do
+        run read_input_server get_input new_input text ||
+        run print_output_server print_output computer_output ||
+        let process user_input =
+          pause;
+          emit new_input ();
+          await text(line) in
+          line
+        in
+        let rule =
+          run R_dialog_ctrl.automaton wcs_cred ws_ids user_input computer_output
+        in
+        Io_util.print_rule rule;
+        emit stop
+      until stop done;
+      Io_util.print_done ()
+  | _ -> Rulebot_main.main ()
+  end

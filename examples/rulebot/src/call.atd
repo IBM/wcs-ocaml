@@ -1,0 +1,9 @@
+type json <ocaml module="Json_t"> = abstract
+
+(** {6 Call} *)
+type call = {
+    workspace_id : string;
+    ~text <ocaml default="\"\""> : string;
+    ~context <ocaml default="`Null"> : json;
+    ?return : string nullable;
+  } <ocaml field_prefix="call_">

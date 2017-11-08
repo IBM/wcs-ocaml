@@ -1,0 +1,23 @@
+type config = {
+    ?ws_select_example : string nullable;
+    ?ws_select_example_id : string nullable;
+    ?ws_select_expr : string nullable;
+    ?ws_select_expr_id : string nullable;
+    ?ws_dispatch : string nullable;
+    ?ws_dispatch_id : string nullable;
+    ?ws_when : string nullable;
+    ?ws_when_id : string nullable;
+    ?ws_cond : string nullable;
+    ?ws_cond_id : string nullable;
+    ?ws_cond_continue : string nullable;
+    ?ws_cond_continue_id : string nullable;
+    ?ws_then : string nullable;
+    ?ws_then_id : string nullable;
+    ?ws_expr : string nullable;
+    ?ws_expr_id : string nullable;
+    ?ws_actn : string nullable;
+    ?ws_actn_id : string nullable;
+    ?ws_accept : string nullable;
+    ?ws_accept_id : string nullable;
+  }
+
