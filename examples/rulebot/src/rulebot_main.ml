@@ -1,8 +1,24 @@
+(*
+ *  This file is part of the Watson Conversation Service OCaml API project.
+ *
+ * Copyright 2016-2017 IBM Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *)
+
 open Cnl_t
 open Cnl_util
 open Cnl_print
-open Cnl_samples
-open Cnl_scripts
 
 open Bmd_t
 open Bmd_util
@@ -86,7 +102,6 @@ let get_workspace_id ?(update=false) ws_name wcs_cred ws_config get_id_fname ws 
   end
 
 let string_of_ws_ids ws_ids =
-  let open Dialog_ctrl in
   let config =
     { ws_select_example = None;
       ws_select_example_id = None;
@@ -176,19 +191,11 @@ let load_ws_ids wcs_cred workspaces_config ws_update bmd =
 (* Command line *)
 type mode =
   | M_nothing
-  | M_samples
-  | M_script_samples
-  | M_parse of string
-  | M_script of string
   | M_wcs of string
   | M_ws_gen
   | M_ws_delete
 
-let rulebot_mode : mode ref = ref M_nothing
-let set_samples_mode () = rulebot_mode := M_samples
-let set_script_samples_mode () = rulebot_mode := M_script_samples
-let set_parse_mode f = rulebot_mode := M_parse f
-let set_script_mode f = rulebot_mode := M_script f
+let rulebot_mode : mode ref = ref (M_wcs "rml")
 let set_ws_delete_mode f = rulebot_mode := M_ws_delete
 let set_ws_gen_mode f = rulebot_mode := M_ws_gen
 let set_wcs_mode main = rulebot_mode := M_wcs main
@@ -260,137 +267,13 @@ let args =
        " Log I/O for Slackbot");
       ("-slackbot", Arg.String set_slackbot,
        "cmd Set the slackbot-stdio command");
-      ("-samples", Arg.Unit set_samples_mode,
-       " Export sample rules to JSON");
-      ("-script-samples", Arg.Unit set_script_samples_mode,
-       " Export sample scripts to JSON");
-      ("-parse", Arg.String set_parse_mode,
-       "rule.json JSON CNL rule parse and emit");
-      ("-script", Arg.String set_script_mode,
-       "script.json JSON CNL script parse and emit");
       ("-rule", Arg.String set_init_rule,
        "r Initial rule");
       ("-focus", Arg.Int set_init_focus,
        "n Initial focus");
-   ]
+    ]
 
 let usage = "rulebot [options]"
-
-(* Parsing and emit mode *)
-
-let script_one_line instr_nb rule_before ic =
-  let one_line = input_line ic in
-  let instr_j = Yojson.Safe.from_string one_line in
-  let instr = convert_json_instr instr_j in
-  let rule_after = Cnl_engine.cnl_instr_apply instr rule_before in
-  begin
-    incr instr_nb;
-    Io_util.print_instr !instr_nb;
-    Io_util.print_rule rule_after;
-    rule_after
-  end
-
-let parse_script f =
-  let ic = open_in f in
-  let instr_nb = ref 0 in
-  let rule_init = !rule_init in
-  let rec loop rule =
-    let next_rule = script_one_line instr_nb rule ic in
-    loop next_rule
-  in
-  begin
-    Io_util.print_instr !instr_nb;
-    Io_util.print_rule rule_init;
-    try loop rule_init with
-    | _ ->
-	begin
-	  close_in ic;
-	  Io_util.print_done ()
-	end
-  end
-
-(* Samples mode *)
-(* File print *)
-
-let make_file fout scomp =
-  let oc = open_out fout in
-  begin
-    output_string oc scomp;
-    close_out oc
-  end
-
-let proc_sample sample =
-  let (rulename,rule) = sample in
-  let rule_s = Yojson.Safe.to_string (Cnl_t.cnl_rule_to_yojson rule)
-  in
-  make_file (rulename ^ ".json") rule_s
-
-let proc_script_sample script_sample =
-  let (scriptname,script) = script_sample in
-  let script_s =
-    String.concat "\n"
-      (List.map (fun x -> Yojson.Safe.to_string (Cnl_instr_t.cnl_instr_to_yojson x)) script)
-  in
-  make_file (scriptname ^ ".json") script_s
-
-let samples () =
-  List.iter proc_sample cnl_samples
-
-let script_samples () =
-  List.iter proc_script_sample cnl_script_samples
-
-(* WCS mode *)
-
-let wcs bmd main =
-  begin match main, !wcs_credential with
-  | "select_example", Some wcs_cred ->
-      let ws_select_example_id =
-        get_workspace_id ~update:!ws_update "select_example"
-          wcs_cred !workspaces_config
-          (fun config -> (config.ws_select_example_id, config.ws_select_example))
-          (Some Ws_select_example.ws_select_example)
-      in
-      Dialog_ctrl.select_example wcs_cred ws_select_example_id
-  | "select_expr", Some wcs_cred ->
-      let ws_select_expr_id =
-        get_workspace_id ~update:!ws_update "select_expr"
-          wcs_cred !workspaces_config
-          (fun config -> (config.ws_select_expr_id, config.ws_select_expr))
-          (Some Ws_select_expr.ws_select_expr)
-      in
-      ignore (Dialog_ctrl.select_expr wcs_cred ws_select_expr_id `Null)
-  | "rule", Some wcs_cred ->
-      let ws_ids = load_ws_ids wcs_cred !workspaces_config !ws_update bmd in
-      ignore (Dialog_ctrl.build_rule wcs_cred ws_ids)
-  | "when", Some wcs_cred ->
-      let id =
-        get_workspace_id ~update:!ws_update "when"
-          wcs_cred !workspaces_config
-          (fun config -> (config.ws_when_id, config.ws_when))
-          (Some (Ws_when.ws_when (snd bmd)))
-      in
-      ignore (Dialog_ctrl.build_when_step wcs_cred id !rule_init !focus_init)
-  | "cond", Some wcs_cred ->
-      let id =
-        get_workspace_id ~update:!ws_update "cond"
-          wcs_cred !workspaces_config
-          (fun config -> (config.ws_cond_id, config.ws_cond))
-          (Some Ws_cond.ws_cond)
-      in
-      ignore (Dialog_ctrl.build_cond_step wcs_cred id !rule_init !focus_init)
-  | "actn", Some wcs_cred ->
-      let id =
-        get_workspace_id ~update:!ws_update "actn"
-          wcs_cred !workspaces_config
-          (fun config -> (config.ws_actn_id, config.ws_actn))
-          (Some (Ws_actn.ws_actn (snd bmd)))
-      in
-      ignore (Dialog_ctrl.build_actn_step wcs_cred id !rule_init !focus_init)
-  | _, Some _ ->
-      Arg.usage args ("Unknown main "^main^"\n"^usage)
-  | _, None ->
-      Arg.usage args ("Watson Conversation credentials required\n"^usage)
-  end
 
 
 (* Workspaces generation *)
@@ -465,11 +348,6 @@ let main () =
   in
   begin match !rulebot_mode with
   | M_nothing -> Arg.usage args usage
-  | M_samples -> samples ()
-  | M_script_samples -> script_samples ()
-  | M_parse f -> Io_util.print_rule (parse_rule f)
-  | M_script f -> parse_script f
-  | M_wcs main -> wcs bmd main
   | M_ws_gen -> workspaces_generation bmd
   | M_ws_delete -> workspaces_delete ()
   end

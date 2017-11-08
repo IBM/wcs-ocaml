@@ -1,3 +1,21 @@
+(*
+ *  This file is part of the Watson Conversation Service OCaml API project.
+ *
+ * Copyright 2016-2017 IBM Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *)
+
 open Cnl_t
 open Cnl_util
 open Cnl_builder
@@ -33,13 +51,13 @@ let set_init vname fname : cnl_actn_desc =
   A_set (vname,fname,mk_expr_undefined ())
 
 (**
-when a transaction occurs, called 'the transaction'
-if
+   when a transaction occurs, called 'the transaction'
+   if
     the balance of 'the account' is less than 'Average Risky Account Balance'
-then
-	print "aggregate " + 'Average Risky Account Balance' ;
-	print "balance" + the balance of 'the account';
-	define 'the exception' as a new exception where
+   then
+   print "aggregate " + 'Average Risky Account Balance' ;
+   print "balance" + the balance of 'the account';
+   define 'the exception' as a new exception where
         the reason is "The account for " + the email of the customer of 'the account' + " is risky and below the average balance for risky accounts." ,
         the code is "R04" ;
     emit a new authorization response where
@@ -53,20 +71,20 @@ let define1 =
   mk_define_f "the exception"
     (mk_new_event_f "exception"
        [("reason",mk_concat_list_f
-	   [mk_string_f "The account for ";
-	    mk_get_f (mk_get_var_f "customer" "the account") "email";
-	    mk_string_f " is risky and below the average balance for risky accounts."]);
-	("code",mk_string_f "R04")])
+                    [mk_string_f "The account for ";
+                     mk_get_f (mk_get_var_f "customer" "the account") "email";
+                     mk_string_f " is risky and below the average balance for risky accounts."]);
+        ("code",mk_string_f "R04")])
 let emit1 =
   mk_emit_f
     (mk_new_event_f "authorization response"
        [("account",mk_var_f "the account");
-	("message", mk_concat_list_f
-	   [mk_string_f "R04: the account for ";
-	    mk_get_f (mk_get_var_f "the account" "customer") "email";
-	    mk_string_f " is risky and below the average balance for risky accounts."]);
-	("exception",mk_var_f "the exception");
-	("transaction",mk_var_f "the transaction")])
+        ("message", mk_concat_list_f
+                      [mk_string_f "R04: the account for ";
+                       mk_get_f (mk_get_var_f "the account" "customer") "email";
+                       mk_string_f " is risky and below the average balance for risky accounts."]);
+        ("exception",mk_var_f "the exception");
+        ("transaction",mk_var_f "the transaction")])
 let when1 = ("transaction",Some "the transaction")
 let cond1 = C_condition (mk_lt_f (mk_get_var_f "balance" "the account") (mk_expr_f (E_var "Average Risky Account Balance")))
 let then1 =
@@ -79,16 +97,16 @@ let then1 =
 let rule1 = mk_rule_init when1 cond1 then1
 
 (**
-when an airplane event occurs
-then
-  define rpmAverage as (
+   when an airplane event occurs
+   then
+   define rpmAverage as (
     the average engine rpm of 'the airplane' +
     the rpm of the engine of this airplane event) / 2;
-  define pressureAverage as (
+   define pressureAverage as (
     the average engine pressure ratio of 'the airplane' +
     the pressure ratio of the engine of this airplane event) / 2;
-  set the average engine rpm of 'the airplane' to rpmAverage;
-  set the average engine pressure ratio of 'the airplane' to
+   set the average engine rpm of 'the airplane' to rpmAverage;
+   set the average engine pressure ratio of 'the airplane' to
     pressureAverage;
 *)
 
@@ -97,16 +115,16 @@ let define21 =
     "rpmAverage"
     (mk_div_f
        (mk_plus_f
-	  (mk_get_var_f "average engine rpm" "the airplane")
-	  (mk_get_f (mk_get_f (mk_this_f "airplane") "engine") "rpm"))
+          (mk_get_var_f "average engine rpm" "the airplane")
+          (mk_get_f (mk_get_f (mk_this_f "airplane") "engine") "rpm"))
        (mk_int_f 2))
 let define22 =
   mk_define_f
     "pressureAverage"
     (mk_div_f
        (mk_plus_f
-	  (mk_get_var_f "average engine pressure ratio" "the airplane")
-	  (mk_get_f (mk_get_f (mk_this_f "airplane") "engine") "pressure ratio"))
+          (mk_get_var_f "average engine pressure ratio" "the airplane")
+          (mk_get_f (mk_get_f (mk_this_f "airplane") "engine") "pressure ratio"))
        (mk_int_f 2))
 
 let setdesc21 = mk_set_desc_f "average engine rpm" "the airplane" (mk_var_f "rpmAverage")
@@ -134,88 +152,88 @@ let cnl_samples =
 (* Sample expressions *)
 
 let expr1 = mk_expr_undefined () (* XXX TODO XXX *)
-    (* "expr": { *)
-    (*   "expr_desc": [ *)
-    (*     "P_confirmed", *)
-    (*     [ *)
-    (*       "E_binop", *)
-    (*       [ *)
-    (*         "Op_lt" *)
-    (*       ], *)
-    (*       { *)
-    (*         "expr_desc": [ *)
-    (*           "P_confirmed", *)
-    (*           [ *)
-    (*             "E_prop", *)
-    (*             { *)
-    (*               "expr_desc": [ *)
-    (*                 "P_confirmed", *)
-    (*                 [ *)
-    (*                   "E_variable", *)
-    (*                   "balance" *)
-    (*                 ] *)
-    (*               ] *)
-    (*             }, *)
-    (*             "the account" *)
-    (*           ] *)
-    (*         ] *)
-    (*       }, *)
-    (*       { *)
-    (*         "expr_desc": [ *)
-    (*           "P_confirmed", *)
-    (*           [ *)
-    (*             "E_variable", *)
-    (*             "Average Risky Account Balance" *)
-    (*           ] *)
-    (*         ] *)
-    (*       } *)
-    (*     ] *)
-    (*   ] *)
-    (* } *)
+(* "expr": { *)
+(*   "expr_desc": [ *)
+(*     "P_confirmed", *)
+(*     [ *)
+(*       "E_binop", *)
+(*       [ *)
+(*         "Op_lt" *)
+(*       ], *)
+(*       { *)
+(*         "expr_desc": [ *)
+(*           "P_confirmed", *)
+(*           [ *)
+(*             "E_prop", *)
+(*             { *)
+(*               "expr_desc": [ *)
+(*                 "P_confirmed", *)
+(*                 [ *)
+(*                   "E_variable", *)
+(*                   "balance" *)
+(*                 ] *)
+(*               ] *)
+(*             }, *)
+(*             "the account" *)
+(*           ] *)
+(*         ] *)
+(*       }, *)
+(*       { *)
+(*         "expr_desc": [ *)
+(*           "P_confirmed", *)
+(*           [ *)
+(*             "E_variable", *)
+(*             "Average Risky Account Balance" *)
+(*           ] *)
+(*         ] *)
+(*       } *)
+(*     ] *)
+(*   ] *)
+(* } *)
 
 let expr2 = mk_expr_undefined () (* XXX TODO XXX *)
-    (* "expr": { *)
-    (*   "expr_desc": [ *)
-    (*     "P_filled", *)
-    (*     13, *)
-    (*     [ *)
-    (*       "E_binop", *)
-    (*       [ *)
-    (*         "Op_concat" *)
-    (*       ], *)
-    (*       { *)
-    (*         "expr_desc": [ *)
-    (*           "P_filled", *)
-    (*           14, *)
-    (*           [ *)
-    (*             "E_lit", *)
-    (*             [ *)
-    (*               "L_string", *)
-    (*               "balance" *)
-    (*             ] *)
-    (*           ] *)
-    (*         ] *)
-    (*       }, *)
-    (*       { *)
-    (*         "expr_desc": [ *)
-    (*           "P_filled", *)
-    (*           15, *)
-    (*           [ *)
-    (*             "E_prop", *)
-    (*             { *)
-    (*               "expr_desc": [ *)
-    (*                 "P_filled", *)
-    (*                 16, *)
-    (*                 [ *)
-    (*                   "E_variable", *)
-    (*                   "balance" *)
-    (*                 ] *)
-    (*               ] *)
-    (*             }, *)
-    (*             "the account" *)
-    (*           ] *)
-    (*         ] *)
-    (*       } *)
-    (*     ] *)
-    (*   ] *)
-    (* } *)
+(* "expr": { *)
+(*   "expr_desc": [ *)
+(*     "P_filled", *)
+(*     13, *)
+(*     [ *)
+(*       "E_binop", *)
+(*       [ *)
+(*         "Op_concat" *)
+(*       ], *)
+(*       { *)
+(*         "expr_desc": [ *)
+(*           "P_filled", *)
+(*           14, *)
+(*           [ *)
+(*             "E_lit", *)
+(*             [ *)
+(*               "L_string", *)
+(*               "balance" *)
+(*             ] *)
+(*           ] *)
+(*         ] *)
+(*       }, *)
+(*       { *)
+(*         "expr_desc": [ *)
+(*           "P_filled", *)
+(*           15, *)
+(*           [ *)
+(*             "E_prop", *)
+(*             { *)
+(*               "expr_desc": [ *)
+(*                 "P_filled", *)
+(*                 16, *)
+(*                 [ *)
+(*                   "E_variable", *)
+(*                   "balance" *)
+(*                 ] *)
+(*               ] *)
+(*             }, *)
+(*             "the account" *)
+(*           ] *)
+(*         ] *)
+(*       } *)
+(*     ] *)
+(*   ] *)
+(* } *)

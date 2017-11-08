@@ -1,3 +1,21 @@
+(*
+ *  This file is part of the Watson Conversation Service OCaml API project.
+ *
+ * Copyright 2016-2017 IBM Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *)
+
 open Cnl_t
 
 (** {6. Printer util} *)
@@ -57,11 +75,11 @@ let node_id node =
 (** {6. Find nodes} *)
 
 let find_node_kind
-    (id: id)
-    (kind: cnl_kind)
-    (node: 'a node)
-    (acc: cnl_kind option)
-    : cnl_kind option =
+      (id: id)
+      (kind: cnl_kind)
+      (node: 'a node)
+      (acc: cnl_kind option)
+  : cnl_kind option =
   begin match node with
   | N_undefined id'
   | N_filled (id', _)
@@ -81,9 +99,9 @@ let find_node_kind_fold_fun (id: id) =
     Cnl2cnl.poly_fold_fun = f }
 
 let rule_find_node_kind
-    (id: id)
-    (rule: cnl_rule)
-    : cnl_kind option =
+      (id: id)
+      (rule: cnl_rule)
+  : cnl_kind option =
   Cnl2cnl.rule_dp_fold_over_nodes (find_node_kind_fold_fun id) rule None
 
 
@@ -93,10 +111,10 @@ let rule_find_node_kind
 (** {8. Node ids} *)
 
 let get_node_ids
-    (kind: cnl_kind)
-    (node: 'a node)
-    (acc: (id * cnl_kind * unit node) list)
-    : (id * cnl_kind * unit node) list =
+      (kind: cnl_kind)
+      (node: 'a node)
+      (acc: (id * cnl_kind * unit node) list)
+  : (id * cnl_kind * unit node) list =
   begin match node with
   | N_undefined id -> (id, kind, N_undefined id) :: acc
   | N_filled (id, _) -> (id, kind, N_filled (id, ())) :: acc
@@ -109,18 +127,18 @@ let get_node_ids_fold_fun =
     Cnl2cnl.poly_fold_fun = get_node_ids }
 
 let rule_get_node_ids
-    (rule: cnl_rule)
-    : (id * cnl_kind * unit node) list =
+      (rule: cnl_rule)
+  : (id * cnl_kind * unit node) list =
   Cnl2cnl.rule_dp_fold_over_nodes get_node_ids_fold_fun rule []
 
 
 (** {8. Undefined} *)
 
 let get_undefined
-    (kind: cnl_kind)
-    (node: 'a node)
-    (acc: (id * cnl_kind) list)
-    : (id * cnl_kind) list =
+      (kind: cnl_kind)
+      (node: 'a node)
+      (acc: (id * cnl_kind) list)
+  : (id * cnl_kind) list =
   begin match node with
   | N_undefined id -> (id, kind) :: acc
   | N_filled (_, _)
@@ -133,43 +151,43 @@ let get_undefined_fold_fun =
     Cnl2cnl.poly_fold_fun = get_undefined }
 
 let rule_get_undefined
-    (rule: cnl_rule)
-    : (id * cnl_kind) list =
+      (rule: cnl_rule)
+  : (id * cnl_kind) list =
   Cnl2cnl.rule_dp_fold_over_nodes get_undefined_fold_fun rule []
 
 let evnt_get_undefined
-    (evnt: cnl_event)
-    : (id * cnl_kind) list =
+      (evnt: cnl_event)
+  : (id * cnl_kind) list =
   Cnl2cnl.evnt_dp_fold_over_nodes get_undefined_fold_fun evnt []
 
 let cond_get_undefined
-    (cond: cnl_cond)
-    : (id * cnl_kind) list =
+      (cond: cnl_cond)
+  : (id * cnl_kind) list =
   Cnl2cnl.cond_dp_fold_over_nodes get_undefined_fold_fun cond []
 
 let actns_get_undefined
-    (actns: cnl_actions)
-    : (id * cnl_kind) list =
+      (actns: cnl_actions)
+  : (id * cnl_kind) list =
   Cnl2cnl.actns_dp_fold_over_nodes get_undefined_fold_fun actns []
 
 let actn_get_undefined
-    (actn: cnl_action)
-    : (id * cnl_kind) list =
+      (actn: cnl_action)
+  : (id * cnl_kind) list =
   Cnl2cnl.actn_dp_fold_over_nodes get_undefined_fold_fun actn []
 
 let expr_get_undefined
-    (expr: cnl_expr)
-    : (id * cnl_kind) list =
+      (expr: cnl_expr)
+  : (id * cnl_kind) list =
   Cnl2cnl.expr_dp_fold_over_nodes get_undefined_fold_fun expr []
 
 
 (** {8. Filled} *)
 
 let get_filled
-    (kind: cnl_kind)
-    (node: 'a node)
-    (acc: (id * cnl_kind) list)
-    : (id * cnl_kind) list =
+      (kind: cnl_kind)
+      (node: 'a node)
+      (acc: (id * cnl_kind) list)
+  : (id * cnl_kind) list =
   begin match node with
   | N_filled (id, _) -> (id, kind) :: acc
   | N_undefined _
@@ -182,43 +200,43 @@ let get_filled_fold_fun =
     Cnl2cnl.poly_fold_fun = get_filled }
 
 let rule_get_filled
-    (rule: cnl_rule)
-    : (id * cnl_kind) list =
+      (rule: cnl_rule)
+  : (id * cnl_kind) list =
   Cnl2cnl.rule_dp_fold_over_nodes get_filled_fold_fun rule []
 
 let evnt_get_filled
-    (evnt: cnl_event)
-    : (id * cnl_kind) list =
+      (evnt: cnl_event)
+  : (id * cnl_kind) list =
   Cnl2cnl.evnt_dp_fold_over_nodes get_filled_fold_fun evnt []
 
 let cond_get_filled
-    (cond: cnl_cond)
-    : (id * cnl_kind) list =
+      (cond: cnl_cond)
+  : (id * cnl_kind) list =
   Cnl2cnl.cond_dp_fold_over_nodes get_filled_fold_fun cond []
 
 let actns_get_filled
-    (actns: cnl_actions)
-    : (id * cnl_kind) list =
+      (actns: cnl_actions)
+  : (id * cnl_kind) list =
   Cnl2cnl.actns_dp_fold_over_nodes get_filled_fold_fun actns []
 
 let actn_get_filled
-    (actn: cnl_action)
-    : (id * cnl_kind) list =
+      (actn: cnl_action)
+  : (id * cnl_kind) list =
   Cnl2cnl.actn_dp_fold_over_nodes get_filled_fold_fun actn []
 
 let expr_get_filled
-    (expr: cnl_expr)
-    : (id * cnl_kind) list =
+      (expr: cnl_expr)
+  : (id * cnl_kind) list =
   Cnl2cnl.expr_dp_fold_over_nodes get_filled_fold_fun expr []
 
 
 (** {8. Rejected} *)
 
 let get_rejected
-    (kind: cnl_kind)
-    (node: 'a node)
-    (acc: (id * cnl_kind) list)
-    : (id * cnl_kind) list =
+      (kind: cnl_kind)
+      (node: 'a node)
+      (acc: (id * cnl_kind) list)
+  : (id * cnl_kind) list =
   begin match node with
   | N_rejected (id, _) -> (id, kind) :: acc
   | N_undefined _
@@ -231,33 +249,33 @@ let get_rejected_fold_fun =
     Cnl2cnl.poly_fold_fun = get_rejected }
 
 let rule_get_rejected
-    (rule: cnl_rule)
-    : (id * cnl_kind) list =
+      (rule: cnl_rule)
+  : (id * cnl_kind) list =
   Cnl2cnl.rule_dp_fold_over_nodes get_rejected_fold_fun rule []
 
 let evnt_get_rejected
-    (evnt: cnl_event)
-    : (id * cnl_kind) list =
+      (evnt: cnl_event)
+  : (id * cnl_kind) list =
   Cnl2cnl.evnt_dp_fold_over_nodes get_rejected_fold_fun evnt []
 
 let cond_get_rejected
-    (cond: cnl_cond)
-    : (id * cnl_kind) list =
+      (cond: cnl_cond)
+  : (id * cnl_kind) list =
   Cnl2cnl.cond_dp_fold_over_nodes get_rejected_fold_fun cond []
 
 let actns_get_rejected
-    (actns: cnl_actions)
-    : (id * cnl_kind) list =
+      (actns: cnl_actions)
+  : (id * cnl_kind) list =
   Cnl2cnl.actns_dp_fold_over_nodes get_rejected_fold_fun actns []
 
 let actn_get_rejected
-    (actn: cnl_action)
-    : (id * cnl_kind) list =
+      (actn: cnl_action)
+  : (id * cnl_kind) list =
   Cnl2cnl.actn_dp_fold_over_nodes get_rejected_fold_fun actn []
 
 let expr_get_rejected
-    (expr: cnl_expr)
-    : (id * cnl_kind) list =
+      (expr: cnl_expr)
+  : (id * cnl_kind) list =
   Cnl2cnl.expr_dp_fold_over_nodes get_rejected_fold_fun expr []
 
 (** {6. Get subtree} *)
@@ -270,10 +288,10 @@ let rec expr_get_cnl (id: id) (expr: cnl_expr) : cnl_ast option =
       else
         Cnl2cnl.expr_sh_fold
           (fun expr acc ->
-            begin match acc with
-            | Some _ -> acc
-            | None ->  expr_get_cnl id expr
-            end)
+             begin match acc with
+             | Some _ -> acc
+             | None ->  expr_get_cnl id expr
+             end)
           expr None
   | None -> None
   end
@@ -297,10 +315,10 @@ let cond_get_cnl (id: id) (cond: cnl_cond) : cnl_ast option =
       else
         Cnl2cnl.cond_sh_fold
           (fun expr acc ->
-            begin match acc with
-            | Some _ -> acc
-            | None ->  expr_get_cnl id expr
-            end)
+             begin match acc with
+             | Some _ -> acc
+             | None ->  expr_get_cnl id expr
+             end)
           cond None
   | None -> None
   end
@@ -312,10 +330,10 @@ let actn_get_cnl (id: id) (actn: cnl_action) : cnl_ast option =
       else
         Cnl2cnl.actn_sh_fold
           (fun expr acc ->
-            begin match acc with
-            | Some _ -> acc
-            | None ->  expr_get_cnl id expr
-            end)
+             begin match acc with
+             | Some _ -> acc
+             | None ->  expr_get_cnl id expr
+             end)
           actn None
   | None -> None
   end
@@ -327,10 +345,10 @@ let actns_get_cnl (id: id) (actns: cnl_actions) : cnl_ast option =
       else
         Cnl2cnl.actns_sh_fold
           (fun actn acc ->
-            begin match acc with
-            | Some _ -> acc
-            | None ->  actn_get_cnl id actn
-            end)
+             begin match acc with
+             | Some _ -> acc
+             | None ->  actn_get_cnl id actn
+             end)
           (fun closed acc -> acc)
           actns None
   | None -> None
@@ -343,20 +361,20 @@ let rule_get_cnl (id: id) (rule: cnl_rule) : cnl_ast option =
       else
         Cnl2cnl.rule_sh_fold
           (fun evnt acc ->
-            begin match acc with
-            | Some _ -> acc
-            | None -> evnt_get_cnl id evnt
-            end)
+             begin match acc with
+             | Some _ -> acc
+             | None -> evnt_get_cnl id evnt
+             end)
           (fun cond acc ->
-            begin match acc with
-            | Some _ -> acc
-            | None -> cond_get_cnl id cond
-            end)
+             begin match acc with
+             | Some _ -> acc
+             | None -> cond_get_cnl id cond
+             end)
           (fun actns acc ->
-            begin match acc with
-            | Some _ -> acc
-            | None -> actns_get_cnl id actns
-            end)
+             begin match acc with
+             | Some _ -> acc
+             | None -> actns_get_cnl id actns
+             end)
           rule None
   | None -> None
   end
@@ -364,10 +382,10 @@ let rule_get_cnl (id: id) (rule: cnl_rule) : cnl_ast option =
 (** {6. Find focus} *)
 
 let rec expr_next_focus_fold
-    (focus: int)
-    (expr: cnl_expr)
-    ((res, id_found): (int * cnl_kind) option * bool)
-    : (int * cnl_kind) option * bool =
+          (focus: int)
+          (expr: cnl_expr)
+          ((res, id_found): (int * cnl_kind) option * bool)
+  : (int * cnl_kind) option * bool =
   begin match res, id_found, expr.expr_node with
   | Some _, _, _ -> (res, id_found)
   | None, true, (N_undefined (Some id) | N_rejected (Some id, _)) ->
@@ -396,10 +414,10 @@ let rec expr_next_focus_fold
   end
 
 let evnt_next_focus_fold
-    (focus: int)
-    (evnt: cnl_event)
-    ((res, id_found): (int * cnl_kind) option * bool)
-    : (int * cnl_kind) option * bool =
+      (focus: int)
+      (evnt: cnl_event)
+      ((res, id_found): (int * cnl_kind) option * bool)
+  : (int * cnl_kind) option * bool =
   begin match res, id_found, evnt.evnt_node with
   | Some _, _, _ -> (res, id_found)
   | None, true, (N_undefined (Some id) | N_rejected (Some id, _)) ->
@@ -410,10 +428,10 @@ let evnt_next_focus_fold
   end
 
 let cond_next_focus_fold
-    (focus: int)
-    (cond: cnl_cond)
-    ((res, id_found): (int * cnl_kind) option * bool)
-    : (int * cnl_kind) option * bool =
+      (focus: int)
+      (cond: cnl_cond)
+      ((res, id_found): (int * cnl_kind) option * bool)
+  : (int * cnl_kind) option * bool =
   begin match res, id_found, cond.cond_node with
   | Some _, _, _ -> (res, id_found)
   | None, true, (N_undefined (Some id) | N_rejected (Some id, _)) ->
@@ -426,10 +444,10 @@ let cond_next_focus_fold
   end
 
 let actn_next_focus_fold
-    (focus: int)
-    (actn: cnl_action)
-    ((res, id_found): (int * cnl_kind) option * bool)
-    : (int * cnl_kind) option * bool =
+      (focus: int)
+      (actn: cnl_action)
+      ((res, id_found): (int * cnl_kind) option * bool)
+  : (int * cnl_kind) option * bool =
   begin match res, id_found, actn.actn_node with
   | Some _, _, _ -> (res, id_found)
   | None, true, (N_undefined (Some id) | N_rejected (Some id, _)) ->
@@ -442,10 +460,10 @@ let actn_next_focus_fold
   end
 
 let actns_next_focus_fold
-    (focus: int)
-    (actns: cnl_actions)
-    ((res, id_found): (int * cnl_kind) option * bool)
-    : (int * cnl_kind) option * bool =
+      (focus: int)
+      (actns: cnl_actions)
+      ((res, id_found): (int * cnl_kind) option * bool)
+  : (int * cnl_kind) option * bool =
   begin match res, id_found, actns.actns_node with
   | Some _, _, _ -> (res, id_found)
   | None, true, (N_undefined (Some id) | N_rejected (Some id, _)) ->
@@ -455,21 +473,21 @@ let actns_next_focus_fold
       Cnl2cnl.actns_sh_fold
         (actn_next_focus_fold focus)
         (fun closed (res, id_found) ->
-          begin match res, id_found, closed with
-          | Some _, _, _ -> (res, id_found)
-          | None, true, (N_undefined (Some id) | N_rejected (Some id, _)) ->
-              Some (id, K_actns_closed), true
-          | _ ->
-              let id_found = id_found || node_id closed = Some (Some focus) in
-              (res, id_found)
-          end)
+           begin match res, id_found, closed with
+           | Some _, _, _ -> (res, id_found)
+           | None, true, (N_undefined (Some id) | N_rejected (Some id, _)) ->
+               Some (id, K_actns_closed), true
+           | _ ->
+               let id_found = id_found || node_id closed = Some (Some focus) in
+               (res, id_found)
+           end)
         actns (None, id_found)
   end
 
 let rule_next_focus
-    (focus: int)
-    (rule : cnl_rule)
-    : (int * cnl_kind) option =
+      (focus: int)
+      (rule : cnl_rule)
+  : (int * cnl_kind) option =
   let res_opt, _ =
     let id_found = node_id rule.rule_node = Some (Some focus) in
     Cnl2cnl.rule_sh_fold
@@ -492,9 +510,9 @@ let rule_next_focus
   end
 
 let cond_next_focus
-    (focus: int)
-    (rule : cnl_rule)
-    : (int * cnl_kind) option =
+      (focus: int)
+      (rule : cnl_rule)
+  : (int * cnl_kind) option =
   let res_opt, _ =
     let id_found = node_id rule.rule_node = Some (Some focus) in
     Cnl2cnl.rule_sh_fold
@@ -521,8 +539,8 @@ let cond_next_focus
 (** {6. Renaming } *)
 
 let max_id
-    (rule: cnl_rule)
-    : id =
+      (rule: cnl_rule)
+  : id =
   let fold_fun kind node m_id =
     let id =
       begin match node with
@@ -550,12 +568,12 @@ let next_id (id:id) : id =
   end
 
 let index_rule
-    (rule: cnl_rule)
-    : cnl_rule =
+      (rule: cnl_rule)
+  : cnl_rule =
   let map_fold_fun kind node id =
     begin match node with
     | N_undefined None ->
-         N_undefined id, next_id id
+        N_undefined id, next_id id
     | N_filled (None, x) ->
         N_filled (id, x), next_id id
     | N_rejected (None, x) ->
@@ -588,24 +606,24 @@ let f_to_a p =
   end
 
 let expr_f_to_a
-    (expr: cnl_expr)
-    : cnl_expr =
+      (expr: cnl_expr)
+  : cnl_expr =
   Cnl2cnl.expr_dp_map_over_nodes
     { Cnl2cnl.id_map_over_node_fun with
       Cnl2cnl.poly_map_fun = (fun kind node -> f_to_a node) }
     expr
 
 let actn_f_to_a
-    (actn: cnl_action)
-    : cnl_action =
+      (actn: cnl_action)
+  : cnl_action =
   Cnl2cnl.actn_dp_map_over_nodes
     { Cnl2cnl.id_map_over_node_fun with
       Cnl2cnl.poly_map_fun = (fun kind node -> f_to_a node) }
     actn
 
 let evnt_f_to_a
-    (evnt: cnl_event)
-    : cnl_event =
+      (evnt: cnl_event)
+  : cnl_event =
   Cnl2cnl.evnt_dp_map_over_nodes
     { Cnl2cnl.id_map_over_node_fun with
       Cnl2cnl.poly_map_fun = (fun kind node -> f_to_a node) }
@@ -613,32 +631,32 @@ let evnt_f_to_a
 
 
 let cond_f_to_a
-    (cond: cnl_cond)
-    : cnl_cond =
+      (cond: cnl_cond)
+  : cnl_cond =
   Cnl2cnl.cond_dp_map_over_nodes
     { Cnl2cnl.id_map_over_node_fun with
       Cnl2cnl.poly_map_fun = (fun kind node -> f_to_a node) }
     cond
 
 let actns_f_to_a
-    (actns: cnl_actions)
-    : cnl_actions =
+      (actns: cnl_actions)
+  : cnl_actions =
   Cnl2cnl.actns_dp_map_over_nodes
     { Cnl2cnl.id_map_over_node_fun with
       Cnl2cnl.poly_map_fun = (fun kind node -> f_to_a node) }
     actns
 
 let rule_f_to_a
-    (rule: cnl_rule)
-    : cnl_rule =
+      (rule: cnl_rule)
+  : cnl_rule =
   Cnl2cnl.rule_dp_map_over_nodes
     { Cnl2cnl.id_map_over_node_fun with
       Cnl2cnl.poly_map_fun = (fun kind node -> f_to_a node) }
     rule
 
 let cnl_f_to_a
-    (cnl: cnl_ast)
-    : cnl_ast =
+      (cnl: cnl_ast)
+  : cnl_ast =
   begin match cnl with
   | Cnl_expr expr -> Cnl_expr (expr_f_to_a expr)
   | Cnl_actn actn -> Cnl_actn (actn_f_to_a actn)
@@ -659,24 +677,24 @@ let f_to_r p =
   end
 
 let expr_f_to_r
-    (expr: cnl_expr)
-    : cnl_expr =
+      (expr: cnl_expr)
+  : cnl_expr =
   Cnl2cnl.expr_dp_map_over_nodes
     { Cnl2cnl.id_map_over_node_fun with
       Cnl2cnl.poly_map_fun = (fun kind node -> f_to_r node) }
     expr
 
 let actn_f_to_r
-    (actn: cnl_action)
-    : cnl_action =
+      (actn: cnl_action)
+  : cnl_action =
   Cnl2cnl.actn_dp_map_over_nodes
     { Cnl2cnl.id_map_over_node_fun with
       Cnl2cnl.poly_map_fun = (fun kind node -> f_to_r node) }
     actn
 
 let evnt_f_to_r
-    (evnt: cnl_event)
-    : cnl_event =
+      (evnt: cnl_event)
+  : cnl_event =
   Cnl2cnl.evnt_dp_map_over_nodes
     { Cnl2cnl.id_map_over_node_fun with
       Cnl2cnl.poly_map_fun = (fun kind node -> f_to_r node) }
@@ -684,32 +702,32 @@ let evnt_f_to_r
 
 
 let cond_f_to_r
-    (cond: cnl_cond)
-    : cnl_cond =
+      (cond: cnl_cond)
+  : cnl_cond =
   Cnl2cnl.cond_dp_map_over_nodes
     { Cnl2cnl.id_map_over_node_fun with
       Cnl2cnl.poly_map_fun = (fun kind node -> f_to_r node) }
     cond
 
 let actns_f_to_r
-    (actns: cnl_actions)
-    : cnl_actions =
+      (actns: cnl_actions)
+  : cnl_actions =
   Cnl2cnl.actns_dp_map_over_nodes
     { Cnl2cnl.id_map_over_node_fun with
       Cnl2cnl.poly_map_fun = (fun kind node -> f_to_r node) }
     actns
 
 let rule_f_to_r
-    (rule: cnl_rule)
-    : cnl_rule =
+      (rule: cnl_rule)
+  : cnl_rule =
   Cnl2cnl.rule_dp_map_over_nodes
     { Cnl2cnl.id_map_over_node_fun with
       Cnl2cnl.poly_map_fun = (fun kind node -> f_to_r node) }
     rule
 
 let cnl_f_to_r
-    (cnl: cnl_ast)
-    : cnl_ast =
+      (cnl: cnl_ast)
+  : cnl_ast =
   begin match cnl with
   | Cnl_expr expr -> Cnl_expr (expr_f_to_r expr)
   | Cnl_actn actn -> Cnl_actn (actn_f_to_r actn)
@@ -797,9 +815,9 @@ let expr_prompt id expr =
         | E_new (evnt, setters) ->
             List.iter
               (fun (field, e) ->
-                let txt = "the expression defining the field '"^field^"'" in
-                let _ = expr_prompt_aux id txt e in
-                ())
+                 let txt = "the expression defining the field '"^field^"'" in
+                 let _ = expr_prompt_aux id txt e in
+                 ())
               setters;
             ()
         end
@@ -817,31 +835,31 @@ let rule_prompt id rule =
   Cnl2cnl.rule_sh_fold
     (fun _ acc -> acc)
     (fun cond acc ->
-      Cnl2cnl.cond_sh_fold
-        (fun expr acc ->
-          begin match acc with
-          | Some _ -> acc
-          | None ->
-              let s = expr_prompt id expr in
-              if s = "" then None
-              else Some s
-          end)
-        cond acc)
+       Cnl2cnl.cond_sh_fold
+         (fun expr acc ->
+            begin match acc with
+            | Some _ -> acc
+            | None ->
+                let s = expr_prompt id expr in
+                if s = "" then None
+                else Some s
+            end)
+         cond acc)
     (fun actns acc ->
-      Cnl2cnl.actns_sh_fold
-        (fun actn acc ->
-          Cnl2cnl.actn_sh_fold
-            (fun expr acc ->
-              begin match acc with
-              | Some _ -> acc
-              | None ->
-                  let s = expr_prompt id expr in
-                  if s = "" then None
-                  else Some s
-              end)
-            actn acc)
-        (fun _ acc -> acc)
-        actns acc)
+       Cnl2cnl.actns_sh_fold
+         (fun actn acc ->
+            Cnl2cnl.actn_sh_fold
+              (fun expr acc ->
+                 begin match acc with
+                 | Some _ -> acc
+                 | None ->
+                     let s = expr_prompt id expr in
+                     if s = "" then None
+                     else Some s
+                 end)
+              actn acc)
+         (fun _ acc -> acc)
+         actns acc)
     rule
     None
 
@@ -879,10 +897,10 @@ let json_of_rule_desc desc =
   Yojson.Safe.to_basic (cnl_rule_desc_to_yojson desc)
 
 let rec json_replace
-    (old: string)
-    (new_: string)
-    (j: Yojson.Basic.json)
-    =
+          (old: string)
+          (new_: string)
+          (j: Yojson.Basic.json)
+  =
   begin match j with
   | `Null
   | `Bool _
@@ -896,9 +914,9 @@ let rec json_replace
       let l =
         List.map
           (fun (s, j) ->
-            let s = if s = old then new_ else s in
-            let j = json_replace old new_ j in
-            (s, j))
+             let s = if s = old then new_ else s in
+             let j = json_replace old new_ j in
+             (s, j))
           l
       in
       `Assoc l

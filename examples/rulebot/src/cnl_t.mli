@@ -1,3 +1,21 @@
+(*
+ *  This file is part of the Watson Conversation Service OCaml API project.
+ *
+ * Copyright 2016-2017 IBM Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *)
+
 (* type 'a error_or = ('a, string) result *)
 
 (** {6. Locations} *)
@@ -15,48 +33,48 @@ type 'a node =
   | N_accepted of 'a
 
 type 'a node_list = {
-    list_elems : 'a list;
-    list_closed : unit node;
-  }
+  list_elems : 'a list;
+  list_closed : unit node;
+}
 
 (** {6. AST}
     See BNF in ../papers/2017-debs-dialog-odm/cnl_bnf.txt
- *)
+*)
 
 type cnl_rule = {
-    rule_node : cnl_rule_desc node;
-    rule_loc : location;
-  }
+  rule_node : cnl_rule_desc node;
+  rule_loc : location;
+}
 and cnl_rule_desc = {
-    rule_evnt : cnl_event;
-    rule_cond : cnl_cond;
-    rule_actns : cnl_actions;
-  }
+  rule_evnt : cnl_event;
+  rule_cond : cnl_cond;
+  rule_actns : cnl_actions;
+}
 
 and cnl_event = {
-    evnt_node : cnl_evnt_desc node;
-    evnt_loc : location;
-  }
+  evnt_node : cnl_evnt_desc node;
+  evnt_loc : location;
+}
 and cnl_evnt_desc = event_name * variable_name option
 
 and cnl_cond = {
-    cond_node : cnl_cond_desc node;
-    cond_loc : location;
-  }
+  cond_node : cnl_cond_desc node;
+  cond_loc : location;
+}
 and cnl_cond_desc =
   | C_no_condition
   | C_condition of cnl_expr
 
 and cnl_actions = {
-    actns_node : cnl_actns_desc node;
-    actns_loc : location;
-  }
+  actns_node : cnl_actns_desc node;
+  actns_loc : location;
+}
 and cnl_actns_desc = cnl_action node_list
 
 and cnl_action = {
-    actn_node : cnl_actn_desc node;
-    actn_loc : location;
-  }
+  actn_node : cnl_actn_desc node;
+  actn_loc : location;
+}
 and cnl_actn_desc =
   | A_print of cnl_expr
   | A_emit of cnl_expr
@@ -64,10 +82,10 @@ and cnl_actn_desc =
   | A_set of field_name * variable_name * cnl_expr
 
 and cnl_expr = {
-    expr_node : cnl_expr_desc node;
-    expr_field : (event_name * field_name) option; (* XXX Hack? -- contextual information for fields within new XXX *)
-    expr_loc : location;
-  }
+  expr_node : cnl_expr_desc node;
+  expr_field : (event_name * field_name) option; (* XXX Hack? -- contextual information for fields within new XXX *)
+  expr_loc : location;
+}
 and cnl_expr_desc =
   | E_lit of cnl_literal
   | E_var of variable_name
