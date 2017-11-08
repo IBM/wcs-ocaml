@@ -29,8 +29,6 @@ let of_string s = Spel_parse.expr_from_string s
 
 let of_text s = Spel_parse.quoted_expr_from_string s
 
-let of_json j = Spel_parse.json_expr_from_json j
-
 (** {6 from OCaml types} *)
 
 let entity entity_def ?value () =

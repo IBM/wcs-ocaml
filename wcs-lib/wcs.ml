@@ -129,10 +129,10 @@ let next_step_id
 let mk_next_step_id = next_step_id (* alias to avoid hiding *)
 
 
-let output (* XX TODO : handle multiple outputs *)
+let output (* XXX TODO : handle multiple outputs XXX *)
       text
   : output_def =
-  Spel.of_json (`Assoc [ "text", `String text ])
+  Json_spel.of_json (`Assoc [ "text", `String text ])
 
 let mk_output = output (* alias to avoid hiding *)
 
@@ -179,7 +179,7 @@ let dialog_node
   let output =
     begin match output, output_spel with
     | None, None -> None
-    | Some output, None -> Some (Spel.of_json output)
+    | Some output, None -> Some (Json_spel.of_json output)
     | None, Some json_expr -> Some json_expr
     | Some _, Some _ ->
         Log.error "Wcs"
@@ -201,7 +201,7 @@ let dialog_node
   let context =
     begin match context, context_spel with
     | None, None -> None
-    | Some context, None -> Some (Spel.of_json context)
+    | Some context, None -> Some (Json_spel.of_json context)
     | None, Some json_expr -> Some json_expr
     | Some _, Some _ ->
         Log.error "Wcs"

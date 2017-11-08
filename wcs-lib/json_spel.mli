@@ -43,6 +43,17 @@ val list : json_spel list -> json_spel
 (** [list l] build the JSON list [l]. *)
 
 
+(** {6 [json]/[json_spel] conversion} *)
+
+val to_json : json_spel -> json
+(** [to_json v] convert [v] value into [json]. Expressions are turned
+    into strings with using the Spel concrete syntax. *)
+
+val of_json : json -> json_spel
+(** [of_json j] convert [j] into [json_spel]. Strings literals in
+    [j] are parsed as text containing quoted spel expressions. *)
+
+
 (** {6 Manipulation functions} *)
 
 val set : json_spel -> string -> json_spel -> json_spel

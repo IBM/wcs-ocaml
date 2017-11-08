@@ -29,3 +29,39 @@ type json_spel = [
   | `Expr of Spel_t.expression
 ]
 
+(** {6 Serialization/deserialization functions for atdgen} *)
+
+let rec yojson_of_json_spel (j: json_spel) : Yojson.Basic.json =
+  begin match j with
+  | `Assoc l ->
+      `Assoc (List.map (fun x -> (fst x, yojson_of_json_spel (snd x))) l)
+  | `Bool b -> `Bool b
+  | `Float f -> `Float f
+  | `Int i -> `Int i
+  | `List l -> `List (List.map yojson_of_json_spel l)
+  | `Null -> `Null
+  | `Expr e -> `String (Spel_print.to_text e)
+  end
+
+let rec json_spel_of_yojson (j: Yojson.Basic.json) : json_spel =
+  begin match j with
+  | `Assoc l ->
+      `Assoc (List.map (fun x -> (fst x, json_spel_of_yojson (snd x))) l)
+  | `Bool b -> `Bool b
+  | `Float f -> `Float f
+  | `Int i -> `Int i
+  | `List l -> `List (List.map json_spel_of_yojson l)
+  | `Null -> `Null
+  | `String s -> `Expr (Spel_parse.quoted_expr_from_string s)
+  (* This catches parse errors at the expression level *)
+  end
+
+
+let write_json_spel buff x =
+  Yojson.Basic.write_json buff (yojson_of_json_spel x)
+
+let read_json_spel state lexbuf =
+  json_spel_of_yojson (Yojson.Basic.read_json state lexbuf)
+
+let to_string x =
+  Yojson.Basic.to_string (yojson_of_json_spel x)

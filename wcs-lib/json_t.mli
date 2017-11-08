@@ -24,6 +24,8 @@ type basic = Yojson.Basic.json
 
 type json = basic
 
+(** {6 Serialization/deserialization functions for atdgen} *)
+
 type lexer_state = Yojson.Basic.lexer_state
 type bi_outbuf_t = Bi_outbuf.t
 

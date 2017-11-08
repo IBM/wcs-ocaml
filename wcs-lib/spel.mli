@@ -21,17 +21,12 @@
 
 (** {6 parsers} *)
 
-val of_string :
-  string ->
-  Spel_t.expression
+val of_string : string -> Spel_t.expression
+(** [of_string s] parse the Spel expression [s]. *)
 
-val of_json :
-  Json_t.json ->
-  Json_spel_t.json_spel
-
-val of_text :
-  string ->
-  Spel_t.expression
+val of_text : string -> Spel_t.expression
+(** [of_text t] parse the text [t] as a string that can contain
+    embedded Spel expressions. *)
 
 (** {6 from OCaml types} *)
 
