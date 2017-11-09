@@ -28,6 +28,14 @@ val of_text : string -> Spel_t.expression
 (** [of_text t] parse the text [t] as a string that can contain
     embedded Spel expressions. *)
 
+(** {6 printers} *)
+
+val to_string : Spel_t.expression -> string
+(** [to_string e] pretty-print [e] in the Spel concret syntax. *)
+
+val to_text : Spel_t.expression -> string
+(** [to_text e] pretty-print [e] as a string embedding the expression e. *)
+
 (** {6 from OCaml types} *)
 
 val entity :

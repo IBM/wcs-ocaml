@@ -21,7 +21,6 @@ open Wcs_t
 type json_spel = Json_spel_t.json_spel
 
 
-
 (** {6 Builders} *)
 
 let null : json_spel = `Null
@@ -142,77 +141,3 @@ let set_string (ctx: json_spel) (lbl: string) (s: string) : json_spel =
    | ctx, Some (`String s) -> ctx, Some s
    | ctx, _ -> ctx, None
    end *)
-
-(** {6 Conversion of Wcs data structures to JSON} *)
-
-let of_workspace_response rsp =
-  of_json (Json.of_workspace_response rsp)
-
-let of_pagination_response rsp =
-  of_json (Json.of_pagination_response rsp)
-
-let of_list_workspaces_request req =
-  of_json (Json.of_list_workspaces_request req)
-
-let of_list_workspaces_response rsp =
-  of_json (Json.of_list_workspaces_response rsp)
-
-let of_intent_example x =
-  of_json (Json.of_intent_example x)
-
-let of_intent_def x =
-  of_json (Json.of_intent_def x)
-
-let of_entity_value x =
-  of_json (Json.of_entity_value x)
-
-let of_entity_def x =
-  of_json (Json.of_entity_def x)
-
-let of_next_step x =
-  of_json (Json.of_next_step x)
-
-let of_output_def x =
-  of_json (Json.of_output_def x)
-
-let of_dialog_node x =
-  of_json (Json.of_dialog_node x)
-
-let of_workspace x =
-  of_json (Json.of_workspace x)
-
-let of_input x =
-  of_json (Json.of_input x)
-
-let of_entity x =
-  of_json (Json.of_entity x)
-
-let of_output x =
-  of_json (Json.of_output x)
-
-let of_message_request x =
-  of_json (Json.of_message_request x)
-
-let of_message_response x =
-  of_json (Json.of_message_response x)
-
-let of_create_response x =
-  of_json (Json.of_create_response x)
-
-let of_get_workspace_request x =
-  of_json (Json.of_get_workspace_request x)
-
-let of_log_entry x =
-  of_json (Json.of_log_entry x)
-
-let of_action x =
-  of_json (Json.of_action x)
-
-let of_action_def x =
-  of_json (Json.of_action_def x)
-
-let of_logs_request x =
-  of_json (Json.of_logs_request x)
-
-let of_logs_response x =
-  of_json (Json.of_logs_response x)

@@ -20,73 +20,73 @@
 (** Conversion of Wcs data structures to JSON. *)
 
 let workspace_response rsp =
-  Yojson.Basic.pretty_to_string (Json.of_workspace_response rsp)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_workspace_response rsp)
 
 let pagination_response rsp =
-  Yojson.Basic.pretty_to_string (Json.of_pagination_response rsp)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_pagination_response rsp)
 
 let list_workspaces_request req =
-  Yojson.Basic.pretty_to_string (Json.of_list_workspaces_request req)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_list_workspaces_request req)
 
 let list_workspaces_response rsp =
-  Yojson.Basic.pretty_to_string (Json.of_list_workspaces_response rsp)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_list_workspaces_response rsp)
 
 let intent_example x =
-  Yojson.Basic.pretty_to_string (Json.of_intent_example x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_intent_example x)
 
 let intent_def x =
-  Yojson.Basic.pretty_to_string (Json.of_intent_def x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_intent_def x)
 
 let entity_value x =
-  Yojson.Basic.pretty_to_string (Json.of_entity_value x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_entity_value x)
 
 let entity_def x =
-  Yojson.Basic.pretty_to_string (Json.of_entity_def x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_entity_def x)
 
 let next_step x =
-  Yojson.Basic.pretty_to_string (Json.of_next_step x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_next_step x)
 
 let output_def x =
-  Yojson.Basic.pretty_to_string (Json.of_output_def x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_output_def x)
 
 let dialog_node x =
-  Yojson.Basic.pretty_to_string (Json.of_dialog_node x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_dialog_node x)
 
 let workspace x =
-  Yojson.Basic.pretty_to_string (Json.of_workspace x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_workspace x)
 
 let input x =
-  Yojson.Basic.pretty_to_string (Json.of_input x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_input x)
 
 let entity x =
-  Yojson.Basic.pretty_to_string (Json.of_entity x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_entity x)
 
 let output x =
-  Yojson.Basic.pretty_to_string (Json.of_output x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_output x)
 
 let message_request x =
-  Yojson.Basic.pretty_to_string (Json.of_message_request x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_message_request x)
 
 let message_response x =
-  Yojson.Basic.pretty_to_string (Json.of_message_response x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_message_response x)
 
 let create_response x =
-  Yojson.Basic.pretty_to_string (Json.of_create_response x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_create_response x)
 
 let get_workspace_request x =
-  Yojson.Basic.pretty_to_string (Json.of_get_workspace_request x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_get_workspace_request x)
 
 let log_entry x =
-  Yojson.Basic.pretty_to_string (Json.of_log_entry x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_log_entry x)
 
 let action x =
-  Yojson.Basic.pretty_to_string (Json.of_action x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_action x)
 
 let action_def x =
-  Yojson.Basic.pretty_to_string (Json.of_action_def x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_action_def x)
 
 let logs_request x =
-  Yojson.Basic.pretty_to_string (Json.of_logs_request x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_logs_request x)
 
 let logs_response x =
-  Yojson.Basic.pretty_to_string (Json.of_logs_response x)
+  Yojson.Basic.pretty_to_string (Wcs.json_of_logs_response x)

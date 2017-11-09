@@ -87,3 +87,4 @@ and expression_desc =
   (* Fallback *)
   | E_error of string
 
+type spel = expression

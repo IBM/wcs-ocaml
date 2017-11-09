@@ -418,7 +418,7 @@ let message_request
     msg_req_intents = intents;
     msg_req_output = output; }
 
-(** {6 Tree modifications} *)
+(** {6 Tree manipulation} *)
 
 let get_root tree
   : dialog_node option =
@@ -509,3 +509,153 @@ let add_tree
       tree
   in
   dialog_nodes @ tree
+
+(** {6 Json conversion} *)
+
+(** {8 Conversion of Wcs data structures to JSON} *)
+
+let json_of_workspace_response rsp =
+  Yojson.Basic.from_string (Wcs_j.string_of_workspace_response rsp)
+
+let json_of_pagination_response rsp =
+  Yojson.Basic.from_string (Wcs_j.string_of_pagination_response rsp)
+
+let json_of_list_workspaces_request req =
+  Yojson.Basic.from_string (Wcs_j.string_of_list_workspaces_request req)
+
+let json_of_list_workspaces_response rsp =
+  Yojson.Basic.from_string (Wcs_j.string_of_list_workspaces_response rsp)
+
+let json_of_intent_example x =
+  Yojson.Basic.from_string (Wcs_j.string_of_intent_example x)
+
+let json_of_intent_def x =
+  Yojson.Basic.from_string (Wcs_j.string_of_intent_def x)
+
+let json_of_entity_value x =
+  Yojson.Basic.from_string (Wcs_j.string_of_entity_value x)
+
+let json_of_entity_def x =
+  Yojson.Basic.from_string (Wcs_j.string_of_entity_def x)
+
+let json_of_next_step x =
+  Yojson.Basic.from_string (Wcs_j.string_of_next_step x)
+
+let json_of_output_def x =
+  Yojson.Basic.from_string (Wcs_j.string_of_output_def x)
+
+let json_of_dialog_node x =
+  Yojson.Basic.from_string (Wcs_j.string_of_dialog_node x)
+
+let json_of_workspace x =
+  Yojson.Basic.from_string (Wcs_j.string_of_workspace x)
+
+let json_of_input x =
+  Yojson.Basic.from_string (Wcs_j.string_of_input x)
+
+let json_of_entity x =
+  Yojson.Basic.from_string (Wcs_j.string_of_entity x)
+
+let json_of_output x =
+  Yojson.Basic.from_string (Wcs_j.string_of_output x)
+
+let json_of_message_request x =
+  Yojson.Basic.from_string (Wcs_j.string_of_message_request x)
+
+let json_of_message_response x =
+  Yojson.Basic.from_string (Wcs_j.string_of_message_response x)
+
+let json_of_create_response x =
+  Yojson.Basic.from_string (Wcs_j.string_of_create_response x)
+
+let json_of_get_workspace_request x =
+  Yojson.Basic.from_string (Wcs_j.string_of_get_workspace_request x)
+
+let json_of_log_entry x =
+  Yojson.Basic.from_string (Wcs_j.string_of_log_entry x)
+
+let json_of_action x =
+  Yojson.Basic.from_string (Wcs_j.string_of_action x)
+
+let json_of_action_def x =
+  Yojson.Basic.from_string (Wcs_j.string_of_action_def x)
+
+let json_of_logs_request x =
+  Yojson.Basic.from_string (Wcs_j.string_of_logs_request x)
+
+let json_of_logs_response x =
+  Yojson.Basic.from_string (Wcs_j.string_of_logs_response x)
+
+(** {8 Conversion of Wcs data structures to JSON with embedded Spel} *)
+
+let json_spel_of_workspace_response rsp =
+  Json_spel.of_json (json_of_workspace_response rsp)
+
+let json_spel_of_pagination_response rsp =
+  Json_spel.of_json (json_of_pagination_response rsp)
+
+let json_spel_of_list_workspaces_request req =
+  Json_spel.of_json (json_of_list_workspaces_request req)
+
+let json_spel_of_list_workspaces_response rsp =
+  Json_spel.of_json (json_of_list_workspaces_response rsp)
+
+let json_spel_of_intent_example x =
+  Json_spel.of_json (json_of_intent_example x)
+
+let json_spel_of_intent_def x =
+  Json_spel.of_json (json_of_intent_def x)
+
+let json_spel_of_entity_value x =
+  Json_spel.of_json (json_of_entity_value x)
+
+let json_spel_of_entity_def x =
+  Json_spel.of_json (json_of_entity_def x)
+
+let json_spel_of_next_step x =
+  Json_spel.of_json (json_of_next_step x)
+
+let json_spel_of_output_def x =
+  Json_spel.of_json (json_of_output_def x)
+
+let json_spel_of_dialog_node x =
+  Json_spel.of_json (json_of_dialog_node x)
+
+let json_spel_of_workspace x =
+  Json_spel.of_json (json_of_workspace x)
+
+let json_spel_of_input x =
+  Json_spel.of_json (json_of_input x)
+
+let json_spel_of_entity x =
+  Json_spel.of_json (json_of_entity x)
+
+let json_spel_of_output x =
+  Json_spel.of_json (json_of_output x)
+
+let json_spel_of_message_request x =
+  Json_spel.of_json (json_of_message_request x)
+
+let json_spel_of_message_response x =
+  Json_spel.of_json (json_of_message_response x)
+
+let json_spel_of_create_response x =
+  Json_spel.of_json (json_of_create_response x)
+
+let json_spel_of_get_workspace_request x =
+  Json_spel.of_json (json_of_get_workspace_request x)
+
+let json_spel_of_log_entry x =
+  Json_spel.of_json (json_of_log_entry x)
+
+let json_spel_of_action x =
+  Json_spel.of_json (json_of_action x)
+
+let json_spel_of_action_def x =
+  Json_spel.of_json (json_of_action_def x)
+
+let json_spel_of_logs_request x =
+  Json_spel.of_json (json_of_logs_request x)
+
+let json_spel_of_logs_response x =
+  Json_spel.of_json (json_of_logs_response x)

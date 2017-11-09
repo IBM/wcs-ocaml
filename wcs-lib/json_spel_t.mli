@@ -34,7 +34,7 @@ type json_spel = [
 
 (** {6 [json]/[json_spel] conversion}
     All these functions represents Spel expressions as string in the
-    concret syntax, not the AST as JSON.
+    concret syntax of Spel, not the AST as JSON.
 *)
 
 val yojson_of_json_spel : json_spel -> Json_t.basic
