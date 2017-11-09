@@ -40,16 +40,17 @@ let take_skip_user_input (ctx: json_spel) : json_spel * bool =
 
 let actions (acts: action list) : json_spel =
   Json_spel.assoc
-    [Context.actions_lbl, Json_spel.list (List.map Json_spel.of_action acts)]
+    [Context.actions_lbl,
+     Json_spel.list (List.map Wcs.json_spel_of_action acts)]
 
 let actions_def (acts: action_def list) : json_spel =
   Json_spel.assoc
     [Context.actions_lbl,
-     Json_spel.list (List.map Json_spel.of_action_def acts)]
+     Json_spel.list (List.map Wcs.json_spel_of_action_def acts)]
 
 
 let json_spel_of_action (act : action) : json_spel =
-  let json = Json.of_action act in
+  let json = Wcs.json_of_action act in
   let json_spel = Json_spel.of_json json in
   json_spel
 

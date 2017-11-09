@@ -21,6 +21,8 @@
 
 open Wcs_t
 
+(** {6 Builders} *)
+
 val list_workspaces_request :
   ?page_limit:int ->
   ?include_count:bool ->
@@ -176,7 +178,7 @@ val action :
   unit ->
   action
 
-(** {6. Message} *)
+(** {8 Message} *)
 
 val message_request :
   ?text:string ->
@@ -189,7 +191,7 @@ val message_request :
   unit ->
   message_request
 
-(** {6 Tree modification} *)
+(** {6 Tree manipulation} *)
 
 val add_tree:
   dialog_node list ->
@@ -204,9 +206,109 @@ val add_tree:
     sibling of the root of [subtree].
 *)
 
-(** {6 Tree access} *)
-
 val get_root : dialog_node list -> dialog_node option
 (** [get_root tree] return the root of the dialog tree [tree]. It
     returns [None] if the tree is empty.
 *)
+
+(** {6 Json conversion} *)
+
+(** {8 Conversion of Wcs data structures to JSON} *)
+
+val json_of_workspace_response : workspace_response -> json
+
+val json_of_pagination_response : pagination_response -> json
+
+val json_of_list_workspaces_request : list_workspaces_request -> json
+
+val json_of_list_workspaces_response : list_workspaces_response -> json
+
+val json_of_intent_example : intent_example -> json
+
+val json_of_intent_def : intent_def -> json
+
+val json_of_entity_value : entity_value -> json
+
+val json_of_entity_def : entity_def -> json
+
+val json_of_next_step : next_step -> json
+
+val json_of_output_def : output_def -> json
+
+val json_of_dialog_node : dialog_node -> json
+
+val json_of_workspace : workspace -> json
+
+val json_of_input : input -> json
+
+val json_of_entity : entity -> json
+
+val json_of_output : output -> json
+
+val json_of_message_request : message_request -> json
+
+val json_of_message_response : message_response -> json
+
+val json_of_create_response : create_response -> json
+
+val json_of_get_workspace_request : get_workspace_request -> json
+
+val json_of_action : action -> json
+
+val json_of_action_def : action_def -> json
+
+val json_of_log_entry : log_entry -> json
+
+val json_of_logs_request : logs_request -> json
+
+val json_of_logs_response : logs_response -> json
+
+(** {8 Conversion of Wcs data structures to JSON with embedded Spel} *)
+
+val json_spel_of_workspace_response : workspace_response -> json_spel
+
+val json_spel_of_pagination_response : pagination_response -> json_spel
+
+val json_spel_of_list_workspaces_request : list_workspaces_request -> json_spel
+
+val json_spel_of_list_workspaces_response : list_workspaces_response -> json_spel
+
+val json_spel_of_intent_example : intent_example -> json_spel
+
+val json_spel_of_intent_def : intent_def -> json_spel
+
+val json_spel_of_entity_value : entity_value -> json_spel
+
+val json_spel_of_entity_def : entity_def -> json_spel
+
+val json_spel_of_next_step : next_step -> json_spel
+
+val json_spel_of_output_def : output_def -> json_spel
+
+val json_spel_of_dialog_node : dialog_node -> json_spel
+
+val json_spel_of_workspace : workspace -> json_spel
+
+val json_spel_of_input : input -> json_spel
+
+val json_spel_of_entity : entity -> json_spel
+
+val json_spel_of_output : output -> json_spel
+
+val json_spel_of_message_request : message_request -> json_spel
+
+val json_spel_of_message_response : message_response -> json_spel
+
+val json_spel_of_create_response : create_response -> json_spel
+
+val json_spel_of_get_workspace_request : get_workspace_request -> json_spel
+
+val json_spel_of_action : action -> json_spel
+
+val json_spel_of_action_def : action_def -> json_spel
+
+val json_spel_of_log_entry : log_entry -> json_spel
+
+val json_spel_of_logs_request : logs_request -> json_spel
+
+val json_spel_of_logs_response : logs_response -> json_spel

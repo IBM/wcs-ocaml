@@ -29,6 +29,13 @@ let of_string s = Spel_parse.expr_from_string s
 
 let of_text s = Spel_parse.quoted_expr_from_string s
 
+(** {6 printers} *)
+
+let to_string = Spel_print.to_string
+
+let to_text = Spel_print.to_text
+
+
 (** {6 from OCaml types} *)
 
 let entity entity_def ?value () =

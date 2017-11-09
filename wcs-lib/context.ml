@@ -42,10 +42,10 @@ let take_skip_user_input (ctx: json) : json * bool =
 let actions_lbl = "actions"
 
 let actions (acts: action list) : json =
-  Json.assoc [actions_lbl, Json.list (List.map Json.of_action acts)]
+  Json.assoc [actions_lbl, Json.list (List.map Wcs.json_of_action acts)]
 
 let yojson_of_action (act : action) : json =
-  Json.of_action act
+  Wcs.json_of_action act
 
 let action_of_yojson (act : json) : action =
   Wcs_j.action_of_string (Yojson.Basic.to_string act)

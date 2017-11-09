@@ -180,7 +180,7 @@ let get wcs_cred =
            Wcs.get_workspace_request ?export:!get_export id
          in
          let ws = Wcs_api.get_workspace wcs_cred req in
-         (Json.of_workspace ws) :: acc)
+         (Wcs.json_of_workspace ws) :: acc)
       [] !get_ws_ids
   in
   begin match workspaces with

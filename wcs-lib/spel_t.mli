@@ -20,7 +20,9 @@
 
 type location = Lexing.position * Lexing.position
 
-(** {6 atomic types} *)
+(** {6 Spel AST} *)
+
+(** atomic types *)
 type spel_type =
   | T_string
   | T_int
@@ -28,7 +30,7 @@ type spel_type =
   | T_boolean
   | T_object
 
-(** {6 literals} *)
+(** literals *)
 type literal =
   | L_string of string
   | L_int of int
@@ -36,7 +38,7 @@ type literal =
   | L_boolean of bool
   | L_null
 
-(** {6 operators} *)
+(** operators *)
 type op =
   | Op_eq
   | Op_ne
@@ -56,7 +58,7 @@ type op =
   | Op_concat
   | Op_toString
 
-(** {6 expressions} *)
+(** expressions *)
 type expression =
   { expr_desc : expression_desc;
     expr_loc : location;
@@ -89,4 +91,6 @@ and expression_desc =
   (* Fallback *)
   | E_error of string
 
+
+type spel = expression
 
