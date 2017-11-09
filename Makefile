@@ -32,6 +32,10 @@ webdoc: doc
 	cp -rf _build/default/_doc/ docs/
 	rm -f docs/index.html
 
+indent:
+	@find . \( -name '*.ml' -exec ocp-indent -i \{\} + \)
+	@find . \( -name '*.mli' -exec ocp-indent -i \{\} + \)
+
 install:
 	$(JBUILDER) install
 
