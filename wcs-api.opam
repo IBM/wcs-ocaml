@@ -1,6 +1,6 @@
 opam-version: "1.2"
 name: "wcs-api"
-version: "2017-05-26.02-dev"
+version: "2017-05-26.02"
 maintainer: [
   "Louis Mandel <lmandel@us.ibm.com>"
 ]
@@ -21,7 +21,7 @@ build: [
 build-test: [ ["jbuilder" "runtest"] ]
 
 depends: [
-  "wcs-lib" {= "2017-05-26.02-dev"}
+  "wcs-lib" {= "2017-05-26.02"}
   ("lwt_ssl" | "tls")
   "cohttp-lwt-unix"
 ]
