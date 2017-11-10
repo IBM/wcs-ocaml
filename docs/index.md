@@ -50,7 +50,7 @@ opam install wcs-api
 In order to illustrate the use of wcs-ocaml, we are going to program a
 bot that tells a knock knock joke.
 
-Let's start to create a dialog node that says `"Knock knock"`:
+Let's start with a dialog node that says `"Knock knock"`:
 
 ```ocaml
 let knock =
@@ -69,7 +69,8 @@ that corresponds to a JSON object of type
 in WCS.
 
 The user is expected to ask _who is there?_. To capture this intent
-but not match exactly on this input, we can define a WCS intent with some examples to train the Natural Language Understanding component of WCS:
+without looking for an exact match, we can define a WCS intent using
+multiple examples to train the NLU:
 
 ```ocaml
 let who_intent =
@@ -82,8 +83,8 @@ let who_intent =
     ()
 ```
 
-So, we can know define the next node in the conversation that is going
-to respond to the _who is there?_ question:
+We can now define the next step of the dialog, answering the question
+_who is there?_:
 
 ```ocaml
 let whoisthere =
@@ -94,24 +95,24 @@ let whoisthere =
     ()
 ```
 
-We can notice that here the condition is not given as a string but as
-an expression written using the embedding of the Spel expression
-language (used by WCS) inside OCaml.
+The condition is not a string but an expression written using the
+embedding of the Spel expression language (used by WCS) in OCaml.
 
-In the rest of the conversation the user is expected to repeat the
-name of the character given by the bot. To be sure that the user
-repeat the name, we are going to define an entity `char_entity`
-containing the name or some synonyms:
+We now expect the user to repeat the name of the character mentioned
+by the bot.  To test that the user input matches the same character,
+we define an entity `char_entity` containing the name and a list of
+synonyms.
 
 ```ocaml
 let char_entity =
-  Wcs.entity "Characters"
+  Wcs.entity "Character"
     ~values: [ "Broken Pencil", ["Dammaged Pen"; "Fractured Pencil"] ]
     ()
 ```
 
-If the input given by the user contains the name of the character, then
-the bot terminates the joke:
+The bot terminates the joke if the input given by the user matches the
+name of the character. Setting a `return` field in the context triggers
+the termination of the bot.
 
 ```ocaml
 let answer =
@@ -123,15 +124,16 @@ let answer =
     ()
 ```
 
-Setting a `return` field in the context will case the termination of
-the bot. If the user doesn't gives the name of the character, we want
-to tell the user what to do. So we add a fallback node:
+
+
+If the user doesn't gives the name of the character, the bot can help
+with a generic answer using a fallback node:
 
 ```ocaml
 let fallback =
   Wcs.dialog_node "Fallback"
     ~conditions_spel: Spel.anything_else
-    ~text: "You should repreat my name!"
+    ~text: "You should repeat my name!"
     ~previous_sibling: answer
     ~next_step: (whoisthere, Wcs_aux.Goto_body)
     ()
@@ -155,16 +157,18 @@ It is possible to print this workspace:
 let () = print_endline (Wcs_pretty.workspace ws_knockknock)
 ```
 
-But it is also possible to deploy the workspace on WCS directly from
-OCaml. For that, the library needs the service credentials:
+It is also possible to directly deploy the workspace on WCS. The
+deployment requires the service credentials:
 
 ```ocaml
 let wcs_cred = Wcs_bot.get_credential None
 ```
 
-The call to this function [`Wcs_bot.get_credential`](XXX TODO XXX) is
-going lookup in the environment variable `$WCS_CRED` to find a path to
-a file name containing the service credentials in the following format:
+The function
+[Wcs_bot.get_credential](https://ibm.github.io/wcs-ocaml/wcs-api/Wcs_bot/index.html#val-get_credential)
+retrieves the path stored in the environment variable `WCS_CRED` to
+find a file containing the service credentials in the following
+format:
 
 ```js
 {
@@ -174,14 +178,18 @@ a file name containing the service credentials in the following format:
 }
 ```
 
-Now, with the service credentials, we can deploy the workspace on WCS:
+
+
+We can now deploy the workspace on WCS:
 
 ```ocaml
 let create_rsp = Wcs_api.create_workspace wcs_cred ws_knockknock
 ```
 
-Finally, we can try the bot with the function [`Wcs_bot.exec`](XXX TODO XXX)
- and providing the workspace identifier that has just been created:
+Finally, we can try the bot with the function
+[Wcs_bot.exec](https://ibm.github.io/wcs-ocaml/wcs-api/Wcs_bot/index.html#val-exec)
+providing the credentials and the workspace identifier that has just
+been created:
 
 ```ocaml
 let _ =
@@ -192,8 +200,8 @@ let _ =
   end
 ```
 
-To be compiled, this program needs to be linked to the `wcs-lib` and
-`wcs-api` libraries. Using `ocamlfind`, it can be done as follows:
+To compile this program, we need to link the libraries `wcs-lib` and
+`wcs-api`. Using `ocamlfind` the command is:
 
 ```
 ocamlfind ocamlc -linkpkg -package wcs-lib -package wcs-api knockknock.ml

@@ -103,7 +103,7 @@ git push
 ```
 git checkout -b wcs-XXXX-XX-XX.XX
 ```
-  - Create the new packages from the new packages from the old ones:
+  - Create the new packages from the old ones:
 ```
 cp -R packages/wcs-lib/wcs-lib.YYYY-YY-YY.YY packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX
 cp -R packages/wcs-lib/wcs-api.YYYY-YY-YY.YY packages/wcs-api/wcs-api.XXXX-XX-XX.XX
