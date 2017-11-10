@@ -135,7 +135,7 @@ let fallback =
     ~conditions_spel: Spel.anything_else
     ~text: "You should repeat my name!"
     ~previous_sibling: answer
-    ~next_step: (whoisthere, Wcs_aux.Goto_body)
+    ~next_step: (whoisthere, Wcs_t.Goto_body)
     ()
 ```
 

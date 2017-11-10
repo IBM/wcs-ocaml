@@ -16,7 +16,7 @@
  * limitations under the License.
  *)
 
-open Wcs_aux
+open Wcs_t
 open Wcs
 open Cnl_util
 
