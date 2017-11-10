@@ -42,20 +42,23 @@ let knockknock who_intent char_entity answer =
   let knock =
     Wcs.dialog_node "Knock"
       ~conditions_spel: (Spel.bool true)
-      ~text: "Knock knock" ()
+      ~text: "Knock knock"
+      ()
   in
   let whoisthere =
     Wcs.dialog_node "WhoIsThere"
       ~conditions_spel: (Spel.intent who_intent)
       ~text: (entity_value char_entity)
-      ~parent: knock ()
+      ~parent: knock
+      ()
   in
   let answer =
     Wcs.dialog_node "Answer"
       ~conditions_spel: (Spel.entity char_entity ())
       ~text: answer
       ~parent: whoisthere
-      ~context: (`Assoc ["return", `Bool true]) ()
+      ~context: (`Assoc ["return", `Bool true])
+      ()
   in
   [ knock; whoisthere; answer ]
 

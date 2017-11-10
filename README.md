@@ -11,7 +11,7 @@ wcs-ocaml is a source development kit in OCaml and command line interface for
 * `wcs` is a command line tool that interact with the service.
 
 The documentation is available [online](https://ibm.github.io/wcs-ocaml/) or in
-the directory (docs)[./docs].
+the directory [docs](./docs).
 
 # Install
 
@@ -91,7 +91,7 @@ grep -r -e '\d\d\d\d-\d\d-\d\d.\d\d-dev' .
 4. Create a new release on the github interface:
    https://github.com/IBM/wcs-ocaml/releases
 
-5 Create a new release of the opam packages.
+5. Create a new release of the opam packages.
   - Create or update the fork of https://github.com/ocaml/opam-repository
 ```
 git checkout master
@@ -128,7 +128,7 @@ git push origin wcs-XXXX-XX-XX.XX
   - Create a pull request from the github interface:
 	https://github.com/ocaml/opam-repository
 
-6 Once the pull request is accepted update the version number.
+6. Once the pull request is accepted update the version number.
 
 # Contribute
 
