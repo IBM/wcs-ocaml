@@ -72,8 +72,66 @@ To compile, do:
 make
 ```
 
+# Make a new release
+
+In order to do a new release, we have to do the following steps.
+
+1. Make sure that the documentation is up to date:
+```
+make webdoc
+```
+
+2. Search and update the version number:
+```
+grep -r -e '\d\d\d\d-\d\d-\d\d.\d\d-dev' .
+```
+
+3. Update the `CHANGES.md` file.
+
+4. Create a new release on the github interface:
+   https://github.com/IBM/wcs-ocaml/releases
+
+5 Create a new release of the opam packages.
+  - Create or update the fork of https://github.com/ocaml/opam-repository
+```
+git checkout master
+git fetch --all
+git merge --ff-only upstream/master
+git push
+```
+  - Create a new branch
+```
+git checkout -b wcs-XXXX-XX-XX.XX
+```
+  - Create the new packages from the new packages from the old ones:
+```
+cp -R packages/wcs-lib/wcs-lib.YYYY-YY-YY.YY packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX
+cp -R packages/wcs-lib/wcs-api.YYYY-YY-YY.YY packages/wcs-api/wcs-api.XXXX-XX-XX.XX
+cp -R packages/wcs-lib/wcs.YYYY-YY-YY.YY packages/wcs/wcs.XXXX-XX-XX.XX
+```
+  - Update the `opam` files:
+```
+cp WCS_OCAML_DIR/wcs-lib.opam packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/opam
+cp WCS_OCAML_DIR/wcs-api.opam packages/wcs-api/wcs-api.XXXX-XX-XX.XX/opam
+cp WCS_OCAML_DIR/wcs.opam packages/wcs/wcs.XXXX-XX-XX.XX/opam
+```
+  - Update the `url` files
+```
+emacs packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/url
+cp packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/url packages/wcs-lib/wcs-api.XXXX-XX-XX.XX/url
+cp packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/url packages/wcs-lib/wcs-api.XXXX-XX-XX.XX/url
+```
+  - Commit and push the changes
+```
+git push origin wcs-XXXX-XX-XX.XX
+```
+  - Create a pull request from the github interface:
+	https://github.com/ocaml/opam-repository
+
+6 Once the pull request is accepted update the version number.
 
 # Contribute
 
 Contributions and bug reports are welcome!
 To contribute please follows the instructions given in the file (CONTRIBUTING.md)[./CONTRIBUTING.md].
+
