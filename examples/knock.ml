@@ -17,7 +17,6 @@
  *)
 
 open Wcs_t
-module Mk = Wcs
 
 let who_intent =
   Wcs.intent "Who"
