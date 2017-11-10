@@ -17,7 +17,6 @@
  *)
 
 open Wcs_t
-open Wcs_aux
 open Wcs
 
 let omap f o =

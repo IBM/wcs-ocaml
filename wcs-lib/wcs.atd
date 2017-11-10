@@ -133,16 +133,12 @@ type entity_def = {
   } <ocaml field_prefix="e_def_">
 <doc text="Type of entity definitions.">
 
-(* type selector = [ *)
-(*   | Goto_user_input <json name="user_input"> *)
-(*   | Goto_condition <json name="condition"> *)
-(*   | Goto_body <json name="body"> *)
-(* ] <ocaml repr="classic"> *)
-(* <doc text="Goto selector."> *)
-
-type selector = string wrap <ocaml t="Wcs_aux.selector"
-                                   wrap="Wcs_aux.selector_wrap"
-                                   unwrap="Wcs_aux.selector_unwrap">
+type selector = [
+  | Goto_user_input <json name="user_input">
+  | Goto_client <json name="client">
+  | Goto_condition <json name="condition">
+  | Goto_body <json name="body">
+] <ocaml repr="classic">
 <doc text="Goto selector.">
 
 type next_step = {

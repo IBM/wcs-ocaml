@@ -27,7 +27,6 @@
 (install
   ((section lib)
    (files   (json_t.rzi
-	     wcs_aux.rzi
 	     spel_t.rzi
 	     json_spel_t.rzi
 	     wcs_t.rzi))
@@ -45,17 +44,12 @@
 
 (rule
  ((targets (wcs_t.rzi))
-  (deps    (wcs_t.mli json_t.rzi wcs_aux.rzi))
+  (deps    (wcs_t.mli json_t.rzi))
   (action  (run rmlc -c ${<}))))
 
 (rule
  ((targets (json_t.rzi))
   (deps    (json_t.rmli))
-  (action  (run rmlc -c ${<}))))
-
-(rule
- ((targets (wcs_aux.rzi))
-  (deps    (wcs_aux.mli))
   (action  (run rmlc -c ${<}))))
 
 (rule

@@ -16,8 +16,8 @@
  * limitations under the License.
  *)
 
+open Wcs_t
 open Wcs
-open Wcs_aux
 
 let entities = [
   entity "rule_part"
