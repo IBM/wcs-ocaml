@@ -21,7 +21,7 @@
   (public_name wcs-lib)
   (wrapped false)
   (synopsis "Watson Conversation Service Library")
-  (libraries (atdgen sedlex menhirlib))
+  (libraries (atdgen sedlex menhirLib))
   (preprocess (pps (sedlex.ppx)))))
 
 (install
