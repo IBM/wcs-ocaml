@@ -57,7 +57,7 @@ let knock =
   Wcs.dialog_node "Knock"
     ~conditions: "true"
     ~text: "Knock knock"
-	()
+    ()
 ```
 
 The function

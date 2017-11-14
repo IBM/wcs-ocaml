@@ -106,8 +106,8 @@ git checkout -b wcs-XXXX-XX-XX.XX
   - Create the new packages from the old ones:
 ```
 cp -R packages/wcs-lib/wcs-lib.YYYY-YY-YY.YY packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX
-cp -R packages/wcs-lib/wcs-api.YYYY-YY-YY.YY packages/wcs-api/wcs-api.XXXX-XX-XX.XX
-cp -R packages/wcs-lib/wcs.YYYY-YY-YY.YY packages/wcs/wcs.XXXX-XX-XX.XX
+cp -R packages/wcs-api/wcs-api.YYYY-YY-YY.YY packages/wcs-api/wcs-api.XXXX-XX-XX.XX
+cp -R packages/wcs/wcs.YYYY-YY-YY.YY packages/wcs/wcs.XXXX-XX-XX.XX
 ```
   - Update the `opam` files:
 ```
@@ -118,8 +118,8 @@ cp WCS_OCAML_DIR/wcs.opam packages/wcs/wcs.XXXX-XX-XX.XX/opam
   - Update the `url` files
 ```
 emacs packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/url
-cp packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/url packages/wcs-lib/wcs-api.XXXX-XX-XX.XX/url
-cp packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/url packages/wcs-lib/wcs-api.XXXX-XX-XX.XX/url
+cp packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/url packages/wcs-api/wcs-api.XXXX-XX-XX.XX/url
+cp packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/url packages/wcs/wcs.XXXX-XX-XX.XX/url
 ```
   - Commit and push the changes
 ```
