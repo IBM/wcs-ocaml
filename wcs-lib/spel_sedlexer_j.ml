@@ -95,7 +95,7 @@ let rec token sbuff lexbuf =
   | "$" -> VAR (colon_ident sbuff lexbuf)
   | ident ->
       let s = Sedlexing.Utf8.lexeme buf in
-      begin try Hashtbl.find keyword_table (String.lowercase_ascii s)
+      begin try Hashtbl.find keyword_table (String.lowercase s)[@ocaml.warning "-3"]
       with Not_found -> IDENT s
       end
   | "?>" -> reset_string sbuff; CLOSEEXPR
