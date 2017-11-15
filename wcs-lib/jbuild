@@ -44,7 +44,7 @@
 
 (rule
  ((targets (wcs_t.rzi))
-  (deps    (wcs_t.mli json_t.rzi))
+  (deps    (wcs_t.mli json_t.rzi json_spel_t.rzi))
   (action  (run rmlc -c ${<}))))
 
 (rule
