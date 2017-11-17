@@ -18,12 +18,12 @@ build: [
   ["jbuilder" "subst" "-p" name "--name" name] {pinned}
   ["jbuilder" "build" "-p" name "-j" jobs]
 ]
-build-test: [ ["jbuilder" "runtest"] ]
 
 depends: [
-  "ocamlfind"
-  "jbuilder"
-  "atdgen"
+  "jbuilder" {build}
+  "ocaml-migrate-parsetree" {build}
+  "atdgen" {build}
+  "atd"
   "sedlex"
   "menhir"
   "rml"
