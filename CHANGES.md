@@ -1,3 +1,6 @@
+### 2017-05-26.03-dev (XXXX-XX-XX)
+* Switch to cohttp version 1.0.
+
 ### 2017-05-26.02 (2017-11-10)
 * Add support for SPEL expressions.
 * Reorganize modules.
