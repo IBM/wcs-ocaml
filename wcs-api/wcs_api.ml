@@ -76,11 +76,11 @@ let post wcs_cred method_ req =
     let h = Cohttp.Header.add h "Content-Type" "application/json" in
     h
   in
-  let data = ((Cohttp.Body.of_string req) :> Cohttp_lwt_body.t) in
+  let data = ((Cohttp.Body.of_string req) :> Cohttp_lwt.Body.t) in
   let call =
     Cohttp_lwt_unix.Client.post ~body:data ~headers uri >>= (fun (resp, body) ->
       let code = resp |> Cohttp.Response.status |> Cohttp.Code.code_of_status in
-      body |> Cohttp_lwt_body.to_string >|= (fun body ->
+      body |> Cohttp_lwt.Body.to_string >|= (fun body ->
         begin match code with
         | 200 | 201 -> body
         | _ ->
@@ -105,7 +105,7 @@ let get wcs_cred method_ params =
   let call =
     Cohttp_lwt_unix.Client.get ~headers uri >>= (fun (resp, body) ->
       let code = resp |> Cohttp.Response.status |> Cohttp.Code.code_of_status in
-      body |> Cohttp_lwt_body.to_string >|= (fun body ->
+      body |> Cohttp_lwt.Body.to_string >|= (fun body ->
         begin match code with
         | 200 -> body
         | _ ->
@@ -131,7 +131,7 @@ let delete wcs_cred method_ =
   let call =
     Cohttp_lwt_unix.Client.delete ~headers uri >>= (fun (resp, body) ->
       let code = resp |> Cohttp.Response.status |> Cohttp.Code.code_of_status in
-      body |> Cohttp_lwt_body.to_string >|= (fun body ->
+      body |> Cohttp_lwt.Body.to_string >|= (fun body ->
         begin match code with
         | 200 | 201 -> body
         | _ ->
