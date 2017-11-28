@@ -18,7 +18,7 @@
 
 (executables
  ((names (example knock knock_spel fact))
-  (libraries (wcs-lib wcs-api))))
+  (libraries (wcs-lib wcs-api-unix))))
 
 (alias
  ((name   runtest)
