@@ -22,8 +22,7 @@ build-test: [ ["jbuilder" "runtest" "-p" name] ]
 
 depends: [
   "wcs-lib" {= "2017-05-26.03-dev"}
-  ("lwt_ssl" | "tls")
-  "cohttp-lwt-unix"
+  "cohttp-lwt"
 ]
 available: [
   ocaml-version >= "4.03.0"

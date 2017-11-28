@@ -25,16 +25,5 @@
 
 (install
   ((section lib)
-   (files   (wcs_api.rzi
-	     wcs_bot.rzi))
+   (files   ())
    (package wcs-lib)))
-
-(rule
- ((targets (wcs_bot.rzi))
-  (deps    (wcs_bot.rmli ../wcs-lib/wcs_t.rzi))
-  (action  (run rmlc -I ../wcs-lib -c ${<}))))
-
-(rule
- ((targets (wcs_api.rzi))
-  (deps    (wcs_api.mli ../wcs-lib/wcs_t.rzi))
-  (action  (run rmlc -I ../wcs-lib -c ${<}))))

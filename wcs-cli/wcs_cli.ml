@@ -45,7 +45,7 @@ let set_debug () =
   Log.debug_message := true
 
 let print_version () =
-  Format.printf "Watson Conversation Service API %s@." Wcs_api.version
+  Format.printf "Watson Conversation Service API %s@." Wcs_api_unix.version
 
 let speclist =
   [ "-wcs-cred", Arg.String set_wcs_credential,
@@ -141,7 +141,7 @@ let main () =
   Arg.parse (Arg.align speclist) anon_args usage;
   let wcs_credential =
     begin try
-      Wcs_bot.get_credential !wcs_cred
+      Wcs_bot_unix.get_credential !wcs_cred
     with Log.Error (_, msg) ->
       Arg.usage speclist
         (msg ^
