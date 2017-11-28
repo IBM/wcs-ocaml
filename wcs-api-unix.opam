@@ -24,7 +24,7 @@ depends: [
   "wcs-lib" {= "2017-05-26.03-dev"}
   "wcs-api" {= "2017-05-26.03-dev"}
   ("lwt_ssl" | "tls")
-  "cohttp-lwt-unix"
+  "cohttp-lwt-unix" {>= "1.0.0"}
 ]
 available: [
   ocaml-version >= "4.03.0"
