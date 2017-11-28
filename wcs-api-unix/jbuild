@@ -16,8 +16,25 @@
 
 (jbuild_version 1)
 
-(executable
- ((name wcs_cli)
-  (public_name wcs)
-  (package wcs)
-  (libraries (wcs-lib wcs-api-unix))))
+(library
+ ((name        wcs_api_unix)
+  (public_name wcs-api-unix)
+  (wrapped false)
+  (synopsis "Watson Conversation Service rest calls")
+  (libraries (wcs-lib wcs-api cohttp.lwt))))
+
+(install
+  ((section lib)
+   (files   (wcs_api_unix.rzi
+	     wcs_bot_unix.rzi))
+   (package wcs-lib)))
+
+(rule
+ ((targets (wcs_bot_unix.rzi))
+  (deps    (wcs_bot_unix.rmli ../wcs-lib/wcs_t.rzi wcs_api_unix.rzi))
+  (action  (run rmlc -I ../wcs-lib -c ${<}))))
+
+(rule
+ ((targets (wcs_api_unix.rzi))
+  (deps    (wcs_api_unix.mli ../wcs-lib/wcs_t.rzi))
+  (action  (run rmlc -I ../wcs-lib -c ${<}))))

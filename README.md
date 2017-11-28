@@ -22,9 +22,10 @@ You can install wcs-ocaml with the following command:
 opam install wcs
 ```
 
-This will install the three main packages:
+This will install the four main packages:
 - wcs-lib,
-- wcs-api, and,
+- wcs-api,
+- wcs-api-unix and,
 - wcs
 
 
@@ -36,6 +37,7 @@ So, from this directory, do:
 ```
 opam pin add wcs-lib .
 opam pin add wcs-api .
+opam pin add wcs-api-unix .
 opam pin add wcs .
 ```
 
