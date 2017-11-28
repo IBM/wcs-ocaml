@@ -8,8 +8,8 @@ wcs-ocaml is a source development kit in OCaml and command line interface for
 * `wcs-api` offers an OCaml binding to the
   [service API](https://www.ibm.com/watson/developercloud/conversation/api/v1/)
   and a generic client application. This package has two instantiations:
-  - `wcs-api-unix` build on top of Unix communication primitives
-  - `wcs-api-jsoo` build on top of Http communication primitives
+  - `wcs-api-unix` build on top of Unix communication primitives;
+  - `wcs-api-jsoo` build on top of Http communication primitives.
 * `wcs` is a command line tool that interact with the service.
 
 The documentation is available [online](https://ibm.github.io/wcs-ocaml/) or in
@@ -21,7 +21,7 @@ the directory [docs](./docs).
 
 You can install wcs-ocaml with the following command:
 ```
-opam install wcs
+opam install wcs wcs-api-jsoo
 ```
 
 This will install the four main packages:

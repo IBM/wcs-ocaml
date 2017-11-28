@@ -7,13 +7,17 @@ wcs-ocaml is a source development kit in OCaml and command line interface for
   workspaces.
 * `wcs-api` offers an OCaml binding to the
   [service API](https://www.ibm.com/watson/developercloud/conversation/api/v1/)
-  and a generic client application.
+  and a generic client application. This package has two instantiations:
+  - `wcs-api-unix` build on top of Unix communication primitives;
+  - `wcs-api-jsoo` build on top of Http communication primitives.
 * `wcs` is a command line tool that interact with the service.
 
 The documentation of the packages is defined in the interface of the modules
 and  available online:
 * [`wcs-lib`](wcs-lib)
 * [`wcs-api`](wcs-api)
+* [`wcs-api-unix`](wcs-api-unix)
+* [`wcs-api-jsoo`](wcs-api-jsoo)
 
 The `wcs` command line tool allows to do operations like listing the workspaces,
 uploading or updating workspaces. The full documentation if avaible with the
@@ -30,9 +34,10 @@ Then you can install wcs-ocaml with the following command:
 opam install wcs
 ```
 
-This will install the three main packages:
+This will install the main packages:
 - `wcs-lib`,
-- `wcs-api`, and,
+- `wcs-api`,
+- `wcs-api-unix` and,
 - `wcs`
 
 Alternatively, you can only install the WCS SDK:
@@ -161,11 +166,11 @@ It is also possible to directly deploy the workspace on WCS. The
 deployment requires the service credentials:
 
 ```ocaml
-let wcs_cred = Wcs_bot.get_credential None
+let wcs_cred = Wcs_bot_unix.get_credential None
 ```
 
 The function
-[Wcs_bot.get_credential](https://ibm.github.io/wcs-ocaml/wcs-api/Wcs_bot/index.html#val-get_credential)
+[Wcs_bot_unix.get_credential](https://ibm.github.io/wcs-ocaml/wcs-api/Wcs_bot_unix/index.html#val-get_credential)
 retrieves the path stored in the environment variable `WCS_CRED` to
 find a file containing the service credentials in the following
 format:
@@ -183,11 +188,11 @@ format:
 We can now deploy the workspace on WCS:
 
 ```ocaml
-let create_rsp = Wcs_api.create_workspace wcs_cred ws_knockknock
+let create_rsp = Wcs_api_unix.create_workspace wcs_cred ws_knockknock
 ```
 
 Finally, we can try the bot with the function
-[Wcs_bot.exec](https://ibm.github.io/wcs-ocaml/wcs-api/Wcs_bot/index.html#val-exec)
+[Wcs_bot_unix.exec](https://ibm.github.io/wcs-ocaml/wcs-api/Wcs_bot_unix/index.html#val-exec)
 providing the credentials and the workspace identifier that has just
 been created:
 
@@ -195,7 +200,7 @@ been created:
 let _ =
   begin match create_rsp with
   | { Wcs_t.crea_rsp_workspace_id = Some id } ->
-    Wcs_bot.exec wcs_cred id Json.null ""
+    Wcs_bot_unix.exec wcs_cred id Json.null ""
   | _  -> failwith "Deployment error"
   end
 ```
@@ -204,5 +209,5 @@ To compile this program, we need to link the libraries `wcs-lib` and
 `wcs-api`. Using `ocamlfind` the command is:
 
 ```
-ocamlfind ocamlc -linkpkg -package wcs-lib -package wcs-api knockknock.ml
+ocamlfind ocamlc -linkpkg -package wcs-api-unix knockknock.ml
 ```
