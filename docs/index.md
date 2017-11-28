@@ -45,7 +45,7 @@ or the WCS API (which will also install `wcs-lib`):
 opam install wcs-api
 ```
 
-# Example
+## Tutorial
 
 In order to illustrate the use of wcs-ocaml, we are going to program a
 bot that tells a knock knock joke.
