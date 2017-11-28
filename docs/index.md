@@ -106,7 +106,7 @@ synonyms.
 ```ocaml
 let char_entity =
   Wcs.entity "Character"
-    ~values: [ "Broken Pencil", ["Dammaged Pen"; "Fractured Pencil"] ]
+    ~values: [ "Broken Pencil", ["Damaged Pen"; "Fractured Pencil"] ]
     ()
 ```
 
