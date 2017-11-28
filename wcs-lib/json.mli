@@ -89,7 +89,7 @@ val pop : json -> string -> json * json option
 *)
 
 
-(** {6 Settes and getters} *)
+(** {6 Setters and getters} *)
 
 (** {8 Boolean fields} *)
 
