@@ -120,7 +120,7 @@ let pop (ctx: json) (lbl: string) : json * json option =
   end
 
 
-(** {6 Settes and getters} *)
+(** {6 Setters and getters} *)
 
 (** {8 Bool} *)
 
