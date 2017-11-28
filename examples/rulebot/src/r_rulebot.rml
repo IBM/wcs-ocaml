@@ -95,13 +95,13 @@ let () =
   in
   begin match !Rulebot_main.rulebot_mode with
   | Rulebot_main.M_bot ->
-      let wcs_cred = Wcs_bot.get_credential !Rulebot_main.wcs_credential in
+      let wcs_cred = Wcs_bot_unix.get_credential !Rulebot_main.wcs_credential in
       run rulebot wcs_cred bmd
   | Rulebot_main.M_nothing->
       Arg.usage Rulebot_main.args Rulebot_main.usage
   | Rulebot_main.M_ws_gen ->
       Rulebot_main.workspaces_generation bmd
   | Rulebot_main.M_ws_delete ->
-      let wcs_cred = Wcs_bot.get_credential !Rulebot_main.wcs_credential in
+      let wcs_cred = Wcs_bot_unix.get_credential !Rulebot_main.wcs_credential in
       Rulebot_main.workspaces_delete wcs_cred
   end

@@ -92,7 +92,7 @@ let process get_value wcs_cred
               msg_req_output = None; }
         in
         let resp =
-          Wcs_api.message wcs_cred workspace_id req_msg
+          Wcs_api_unix.message wcs_cred workspace_id req_msg
         in
         (* debug_message req_msg resp; *)
         emit_resp computer_output resp;
