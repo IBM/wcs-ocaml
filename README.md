@@ -41,6 +41,7 @@ So, from this directory, do:
 opam pin add wcs-lib .
 opam pin add wcs-api .
 opam pin add wcs-api-unix .
+opam pin add wcs-api-jsoo .
 opam pin add wcs .
 ```
 

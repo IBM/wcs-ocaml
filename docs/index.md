@@ -123,7 +123,7 @@ the termination of the bot.
 let answer =
   Wcs.dialog_node "Answer"
     ~conditions_spel: (Spel.entity char_entity ())
-    ~text: "Nevermind it's pointless"
+    ~text: "Never mind it's pointless"
     ~parent: whoisthere
     ~context: (Context.return (Json.bool true))
     ()
