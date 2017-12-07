@@ -16,6 +16,9 @@
  * limitations under the License.
  *)
 
+open Wcs_lib
+open Wcs_api_unix
+
 open Dialog_interface_t
 open Cnl_t
 open Wcs_t
@@ -92,7 +95,7 @@ let process get_value wcs_cred
               msg_req_output = None; }
         in
         let resp =
-          Wcs_api_unix.message wcs_cred workspace_id req_msg
+          Wcs_call_unix.message wcs_cred workspace_id req_msg
         in
         (* debug_message req_msg resp; *)
         emit_resp computer_output resp;

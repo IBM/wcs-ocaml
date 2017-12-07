@@ -16,6 +16,7 @@
  * limitations under the License.
  *)
 
+open Wcs_lib
 open Wcs_t
 open Cnl_t
 open Call_t

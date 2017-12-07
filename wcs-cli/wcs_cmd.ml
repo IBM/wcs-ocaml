@@ -17,6 +17,8 @@
  *)
 
 
+open Wcs_lib
+open Wcs_api_unix
 open Wcs_t
 
 (** {6. The [list] command} *)
@@ -74,7 +76,7 @@ let list wcs_cred =
       ?cursor:!list_cursor
       ()
   in
-  let rsp = Wcs_api_unix.list_workspaces wcs_cred req in
+  let rsp = Wcs_call_unix.list_workspaces wcs_cred req in
   begin match !list_short with
   | false ->
       Format.printf "%s@." (Wcs_pretty.list_workspaces_response rsp)
@@ -112,7 +114,7 @@ let create wcs_cred =
        let ws =
          Json.read_json_file Wcs_j.read_workspace fname
        in
-       let rsp = Wcs_api_unix.create_workspace wcs_cred ws in
+       let rsp = Wcs_call_unix.create_workspace wcs_cred ws in
        let name =
          begin match rsp.crea_rsp_name with
          | Some name -> name
@@ -147,7 +149,7 @@ let delete_usage cmd_name =
 let delete wcs_cred =
   List.iter
     (fun id ->
-       Wcs_api_unix.delete_workspace wcs_cred id;
+       Wcs_call_unix.delete_workspace wcs_cred id;
        Format.printf "Workspace %s deleted@." id)
     !delete_ws_ids
 
@@ -179,7 +181,7 @@ let get wcs_cred =
          let req =
            Wcs.get_workspace_request ?export:!get_export id
          in
-         let ws = Wcs_api_unix.get_workspace wcs_cred req in
+         let ws = Wcs_call_unix.get_workspace wcs_cred req in
          (Wcs.json_of_workspace ws) :: acc)
       [] !get_ws_ids
   in
@@ -224,7 +226,7 @@ let update wcs_cred cmd_name =
       let ws =
         Json.read_json_file Wcs_j.read_workspace fname
       in
-      Wcs_api_unix.update_workspace wcs_cred id ws
+      Wcs_call_unix.update_workspace wcs_cred id ws
   | _ ->
       let usage =
         Format.sprintf "%s update: workspace file and workspace id required"
@@ -287,7 +289,7 @@ let logs wcs_cred =
            ?cursor:!logs_cursor
            ()
        in
-       let rsp = Wcs_api_unix.logs wcs_cred id req in
+       let rsp = Wcs_call_unix.logs wcs_cred id req in
        Format.printf "%s@." (Wcs_pretty.logs_response rsp))
     !logs_ws_ids
 

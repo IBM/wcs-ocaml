@@ -25,6 +25,7 @@
    Version 2017-05-26.
 *)
 
+open Wcs_lib
 
 open Wcs_t
 

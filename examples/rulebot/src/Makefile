@@ -52,6 +52,7 @@ $(RMAIN): $(RMAIN).$(TARGET)
 	cp _build/$< $@
 
 $(RMAIN).$(TARGET): $(GENERATED)
+	-rm -f bmd/io_t.mli call_t.mli
 	$(RMLBUILD) \
 		-rmlc "rmlc -I $(WCSLIB) -I $(WCSAPI) -I $(WCSAPIUNIX)" \
 		-I api -I bmd -I parser -I workspaces \

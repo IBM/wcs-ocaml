@@ -16,6 +16,9 @@
  * limitations under the License.
  *)
 
+open Wcs_lib
+open Wcs_api_unix
+
 let ws_fact =
   let fact = Spel.variable "fact" in
   let n = Spel.variable "n" in
@@ -153,10 +156,10 @@ let main () =
   end;
   begin match !deploy, !ws_id with
   | true, Some ws_id ->
-      let () = Wcs_api_unix.update_workspace wcs_cred ws_id ws_fact in
+      let () = Wcs_call_unix.update_workspace wcs_cred ws_id ws_fact in
       Format.printf "%s: updated@." ws_id
   | true, None ->
-      begin match Wcs_api_unix.create_workspace wcs_cred ws_fact with
+      begin match Wcs_call_unix.create_workspace wcs_cred ws_fact with
       | { crea_rsp_workspace_id = Some id } ->
           Format.printf "%s: created@." id;
           ws_id := Some id;

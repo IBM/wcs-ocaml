@@ -16,6 +16,7 @@
  * limitations under the License.
  *)
 
+open Wcs_lib
 open Wcs_j
 open Bmd_t
 open Bmd_builder

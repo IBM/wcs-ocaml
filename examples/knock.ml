@@ -16,6 +16,8 @@
  * limitations under the License.
  *)
 
+open Wcs_lib
+open Wcs_api_unix
 open Wcs_t
 
 let who_intent =
@@ -105,10 +107,10 @@ let main () =
   end;
   begin match !deploy, !ws_id with
   | true, Some ws_id ->
-      let () = Wcs_api_unix.update_workspace wcs_cred ws_id ws_knockknock in
+      let () = Wcs_call_unix.update_workspace wcs_cred ws_id ws_knockknock in
       Format.printf "%s: updated@." ws_id
   | true, None ->
-      begin match Wcs_api_unix.create_workspace wcs_cred ws_knockknock with
+      begin match Wcs_call_unix.create_workspace wcs_cred ws_knockknock with
       | { crea_rsp_workspace_id = Some id } ->
           Format.printf "%s: created@." id;
           ws_id := Some id;

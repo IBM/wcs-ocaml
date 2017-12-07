@@ -16,4 +16,7 @@
  * limitations under the License.
  *)
 
-include Wcs_bot.Make(Cohttp_lwt_xhr.Client)
+
+open Wcs_api
+
+include Wcs_bot.Make(Wcs_call_jsoo)

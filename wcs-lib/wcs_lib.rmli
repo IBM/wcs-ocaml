@@ -16,4 +16,7 @@
  * limitations under the License.
  *)
 
-include Wcs_api.Make(Cohttp_lwt_unix.Client)
+(**
+   This module is empty but must be open in any ReactiveML file that want
+   to use the wcs-lib. It is used to fake OCaml packages.
+ *)

@@ -16,7 +16,7 @@
  * limitations under the License.
  *)
 
-type json <ocaml module="Json_t"> = abstract
+type json <ocaml module="Wcs_lib.Json_t"> = abstract
 
 (** {6 Call} *)
 type call = {

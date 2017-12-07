@@ -16,4 +16,7 @@
  * limitations under the License.
  *)
 
-include Wcs_api.Wcs_bot.Make(Wcs_call_unix)
+(**
+   This module is empty but must be open in any ReactiveML file that want
+   to use the wcs-api-unix. It is used to fake OCaml packages.
+ *)

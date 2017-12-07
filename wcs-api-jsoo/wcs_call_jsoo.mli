@@ -26,6 +26,7 @@
 *)
 
 
+open Wcs_lib
 open Wcs_t
 
 val version : string

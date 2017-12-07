@@ -16,6 +16,8 @@
  * limitations under the License.
  *)
 
+open Wcs_lib
+
 (* type 'a error_or = ('a, string) result *)
 
 (** {6. Locations} *)
