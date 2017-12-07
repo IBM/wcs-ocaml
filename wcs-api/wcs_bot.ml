@@ -16,10 +16,13 @@
  * limitations under the License.
  *)
 
-module Make (Client : Cohttp_lwt.S.Client) = struct
+open Wcs_lib
+open Wcs_t
 
-  module Wcs_api = Wcs_api.Make(Client)
-  open Wcs_t
+module Make (Wcs_call : sig
+    val message : credential ->
+      string -> message_request -> message_response
+  end) = struct
 
   let pretty_json_string s =
     (Yojson.Basic.pretty_to_string (Yojson.Basic.from_string s))
@@ -52,7 +55,7 @@ module Make (Client : Cohttp_lwt.S.Client) = struct
         ("Request:\n"^
          (Wcs_pretty.message_request req_msg));
       let resp =
-        Wcs_api.message wcs_cred ws_id req_msg
+        Wcs_call.message wcs_cred ws_id req_msg
       in
       Log.debug "Wcs_bot"
         ("Response:\n"^

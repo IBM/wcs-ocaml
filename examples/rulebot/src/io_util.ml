@@ -16,6 +16,7 @@
  * limitations under the License.
  *)
 
+open Wcs_lib
 open Cnl_print
 open Dialog_interface_t
 open Wcs_t

@@ -16,6 +16,8 @@
  * limitations under the License.
  *)
 
+open Wcs_lib
+open Wcs_api_unix
 open Wcs_cmd
 
 type command =
@@ -45,7 +47,7 @@ let set_debug () =
   Log.debug_message := true
 
 let print_version () =
-  Format.printf "Watson Conversation Service API %s@." Wcs_api_unix.version
+  Format.printf "Watson Conversation Service API %s@." Wcs_call_unix.version
 
 let speclist =
   [ "-wcs-cred", Arg.String set_wcs_credential,

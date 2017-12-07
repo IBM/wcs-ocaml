@@ -19,14 +19,14 @@
 (library
  ((name        wcs_lib)
   (public_name wcs-lib)
-  (wrapped false)
   (synopsis "Watson Conversation Service Library")
   (libraries (atdgen sedlex menhirLib))
   (preprocess (pps (sedlex.ppx)))))
 
 (install
   ((section lib)
-   (files   (json_t.rzi
+   (files   (wcs_lib.rzi
+	     json_t.rzi
 	     spel_t.rzi
 	     json_spel_t.rzi
 	     wcs_t.rzi))
@@ -41,6 +41,11 @@
  ((targets (wcs_t.ml wcs_t.mli))
   (deps    (wcs.atd))
   (action  (run atdgen -t ${<}))))
+
+(rule
+ ((targets (wcs_lib.rzi))
+  (deps    (wcs_lib.rmli))
+  (action  (run rmlc -c ${<}))))
 
 (rule
  ((targets (wcs_t.rzi))

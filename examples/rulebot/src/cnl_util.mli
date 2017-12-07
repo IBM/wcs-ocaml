@@ -16,6 +16,7 @@
  * limitations under the License.
  *)
 
+open Wcs_lib
 open Cnl_t
 
 (** {6. Printer util} *)

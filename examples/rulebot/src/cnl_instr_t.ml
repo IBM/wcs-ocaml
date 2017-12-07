@@ -16,6 +16,7 @@
  * limitations under the License.
  *)
 
+open Wcs_lib
 open Json_t
 open Deriving_intf
 open Cnl_t

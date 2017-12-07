@@ -16,6 +16,9 @@
  * limitations under the License.
  *)
 
+open Wcs_lib
+open Wcs_api_unix
+
 let process read_input_server get_input new_input text =
   let input text =
     let txt = get_input () in

@@ -16,6 +16,8 @@
  * limitations under the License.
  *)
 
+open Wcs_lib
+open Wcs_api_unix
 open Wcs_j
 open Bmd_t
 open Bmd_util
@@ -134,7 +136,7 @@ let patch_wcs_workspace wcs_cred ws_id ws_name bmd =
       ~entities:(entities_of_bmd bmd)
       ()
   in
-  Wcs_api_unix.update_workspace wcs_cred ws_id ws
+  Wcs_call_unix.update_workspace wcs_cred ws_id ws
 
 let bmd_find_entity entity_def_list entity_name =
   List.find (fun x -> x.e_def_entity = entity_name) entity_def_list

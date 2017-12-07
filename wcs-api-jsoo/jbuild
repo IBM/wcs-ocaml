@@ -19,22 +19,27 @@
 (library
  ((name        wcs_api_jsoo)
   (public_name wcs-api-jsoo)
-  (wrapped false)
   (synopsis "Watson Conversation Service rest calls")
   (libraries (wcs-lib wcs-api cohttp-lwt-jsoo))))
 
 (install
   ((section lib)
    (files   (wcs_api_jsoo.rzi
-	     wcs_bot_jsoo.rzi))
+             wcs_call_jsoo.rzi
+             wcs_bot_jsoo.rzi))
    (package wcs-lib)))
 
 (rule
+ ((targets (wcs_api_jsoo.rzi))
+  (deps    (wcs_api_jsoo.rmli))
+  (action  (run rmlc -c ${<}))))
+
+(rule
  ((targets (wcs_bot_jsoo.rzi))
-  (deps    (wcs_bot_jsoo.rmli ../wcs-lib/wcs_t.rzi wcs_api_jsoo.rzi))
+  (deps    (wcs_bot_jsoo.rmli ../wcs-lib/wcs_t.rzi wcs_call_jsoo.rzi))
   (action  (run rmlc -I ../wcs-lib -c ${<}))))
 
 (rule
- ((targets (wcs_api_jsoo.rzi))
-  (deps    (wcs_api_jsoo.mli ../wcs-lib/wcs_t.rzi))
+ ((targets (wcs_call_jsoo.rzi))
+  (deps    (wcs_call_jsoo.mli ../wcs-lib/wcs_t.rzi))
   (action  (run rmlc -I ../wcs-lib -c ${<}))))

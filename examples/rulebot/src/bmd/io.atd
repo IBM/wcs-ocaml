@@ -20,7 +20,7 @@
    Data structured used in Q*cert I/O files.
 *)
 
-type json <ocaml module="Json_t"> = abstract
+type json <ocaml module="Wcs_lib.Json_t"> = abstract
 (** Type of arbitrary JSON values. *)
 
 type derives_from = {

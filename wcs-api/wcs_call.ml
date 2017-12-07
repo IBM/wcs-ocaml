@@ -16,6 +16,8 @@
  * limitations under the License.
  *)
 
+open Wcs_lib
+
 module Make (Client : Cohttp_lwt.S.Client) = struct
   open Lwt
   open Wcs_t
