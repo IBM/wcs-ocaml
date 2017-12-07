@@ -21,7 +21,7 @@
   (public_name wcs-api)
   (wrapped false)
   (synopsis "Watson Conversation Service rest calls")
-  (libraries (wcs-lib cohttp.lwt))))
+  (libraries (wcs-lib cohttp-lwt))))
 
 (install
   ((section lib)
