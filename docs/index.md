@@ -53,7 +53,12 @@ opam install wcs-api
 ## Tutorial
 
 In order to illustrate the use of wcs-ocaml, we are going to program a
-bot that tells a knock knock joke.
+bot that tells a knock knock joke. It is going to use the `wcs-lib` package:
+
+```ocaml
+open Wcs_lib
+```
+
 
 Let's start with a dialog node that says `"Knock knock"`:
 
@@ -162,8 +167,14 @@ It is possible to print this workspace:
 let () = print_endline (Wcs_pretty.workspace ws_knockknock)
 ```
 
-It is also possible to directly deploy the workspace on WCS. The
-deployment requires the service credentials:
+It is also possible to directly deploy the workspace on WCS. For that, we will need the `wcs-api` package:
+
+```ocaml
+open Wcs_api_unix
+```
+
+
+The deployment requires the service credentials:
 
 ```ocaml
 let wcs_cred = Wcs_bot_unix.get_credential None
@@ -188,7 +199,7 @@ format:
 We can now deploy the workspace on WCS:
 
 ```ocaml
-let create_rsp = Wcs_api_unix.create_workspace wcs_cred ws_knockknock
+let create_rsp = Wcs_call.create_workspace wcs_cred ws_knockknock
 ```
 
 Finally, we can try the bot with the function
@@ -200,7 +211,7 @@ been created:
 let _ =
   begin match create_rsp with
   | { Wcs_t.crea_rsp_workspace_id = Some id } ->
-    Wcs_bot_unix.exec wcs_cred id Json.null ""
+    Wcs_bot.exec wcs_cred id Json.null ""
   | _  -> failwith "Deployment error"
   end
 ```

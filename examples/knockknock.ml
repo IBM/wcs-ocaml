@@ -21,30 +21,17 @@
    `ocamlfind ocamlc -o knockknock -linkpkg -package wcs-api-unix knockknock.ml` *)
 
 open Wcs_lib
-open Wcs_api_unix
 
-(* In order to illustrate the use of wcs-ocaml, we are going to
-   program a bot that tells a knock knock joke. *)
+(* This example is a bot that tells a knock knock joke. *)
 
-(* Let's start with a dialog node that says `"Knock knock"`: *)
+
+(** {6 Programming} *)
 
 let knock =
   Wcs.dialog_node "Knock"
     ~conditions: "true"
     ~text: "Knock knock"
     ()
-
-(* The function
-  [`Wcs.dialog_node`](https://ibm.github.io/wcs-ocaml/wcs-lib/Wcs/index.html#val-dialog_node)
-  creates a value of type
-  [`Wcs_t.dialog_node`](https://ibm.github.io/wcs-ocaml/wcs-lib/Wcs_t/index.html#type-dialog_node)
-  that corresponds to a JSON object of type
-  [`DialogNode`](https://www.ibm.com/watson/developercloud/conversation/api/v1/)
-  in WCS.  *)
-
-(* The user is expected to ask _who is there?_. To capture this intent
-   without looking for an exact match, we can define a WCS intent using
-   multiple examples to train the NLU: *)
 
 let who_intent =
   Wcs.intent "Who"
@@ -55,9 +42,6 @@ let who_intent =
     ]
     ()
 
-(* We can now define the next step of the dialog, answering the
-   question _who is there?: *)
-
 let whoisthere =
   Wcs.dialog_node "WhoIsThere"
     ~conditions_spel: (Spel.intent who_intent)
@@ -65,23 +49,10 @@ let whoisthere =
     ~parent: knock
     ()
 
-(* The condition is not a string but an expression written using the
-   embedding of the Spel expression language (used by WCS) in
-   OCaml. *)
-
-(* We now expect the user to repeat the name of the character
-   mentioned by the bot.  To test that the user input matches the same
-   character, we define an entity `char_entity` containing the name
-   and a list of synonyms.  *)
-
 let char_entity =
   Wcs.entity "Character"
     ~values: [ "Broken Pencil", ["Damaged Pen"; "Fractured Pencil"] ]
     ()
-
-(* The bot terminates the joke if the input given by the user matches the
-   name of the character. Setting a `return` field in the context triggers
-   the termination of the bot. *)
 
 let answer =
   Wcs.dialog_node "Answer"
@@ -91,11 +62,6 @@ let answer =
     ~context: (Context.return (Json.bool true))
     ()
 
-
-
-(* If the user doesn't gives the name of the character, the bot can help
-   with a generic answer using a fallback node: *)
-
 let fallback =
   Wcs.dialog_node "Fallback"
     ~conditions_spel: Spel.anything_else
@@ -104,9 +70,6 @@ let fallback =
     ~next_step: (whoisthere, Wcs_t.Goto_body)
     ()
 
-(* We can now build the entire workspace containing all the dialog
-   nodes, entities, and intents: *)
-
 let ws_knockknock =
   Wcs.workspace "Knock Knock"
     ~entities: [ char_entity ]
@@ -114,42 +77,87 @@ let ws_knockknock =
     ~dialog_nodes: [ knock; whoisthere; answer; fallback; ]
     ()
 
-(* It is possible to print this workspace: *)
-
 let () = print_endline (Wcs_pretty.workspace ws_knockknock)
 
-(*It is also possible to directly deploy the workspace on WCS. The
-  deployment requires the service credentials: *)
 
-let wcs_cred = Wcs_bot.get_credential None
+(** {6 Deployement and test} *)
 
-(* The function
-   [Wcs_bot_unix.get_credential](https://ibm.github.io/wcs-ocaml/wcs-api/Wcs_bot_unix/index.html#val-get_credential)
-   retrieves the path stored in the environment variable `WCS_CRED` to
-   find a file containing the service credentials in the following
-   format:
+open Wcs_api_unix
 
-   {
-     "url": "https://gateway.watsonplatform.net/conversation/api",
-     "password": "PASSWORD",
-     "username": "USERNAME"
-   }
-*)
+(* let wcs_cred = Wcs_bot.get_credential None *)
+
+(* let create_rsp = Wcs_call.create_workspace wcs_cred ws_knockknock *)
+
+(* let _ = *)
+(*   begin match create_rsp with *)
+(*   | { Wcs_t.crea_rsp_workspace_id = Some id } -> *)
+(*     Wcs_bot.exec wcs_cred id Json.null "" *)
+(*   | _  -> failwith "Deployment error" *)
+(*   end *)
 
 
-(* We can now deploy the workspace on WCS: *)
-
-let create_rsp = Wcs_call.create_workspace wcs_cred ws_knockknock
-
-(* Finally, we can try the bot with the function
-   [Wcs_bot_unix.exec](https://ibm.github.io/wcs-ocaml/wcs-api/Wcs_bot_unix/index.html#val-exec)
-   providing the credentials and the workspace identifier that has just
-   been created: *)
-
-let _ =
-  begin match create_rsp with
-  | { Wcs_t.crea_rsp_workspace_id = Some id } ->
-    Wcs_bot.exec wcs_cred id Json.null ""
-  | _  -> failwith "Deployment error"
+let main () =
+  let wcs_cred_file = ref None in
+  let ws_id = ref None in
+  let print = ref false in
+  let deploy = ref false in
+  let exec = ref false in
+  let speclist =
+    Arg.align
+      [ "-cred", Arg.String (fun s -> wcs_cred_file := Some s),
+        "cred.json The file containing the Watson Conversation Service credentials.";
+        "-id", Arg.String (fun id -> ws_id := Some id),
+        "id The workspace id used to update in conjunction with -deploy.";
+        "-print", Arg.Set print,
+        " Print the workspace on stdout.";
+        "-deploy", Arg.Set deploy,
+        " Create or update the workspace on Watson Conversation Service.";
+        "-exec", Arg.Set exec,
+        " Execute the chatbot.";
+        "-debug", Arg.Set Log.debug_message,
+        " Print debug messages.";
+      ]
+  in
+  let usage =
+    "Usage: "^Sys.argv.(0)^" [options]"
+  in
+  Arg.parse speclist (fun _ -> ()) usage;
+  let wcs_cred = Wcs_bot.get_credential !wcs_cred_file in
+  begin match !print with
+  | true ->
+      print_endline (Wcs_pretty.workspace ws_knockknock)
+  | false ->
+      ()
+  end;
+  begin match !deploy, !ws_id with
+  | true, Some ws_id ->
+      let () = Wcs_call.update_workspace wcs_cred ws_id ws_knockknock in
+      Format.printf "%s: updated@." ws_id
+  | true, None ->
+      begin match Wcs_call.create_workspace wcs_cred ws_knockknock with
+      | { crea_rsp_workspace_id = Some id } ->
+          Format.printf "%s: created@." id;
+          ws_id := Some id;
+      | _ -> assert false
+      end
+  | false, _ -> ()
+  end;
+  begin match !exec, !ws_id with
+  | true, Some id ->
+      let _ = Wcs_bot.exec wcs_cred id `Null "" in
+      ()
+  | false, _ ->
+      ()
+  | true, None ->
+      Arg.usage speclist "no worksapce to execute";
+      exit 1
   end
 
+let _ =
+  begin try
+    main ()
+  with
+  | Log.Error (module_name, msg) when not !Log.debug_message ->
+      Format.eprintf "%s@." msg;
+      exit 1
+  end
