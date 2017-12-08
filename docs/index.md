@@ -71,9 +71,9 @@ let knock =
 ```
 
 The function
-[`Wcs.dialog_node`](https://ibm.github.io/wcs-ocaml/wcs-lib/Wcs/index.html#val-dialog_node)
+[`Wcs.dialog_node`](https://ibm.github.io/wcs-ocaml/wcs-lib/Wcs_lib/Wcs/index.html#val-dialog_node)
 creates a value of type
-[`Wcs_t.dialog_node`](https://ibm.github.io/wcs-ocaml/wcs-lib/Wcs_t/index.html#type-dialog_node)
+[`Wcs_t.dialog_node`](https://ibm.github.io/wcs-ocaml/wcs-lib/Wcs_lib/Wcs_t/index.html#type-dialog_node)
 that corresponds to a JSON object of type
 [`DialogNode`](https://www.ibm.com/watson/developercloud/conversation/api/v1/)
 in WCS.
@@ -181,7 +181,7 @@ let wcs_cred = Wcs_bot_unix.get_credential None
 ```
 
 The function
-[Wcs_bot_unix.get_credential](https://ibm.github.io/wcs-ocaml/wcs-api/Wcs_bot_unix/index.html#val-get_credential)
+[`Wcs_bot.get_credential`](https://ibm.github.io/wcs-ocaml/wcs-api-unix/Wcs_api_unix/Wcs_bot/index.html#val-get_credential)
 retrieves the path stored in the environment variable `WCS_CRED` to
 find a file containing the service credentials in the following
 format:
@@ -203,7 +203,7 @@ let create_rsp = Wcs_call.create_workspace wcs_cred ws_knockknock
 ```
 
 Finally, we can try the bot with the function
-[Wcs_bot_unix.exec](https://ibm.github.io/wcs-ocaml/wcs-api/Wcs_bot_unix/index.html#val-exec)
+[`Wcs_bot_unix.exec`](https://ibm.github.io/wcs-ocaml/wcs-api-unix/Wcs_api_unix/Wcs_bot/index.html#val-exec)
 providing the credentials and the workspace identifier that has just
 been created:
 
