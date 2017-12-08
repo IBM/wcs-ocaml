@@ -18,4 +18,4 @@
 
 open Wcs_api
 
-include Wcs_call.Make(Cohttp_lwt_unix.Client)
+include Wcs_call_factory.Make(Cohttp_lwt_unix.Client)

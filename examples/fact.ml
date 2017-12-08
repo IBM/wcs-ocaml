@@ -147,7 +147,7 @@ let main () =
     "Usage: "^Sys.argv.(0)^" [options]"
   in
   Arg.parse speclist (fun _ -> ()) usage;
-  let wcs_cred = Wcs_bot_unix.get_credential !wcs_cred_file in
+  let wcs_cred = Wcs_bot.get_credential !wcs_cred_file in
   begin match !print with
   | true ->
       print_endline (Wcs_pretty.workspace ws_fact)
@@ -156,10 +156,10 @@ let main () =
   end;
   begin match !deploy, !ws_id with
   | true, Some ws_id ->
-      let () = Wcs_call_unix.update_workspace wcs_cred ws_id ws_fact in
+      let () = Wcs_call.update_workspace wcs_cred ws_id ws_fact in
       Format.printf "%s: updated@." ws_id
   | true, None ->
-      begin match Wcs_call_unix.create_workspace wcs_cred ws_fact with
+      begin match Wcs_call.create_workspace wcs_cred ws_fact with
       | { crea_rsp_workspace_id = Some id } ->
           Format.printf "%s: created@." id;
           ws_id := Some id;
@@ -169,7 +169,7 @@ let main () =
   end;
   begin match !exec, !ws_id with
   | true, Some id ->
-      let _ = Wcs_bot_unix.exec wcs_cred id (`Assoc [ "fact", `String id]) "" in
+      let _ = Wcs_bot.exec wcs_cred id (`Assoc [ "fact", `String id]) "" in
       ()
   | false, _ ->
       ()
