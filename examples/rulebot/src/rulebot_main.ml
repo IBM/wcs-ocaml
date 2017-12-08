@@ -84,7 +84,7 @@ let get_workspace_id ?(update=false) ws_name wcs_cred ws_config get_id_fname ws 
   | Some id ->
       begin match update, ws with
       | true, Some w ->
-          Wcs_call_unix.update_workspace wcs_cred id w;
+          Wcs_call.update_workspace wcs_cred id w;
           id
       | _, _ -> id
       end
@@ -96,7 +96,7 @@ let get_workspace_id ?(update=false) ws_name wcs_cred ws_config get_id_fname ws 
         | None, None -> raise (Failure ("Workspace "^ws_name^" required"))
         end
       in
-      let rsp = Wcs_call_unix.create_workspace wcs_cred workspace in
+      let rsp = Wcs_call.create_workspace wcs_cred workspace in
       begin match rsp.crea_rsp_workspace_id with
       | Some id -> id
       | None -> raise (Failure ("Unable to create workspace "^ws_name))
@@ -308,14 +308,14 @@ let workspaces_delete wcs_cred =
     | None -> raise (Failure ("Workspaces configuration file required"))
     end
   in
-  oiter (Wcs_call_unix.delete_workspace wcs_cred) ws_conf.ws_select_example_id;
-  oiter (Wcs_call_unix.delete_workspace wcs_cred) ws_conf.ws_select_expr_id;
-  oiter (Wcs_call_unix.delete_workspace wcs_cred) ws_conf.ws_dispatch_id;
-  oiter (Wcs_call_unix.delete_workspace wcs_cred) ws_conf.ws_when_id;
-  oiter (Wcs_call_unix.delete_workspace wcs_cred) ws_conf.ws_cond_id;
-  oiter (Wcs_call_unix.delete_workspace wcs_cred) ws_conf.ws_cond_continue_id;
-  oiter (Wcs_call_unix.delete_workspace wcs_cred) ws_conf.ws_then_id;
-  oiter (Wcs_call_unix.delete_workspace wcs_cred) ws_conf.ws_expr_id;
-  oiter (Wcs_call_unix.delete_workspace wcs_cred) ws_conf.ws_actn_id;
-  oiter (Wcs_call_unix.delete_workspace wcs_cred) ws_conf.ws_accept_id;
+  oiter (Wcs_call.delete_workspace wcs_cred) ws_conf.ws_select_example_id;
+  oiter (Wcs_call.delete_workspace wcs_cred) ws_conf.ws_select_expr_id;
+  oiter (Wcs_call.delete_workspace wcs_cred) ws_conf.ws_dispatch_id;
+  oiter (Wcs_call.delete_workspace wcs_cred) ws_conf.ws_when_id;
+  oiter (Wcs_call.delete_workspace wcs_cred) ws_conf.ws_cond_id;
+  oiter (Wcs_call.delete_workspace wcs_cred) ws_conf.ws_cond_continue_id;
+  oiter (Wcs_call.delete_workspace wcs_cred) ws_conf.ws_then_id;
+  oiter (Wcs_call.delete_workspace wcs_cred) ws_conf.ws_expr_id;
+  oiter (Wcs_call.delete_workspace wcs_cred) ws_conf.ws_actn_id;
+  oiter (Wcs_call.delete_workspace wcs_cred) ws_conf.ws_accept_id;
   ()

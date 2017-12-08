@@ -136,7 +136,7 @@ let patch_wcs_workspace wcs_cred ws_id ws_name bmd =
       ~entities:(entities_of_bmd bmd)
       ()
   in
-  Wcs_call_unix.update_workspace wcs_cred ws_id ws
+  Wcs_call.update_workspace wcs_cred ws_id ws
 
 let bmd_find_entity entity_def_list entity_name =
   List.find (fun x -> x.e_def_entity = entity_name) entity_def_list

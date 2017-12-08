@@ -19,4 +19,4 @@
 
 open Wcs_api
 
-include Wcs_call.Make(Cohttp_lwt_xhr.Client)
+include Wcs_bot_factory.Make(Wcs_call)

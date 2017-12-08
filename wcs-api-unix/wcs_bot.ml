@@ -16,4 +16,4 @@
  * limitations under the License.
  *)
 
-include Wcs_api.Wcs_bot.Make(Wcs_call_unix)
+include Wcs_api.Wcs_bot_factory.Make(Wcs_call)
