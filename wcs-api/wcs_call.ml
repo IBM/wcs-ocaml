@@ -16,7 +16,4 @@
  * limitations under the License.
  *)
 
-(**
-   This module is empty but must be open in any ReactiveML file that want
-   to use the wcs-api-jsoo. It is used to fake OCaml packages.
- *)
+include Wcs_call_factory.Make(Cohttp_lwt_unix.Client)

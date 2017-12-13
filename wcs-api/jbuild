@@ -20,14 +20,26 @@
  ((name        wcs_api)
   (public_name wcs-api)
   (synopsis "Watson Conversation Service rest calls")
-  (libraries (wcs-lib cohttp-lwt))))
+  (libraries (wcs-lib cohttp-lwt-unix))))
 
 (install
   ((section lib)
-   (files   (wcs_api.rzi))
+   (files   (wcs_api.rzi
+	     wcs_call.rzi
+             wcs_bot.rzi))
    (package wcs-lib)))
 
 (rule
  ((targets (wcs_api.rzi))
   (deps    (wcs_api.rmli))
   (action  (run rmlc -c ${<}))))
+
+(rule
+ ((targets (wcs_bot.rzi))
+  (deps    (wcs_bot.rmli ../wcs-lib/wcs_t.rzi wcs_call.rzi))
+  (action  (run rmlc -I ../wcs-lib -c ${<}))))
+
+(rule
+ ((targets (wcs_call.rzi))
+  (deps    (wcs_call.mli ../wcs-lib/wcs_t.rzi))
+  (action  (run rmlc -I ../wcs-lib -c ${<}))))

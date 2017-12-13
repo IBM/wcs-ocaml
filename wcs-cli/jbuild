@@ -20,4 +20,4 @@
  ((name wcs_cli)
   (public_name wcs)
   (package wcs)
-  (libraries (wcs-lib wcs-api-unix))))
+  (libraries (wcs-lib wcs-api))))
