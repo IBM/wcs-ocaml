@@ -18,7 +18,7 @@
 
 
 (* Compilation command:
-   `ocamlfind ocamlc -o knockknock -linkpkg -package wcs-api-unix knockknock.ml` *)
+   `ocamlfind ocamlc -o knockknock -linkpkg -package wcs-api knockknock.ml` *)
 
 open Wcs_lib
 
@@ -82,7 +82,7 @@ let () = print_endline (Wcs_pretty.workspace ws_knockknock)
 
 (** {6 Deployement and test} *)
 
-open Wcs_api_unix
+open Wcs_api
 
 (* let wcs_cred = Wcs_bot.get_credential None *)
 

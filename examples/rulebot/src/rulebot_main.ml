@@ -17,7 +17,7 @@
  *)
 
 open Wcs_lib
-open Wcs_api_unix
+open Wcs_api
 open Cnl_t
 open Cnl_util
 open Cnl_print

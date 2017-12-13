@@ -16,7 +16,7 @@
 
 WCSLIB=`ocamlfind query wcs-lib`
 WCSAPI=`ocamlfind query wcs-api`
-WCSAPIUNIX=`ocamlfind query wcs-api-unix`
+WCSAPIUNIX=`ocamlfind query wcs-api`
 
 OCAMLBUILD= ocamlbuild \
 		-no-links -classic-display \
@@ -58,7 +58,7 @@ $(RMAIN).$(TARGET): $(GENERATED)
 		-I api -I bmd -I parser -I workspaces \
 		-use-ocamlfind -use-menhir \
 		-pkg atdgen -pkg cohttp.lwt \
-		-pkg wcs-lib -pkg wcs-api -pkg wcs-api-unix \
+		-pkg wcs-lib -pkg wcs-api \
 		$@
 
 %_t.ml %_t.mli: %.atd

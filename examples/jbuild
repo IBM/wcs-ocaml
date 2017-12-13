@@ -18,7 +18,7 @@
 
 (executables
  ((names (example knockknock fact))
-  (libraries (wcs-lib wcs-api-unix))))
+  (libraries (wcs-lib wcs-api))))
 
 (alias
  ((name   runtest)

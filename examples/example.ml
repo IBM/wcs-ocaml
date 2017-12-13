@@ -17,7 +17,7 @@
  *)
 
 open Wcs_lib
-open Wcs_api_unix
+open Wcs_api
 open Wcs_t
 
 let intent_help =
