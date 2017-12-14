@@ -1,5 +1,6 @@
-### 2017-05-26.03-dev (XXXX-XX-XX)
+### 2017-05-26.03 (2017-12-14)
 * Switch to cohttp version 1.0.
+* wcs-lib and wcs-api are packagedin `Wcs_lib` and `Wcs_api` modules.
 
 ### 2017-05-26.02 (2017-11-10)
 * Add support for SPEL expressions.
