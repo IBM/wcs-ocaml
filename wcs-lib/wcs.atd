@@ -160,6 +160,7 @@ type output_def = json_spel
 <doc text="Type of outputs of a dialog node.">
 
 type dialog_node_type = [
+  | Node_standard <json name="standard">
   | Node_response_condition <json name="response_condition">
   | Node_frame <json name="frame">
   | Node_event_handler <json name="event_handler">
