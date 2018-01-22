@@ -1,5 +1,5 @@
-### 2017-05-26.04-dev (XXXX-XX-XX)
-
+### 2017-05-26.04 (2018-01-22)
+* Adapt to the export new format of WCS.
 
 ### 2017-05-26.03 (2017-12-14)
 * Switch to cohttp version 1.0.
