@@ -95,7 +95,9 @@ val dialog_node :
   ?conditions:string ->
   ?conditions_spel:Spel_t.expression ->
   ?parent:dialog_node ->
+  ?parent_id:string ->
   ?previous_sibling:dialog_node ->
+  ?previous_sibling_id:string ->
   ?text:string ->
   ?text_spel:Spel_t.expression ->
   ?output:json ->
@@ -118,6 +120,7 @@ val response_condition :
   ?conditions:string ->
   ?conditions_spel:Spel_t.expression ->
   ?previous_sibling:dialog_node ->
+  ?previous_sibling_id:string ->
   ?text:string ->
   ?text_spel:Spel_t.expression ->
   ?output:json ->

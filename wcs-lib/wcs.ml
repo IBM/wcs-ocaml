@@ -143,7 +143,9 @@ let dialog_node
       ?conditions
       ?conditions_spel
       ?parent
+      ?parent_id
       ?previous_sibling
+      ?previous_sibling_id
       ?text
       ?text_spel
       ?output
@@ -160,10 +162,26 @@ let dialog_node
       ()
   : dialog_node =
   let parent_id =
-    omap (fun node -> node.node_dialog_node) parent
+    begin match parent, parent_id with
+    | None, None -> None
+    | Some p, None -> Some p.node_dialog_node
+    | None, Some id -> Some id
+    | Some _, Some _ ->
+        Log.error "Wcs"
+          (Some None)
+          "dialog_node: ~parent and ~parent_id cannot be present simultanously"
+    end
   in
   let previous_sibling_id =
-    omap (fun node -> node.node_dialog_node) previous_sibling
+    begin match previous_sibling, previous_sibling_id with
+    | None, None -> None
+    | Some s, None -> Some s.node_dialog_node
+    | None, Some id -> Some id
+    | Some _, Some _ ->
+        Log.error "Wcs"
+          (Some None)
+          "dialog_node: ~previous_sibling and ~previous_sibling_id cannot be present simultanously"
+    end
   in
   let text =
     begin match text, text_spel with
@@ -253,6 +271,7 @@ let response_condition ~parent =
   dialog_node (new_id ())
     ~type_: Node_response_condition
     ~parent:parent
+    ?parent_id: None
     ?next_step: None (* Not yet implemented*)
     ?next_step_id: None (* Not yet implemented*)
     ?event_name: None
