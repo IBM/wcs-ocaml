@@ -18,7 +18,7 @@
 
 <doc text="Watson Conversation Service data structures.
 
-   Data srcutures used in Watson Conversation Service.
+   Data structures used in Watson Conversation Service.
 
    Based on the documentation available at:
    https://www.ibm.com/watson/developercloud/conversation/api/v1/
@@ -27,7 +27,7 @@
 ">
 
 type json <ocaml module="Json_t"> = abstract
-<doc text="Type of arbitraty JSON values.">
+<doc text="Type of arbitrary JSON values.">
 
 (** {6 Credentials} *)
 
