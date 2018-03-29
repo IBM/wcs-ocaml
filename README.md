@@ -17,21 +17,22 @@ the directory [docs](./docs).
 
 ## Quick install with Opam
 
-You can install wcs-ocaml with the following command:
+You can install `wcs-ocaml` with the following command:
 ```
 opam install wcs
 ```
 
 This will install the three main packages:
+```
 - wcs-lib,
-- wcs-api and,
+- wcs-api
 - wcs
-
+```
 
 ## Install from source with Opam
 
 Opam can also be used to compile and install from the source
-directory. For that you first need to pin the source directory.
+directory. For that, you first need to pin the source directory.
 So, from this directory, do:
 ```
 opam pin add wcs-lib .
@@ -88,7 +89,7 @@ grep -r -e '\d\d\d\d-\d\d-\d\d.\d\d-dev' .
 
 3. Update the `CHANGES.md` file.
 
-4. Create a new release on the github interface:
+4. Create a new release on the Github interface:
    https://github.com/IBM/wcs-ocaml/releases
 
 5. Create a new release of the opam packages.
@@ -125,7 +126,7 @@ cp packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/url packages/wcs/wcs.XXXX-XX-XX.XX/url
 ```
 git push origin wcs-XXXX-XX-XX.XX
 ```
-  - Create a pull request from the github interface:
+  - Create a pull request from the Github interface:
 	https://github.com/ocaml/opam-repository
 
 6. Once the pull request is accepted update the version number.
