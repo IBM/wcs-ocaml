@@ -42,4 +42,4 @@
 (rule
  ((targets (wcs_call.rzi))
   (deps    (wcs_call.mli ../wcs-lib/wcs_t.rzi))
-  (action  (run rmlc -I ../wcs-lib -c ${<}))))
+  (action  (system "rmlc -I ../wcs-lib -c ${<} || true")))) ;; XXX hack XXX
