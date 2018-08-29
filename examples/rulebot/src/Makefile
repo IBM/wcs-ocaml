@@ -52,7 +52,7 @@ $(RMAIN): $(RMAIN).$(TARGET)
 $(RMAIN).$(TARGET): $(GENERATED)
 	-rm -f bmd/io_t.mli call_t.mli
 	$(RMLBUILD) \
-		-rmlc "rmlc -I $(WCSLIB) \
+		-rmlc "rmlc -I $(WCSLIB)" \
 		-I api -I bmd -I parser -I workspaces \
 		-use-ocamlfind -use-menhir \
 		-pkg atdgen -pkg cohttp.lwt \
