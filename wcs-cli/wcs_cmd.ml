@@ -18,7 +18,6 @@
 
 
 open Wcs_lib
-open Wcs_api
 open Wcs_t
 
 (** {6. The [list] command} *)

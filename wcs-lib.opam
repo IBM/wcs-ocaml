@@ -27,7 +27,8 @@ depends: [
   "sedlex"
   "menhir"
   "rml"
+  "cohttp-lwt-unix" {>= "1.0.0"}
 ]
 available: [
-  ocaml-version >= "4.02.3"
+  ocaml-version >= "4.03.0"
 ]

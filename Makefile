@@ -45,12 +45,10 @@ uninstall:
 clean:
 	rm -rf _build \
 		wcs-lib.install \
-		wcs-api.install \
 		wcs.install
 
 cleanall: clean
-	rm -f *~ \
-		wcs-api/.merlin \
+	rm -f *~ */*~ \
 		wcs-cli/.merlin \
 		wcs-lib/.merlin \
 		examples/.merlin

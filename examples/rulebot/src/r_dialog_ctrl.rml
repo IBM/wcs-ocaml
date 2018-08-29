@@ -17,7 +17,6 @@
  *)
 
 open Wcs_lib
-open Wcs_api
 
 open Dialog_interface_t
 open Cnl_t
