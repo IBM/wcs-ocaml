@@ -16,7 +16,6 @@
  * limitations under the License.
  *)
 
-open Wcs_lib
 open Wcs_t
 
 module Make (Wcs_call : sig

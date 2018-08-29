@@ -15,8 +15,6 @@
 # limitations under the License.
 
 WCSLIB=`ocamlfind query wcs-lib`
-WCSAPI=`ocamlfind query wcs-api`
-WCSAPIUNIX=`ocamlfind query wcs-api`
 
 OCAMLBUILD= ocamlbuild \
 		-no-links -classic-display \
@@ -54,11 +52,11 @@ $(RMAIN): $(RMAIN).$(TARGET)
 $(RMAIN).$(TARGET): $(GENERATED)
 	-rm -f bmd/io_t.mli call_t.mli
 	$(RMLBUILD) \
-		-rmlc "rmlc -I $(WCSLIB) -I $(WCSAPI) -I $(WCSAPIUNIX)" \
+		-rmlc "rmlc -I $(WCSLIB) \
 		-I api -I bmd -I parser -I workspaces \
 		-use-ocamlfind -use-menhir \
 		-pkg atdgen -pkg cohttp.lwt \
-		-pkg wcs-lib -pkg wcs-api \
+		-pkg wcs-lib \
 		$@
 
 %_t.ml %_t.mli: %.atd

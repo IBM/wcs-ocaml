@@ -4,8 +4,7 @@ wcs-ocaml is a source development kit in OCaml and command line interface for
 [Watson Conversation Service (WCS)](https://www.ibm.com/watson/services/conversation/). It allows to program chat bots in OCaml.
 
 * `wcs-lib` provides a framework to write WCS programs, called
-  workspaces.
-* `wcs-api` offers an OCaml binding to the
+  workspaces. It also offers an OCaml binding to the
   [service API](https://www.ibm.com/watson/developercloud/conversation/api/v1/)
   and a generic client application.
 * `wcs` is a command line tool that interact with the service.
@@ -22,10 +21,9 @@ You can install wcs-ocaml with the following command:
 opam install wcs
 ```
 
-This will install the three main packages:
-- wcs-lib,
-- wcs-api and,
-- wcs
+This will install the following packages:
+- `wcs-lib`
+- `wcs`
 
 
 ## Install from source with Opam
@@ -35,7 +33,6 @@ directory. For that you first need to pin the source directory.
 So, from this directory, do:
 ```
 opam pin add wcs-lib .
-opam pin add wcs-api .
 opam pin add wcs .
 ```
 
@@ -106,19 +103,16 @@ git checkout -b wcs-XXXX-XX-XX.XX
   - Create the new packages from the old ones:
 ```
 cp -R packages/wcs-lib/wcs-lib.YYYY-YY-YY.YY packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX
-cp -R packages/wcs-api/wcs-api.YYYY-YY-YY.YY packages/wcs-api/wcs-api.XXXX-XX-XX.XX
 cp -R packages/wcs/wcs.YYYY-YY-YY.YY packages/wcs/wcs.XXXX-XX-XX.XX
 ```
   - Update the `opam` files:
 ```
 cp WCS_OCAML_DIR/wcs-lib.opam packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/opam
-cp WCS_OCAML_DIR/wcs-api.opam packages/wcs-api/wcs-api.XXXX-XX-XX.XX/opam
 cp WCS_OCAML_DIR/wcs.opam packages/wcs/wcs.XXXX-XX-XX.XX/opam
 ```
   - Update the `url` files
 ```
 emacs packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/url
-cp packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/url packages/wcs-api/wcs-api.XXXX-XX-XX.XX/url
 cp packages/wcs-lib/wcs-lib.XXXX-XX-XX.XX/url packages/wcs/wcs.XXXX-XX-XX.XX/url
 ```
   - Commit and push the changes

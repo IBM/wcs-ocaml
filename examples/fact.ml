@@ -17,7 +17,6 @@
  *)
 
 open Wcs_lib
-open Wcs_api
 
 let ws_fact =
   let fact = Spel.variable "fact" in

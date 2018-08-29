@@ -17,7 +17,6 @@
  *)
 
 open Wcs_lib
-open Wcs_api
 open Wcs_cmd
 
 type command =
