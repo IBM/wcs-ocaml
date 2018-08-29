@@ -1,5 +1,8 @@
-### 2017-05-26.05-dev (XXXX-XX-XX)
-
+### 2017-05-26.05 (2018-08-29)
+* Merge `wcs-lib` and `wcs-api` into `wcs-lib`.
+* json and yojson ReactiveML interface.
+* Fix compilation issues with new versions of opam and atdgen.
+* Add `~parent_id` and `~previous_sibling_id` in builder interface.
 
 ### 2017-05-26.04 (2018-01-22)
 * Adapt to the export new format of WCS.

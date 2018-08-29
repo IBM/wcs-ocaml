@@ -1,6 +1,6 @@
 opam-version: "1.2"
 name: "wcs-lib"
-version: "2017-05-26.05-dev"
+version: "2017-05-26.05"
 maintainer: [
   "Louis Mandel <lmandel@us.ibm.com>"
 ]
