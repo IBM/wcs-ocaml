@@ -120,7 +120,7 @@ let process get_value wcs_cred
 
 (** {6. Replace} *)
 
-let process replace_expr wcs_cred
+let process fill_expr wcs_cred
     ws_expr_id expr_kind
     user_input computer_output
     txt_init focus =
@@ -173,7 +173,7 @@ let process replace_expr wcs_cred
   state_update (I_repl_expr (focus, expr));
   txt
 
-let process replace_evnt wcs_cred
+let process fill_evnt wcs_cred
     ws_when_id
     user_input computer_output
     txt_init focus =
@@ -188,7 +188,7 @@ let process replace_evnt wcs_cred
   state_update (I_repl_evnt (focus,when_fragment));
   txt
 
-let process replace_cond wcs_cred
+let process fill_cond wcs_cred
     ws_ids
     user_input computer_output
     txt_init focus =
@@ -207,7 +207,7 @@ let process replace_cond wcs_cred
     begin match Cnl_util.cond_next_focus previous_focus rule with
     | Some (focus, K_expr expr_kind) ->
 	let txt =
-          run replace_expr wcs_cred ws_ids.ws_expr_id
+          run fill_expr wcs_cred ws_ids.ws_expr_id
             expr_kind user_input computer_output txt focus
         in
         pause;
@@ -244,7 +244,7 @@ let process replace_cond wcs_cred
   run loop_ txt
 
 
-let process replace_actns wcs_cred
+let process fill_actns wcs_cred
     user_input  computer_output
     txt_init focus =
   let then_fragment =
@@ -253,7 +253,7 @@ let process replace_actns wcs_cred
   state_update (I_repl_actns (focus,then_fragment));
   txt_init
 
-let process replace_actns_closed wcs_cred
+let process fill_actns_closed wcs_cred
     ws_then_id
     user_input computer_output
     txt_init focus =
@@ -269,7 +269,7 @@ let process replace_actns_closed wcs_cred
   txt
 
 
-let process replace_actn wcs_cred
+let process fill_actn wcs_cred
     ws_actn_id
     user_input computer_output
     txt_init focus =
@@ -311,41 +311,41 @@ let process replace_actn wcs_cred
   state_update (I_repl_actn (focus,actn_fragment));
   txt
 
-let process replace_rule wcs_cred user_input computer_output txt_init focus =
+let process fill_rule wcs_cred user_input computer_output txt_init focus =
   state_reset ();
   txt_init
 
-let process replace wcs_cred
+let process fill wcs_cred
     ws_ids
     user_input computer_output
     txt_init focus kind =
   begin match kind with
   | K_expr expr_kind ->
-      run replace_expr wcs_cred ws_ids.ws_expr_id expr_kind
+      run fill_expr wcs_cred ws_ids.ws_expr_id expr_kind
         user_input computer_output
         txt_init focus
   | K_actn ->
-      run replace_actn wcs_cred ws_ids.ws_actn_id
+      run fill_actn wcs_cred ws_ids.ws_actn_id
         user_input computer_output
         txt_init focus
   | K_evnt ->
-      run replace_evnt wcs_cred ws_ids.ws_when_id
+      run fill_evnt wcs_cred ws_ids.ws_when_id
         user_input computer_output
         txt_init focus
   | K_cond ->
-      run replace_cond wcs_cred ws_ids
+      run fill_cond wcs_cred ws_ids
         user_input computer_output
         txt_init focus
   | K_actns ->
-      run replace_actns wcs_cred
+      run fill_actns wcs_cred
         user_input computer_output
         txt_init focus
   | K_actns_closed ->
-      run replace_actns_closed wcs_cred ws_ids.ws_then_id
+      run fill_actns_closed wcs_cred ws_ids.ws_then_id
         user_input computer_output
         txt_init focus
   | K_rule ->
-      run replace_rule wcs_cred
+      run fill_rule wcs_cred
         user_input computer_output
         txt_init focus
   end
@@ -357,7 +357,7 @@ let process rule_fill wcs_cred ws_ids user_input computer_output =
     begin match Cnl_util.rule_next_focus previous_focus rule with
     | Some (focus, kind) ->
         let txt =
-          run replace wcs_cred ws_ids user_input computer_output txt focus kind
+          run fill wcs_cred ws_ids user_input computer_output txt focus kind
         in
         pause;
         run loop_ txt
@@ -390,26 +390,26 @@ let process accept wcs_cred ws_accept
     end
   in
   state_update instr;
-  txt
+  (is_accepted, txt)
 
 
 let process rule_accept wcs_cred ws_ids user_input computer_output =
-  let rec process loop_ =
+  let rec process loop_ is_accepted =
     let filled = List.rev (Cnl_util.rule_get_filled (get_rule ())) in
     begin match filled with
     | (Some focus, kind) :: _->
-        let _ =
+        let is_accepted, _ =
           run accept wcs_cred ws_ids
             user_input computer_output
             "" focus kind
         in
         pause;
-        run loop_
-    | [] -> ()
+        run loop_ is_accepted
+    | [] -> is_accepted
     | (None, _) :: _ -> assert false
     end
   in
-  run loop_
+  run loop_ true
 
 let process dispatch wcs_cred ws_dispatch_id user_input computer_output =
   let txt = run user_input in
@@ -464,43 +464,52 @@ let process automaton wcs_cred ws_ids real_user_input computer_output =
     txt
   in
   let rec process main =
-    do
-      run rule_fill wcs_cred ws_ids user_input computer_output;
-      run rule_accept wcs_cred ws_ids.ws_accept_id user_input computer_output;
+    run rule_fill wcs_cred ws_ids user_input computer_output;
+    let accepted =
+      run rule_accept wcs_cred ws_ids.ws_accept_id user_input computer_output
+    in
+    if accepted then
       get_rule ()
-    until
-    | ask_reset ->
-        state_reset ();
-        run main
-    | ask_replace(focus, txt)  ->
-        run change focus txt
-    done
-  and process change focus txt_init =
-    do
-      let rule, previous_focus = state_get () in
-      let focus =
-        begin match focus with
-        | None -> previous_focus
-        | Some f -> f
-        end
-      in
-      begin match Cnl_util.rule_find_node_kind (Some focus) rule with
-      | Some kind ->
-          let _ =
-            run replace wcs_cred ws_ids
-              user_input computer_output
-              txt_init focus kind
-          in
-          ()
-      | None -> assert false
-      end;
+    else
       run main
+  in
+  let process change focus txt_init =
+    let rule, previous_focus = state_get () in
+    let focus =
+      begin match focus with
+      | None -> previous_focus
+      | Some f -> f
+      end
+    in
+    begin match Cnl_util.rule_find_node_kind (Some focus) rule with
+    | Some kind ->
+        let _ =
+          run fill wcs_cred ws_ids
+            user_input computer_output
+            txt_init focus kind
+        in
+        ()
+    | None -> ()
+    end
+  in
+  let rec process toplevel_main =
+    do run main
     until
     | ask_reset ->
         state_reset ();
-        run main
+        run toplevel_main
+    | ask_replace(focus, txt)  ->
+        run toplevel_change focus txt;
+        run toplevel_main
+    done
+  and process toplevel_change focus txt_init =
+    do
+      run change focus txt_init
+    until
+    | ask_reset ->
+        state_reset ()
     done
   in
   state_reset ();
-  run main
+  run toplevel_main
 
