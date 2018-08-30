@@ -53,6 +53,13 @@ let state_update,
 
 (** {6. Utils} *)
 
+let rec process resetable s body handler =
+  do run body
+  until s ->
+    run handler;
+    run resetable s body handler
+ done
+
 let pre_rule = ref (Cnl_builder.mk_rule_undefined ())
 let emit_resp =
   fun computer_output resp ->
@@ -79,6 +86,7 @@ let process get_value wcs_cred
     (postprocessing: message_response -> message_response)
     (* : (string * 'a) process *) =
   let rec process loop_ ctx txt =
+    pause;
     begin match bypass_fun txt with
     | Some (skip_user_input, x) ->
         if skip_user_input then (txt, x)
@@ -110,7 +118,6 @@ let process get_value wcs_cred
               if skip_user_input then txt
               else run user_input
             in
-            pause;
             run loop_ ctx txt
         end
     end
@@ -403,7 +410,6 @@ let process rule_accept wcs_cred ws_ids user_input computer_output =
             user_input computer_output
             "" focus kind
         in
-        pause;
         run loop_ is_accepted
     | [] -> is_accepted
     | (None, _) :: _ -> assert false
@@ -463,15 +469,15 @@ let process automaton wcs_cred ws_ids real_user_input computer_output =
     pause;
     txt
   in
-  let rec process main =
+  let rec process build =
     run rule_fill wcs_cred ws_ids user_input computer_output;
     let accepted =
       run rule_accept wcs_cred ws_ids.ws_accept_id user_input computer_output
     in
-    if accepted then
-      get_rule ()
-    else
-      run main
+    begin match accepted with
+    | true -> get_rule ()
+    | false -> run build
+    end
   in
   let process change focus txt_init =
     let rule, previous_focus = state_get () in
@@ -492,24 +498,85 @@ let process automaton wcs_cred ws_ids real_user_input computer_output =
     | None -> ()
     end
   in
-  let rec process toplevel_main =
-    do run main
-    until
-    | ask_reset ->
-        state_reset ();
-        run toplevel_main
-    | ask_replace(focus, txt)  ->
-        run toplevel_change focus txt;
-        run toplevel_main
-    done
-  and process toplevel_change focus txt_init =
-    do
-      run change focus txt_init
-    until
-    | ask_reset ->
-        state_reset ()
+
+  (* let rec process toplevel_build = *)
+  (*   do run build *)
+  (*   until ask_reset -> run toplevel_reset *)
+  (*   | ask_replace(focus, txt) -> run toplevel_change focus txt *)
+  (*   done *)
+  (* and process toplevel_reset = *)
+  (*   state_reset (); *)
+  (*   run toplevel_build *)
+  (* and process toplevel_change focus txt_init = *)
+  (*   let is_reset= *)
+  (*     do run change focus txt_init; true *)
+  (*     until ask_reset -> false done *)
+  (*   in *)
+  (*   if is_reset then run toplevel_reset *)
+  (*   else run toplevel_build *)
+  (* in *)
+
+
+  (* let rec process toplevel_build = *)
+  (*   do run build *)
+  (*   until ask_reset -> run toplevel_reset *)
+  (*   | ask_replace(focus, txt) -> run toplevel_change focus txt *)
+  (*   done; *)
+  (*   run toplevel_build *)
+  (* and process toplevel_change focus txt_init = *)
+  (*   do run change focus txt_init; true *)
+  (*   until ask_reset -> run toplevel_reset done *)
+  (* and process toplevel_reset = *)
+  (*   state_reset () *)
+  (* in *)
+
+  (* let rec process toplevel_build = *)
+  (*   do run build *)
+  (*   until ask_reset -> run toplevel_reset *)
+  (*   | ask_replace(focus, txt) -> run toplevel_change focus txt *)
+  (*   done *)
+  (* and process toplevel_change focus txt_init = *)
+  (*   do run change focus txt_init; run toplevel_build *)
+  (*   until ask_reset -> run toplevel_reset done *)
+  (* and process toplevel_reset = *)
+  (*   state_reset (); *)
+  (*   run toplevel_build *)
+  (* in *)
+
+  (* state_reset (); *)
+  (* run toplevel_build *)
+
+  (* let rec process driver_build = *)
+  (*   do run build *)
+  (*   until ask_replace(focus, txt) -> run driver_change focus txt done *)
+  (* and process driver_change focus txt_init = *)
+  (*   run change focus txt_init; *)
+  (*   run driver_build *)
+  (* in *)
+  (* let rec process driver = *)
+  (*   do *)
+  (*     run driver_build *)
+  (*   until ask_reset -> *)
+  (*     run reset; *)
+  (*     run driver *)
+  (*   done *)
+  (* in *)
+
+  let process reset =
+    state_reset ()
+  in
+
+  let rec process driver =
+    do run build
+    until ask_replace(focus, txt) ->
+      run change focus txt;
+      run driver
     done
   in
+  let process rulebot =
+    run resetable ask_reset driver reset
+  in
+
   state_reset ();
-  run toplevel_main
+  run rulebot
 
