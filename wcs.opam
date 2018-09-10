@@ -1,6 +1,6 @@
 opam-version: "1.2"
 name: "wcs"
-version: "2017-05-26.05"
+version: "2017-05-26.06-dev"
 maintainer: [
   "Louis Mandel <lmandel@us.ibm.com>"
 ]
@@ -20,7 +20,7 @@ build: [
 ]
 
 depends: [
-  "wcs-lib" {= "2017-05-26.05"}
+  "wcs-lib" {= "2017-05-26.06-dev"}
   "cohttp-lwt-unix"
 ]
 available: [

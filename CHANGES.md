@@ -1,3 +1,6 @@
+### 2017-05-26.06-dev (XXXX-XX-XX)
+
+
 ### 2017-05-26.05 (2018-08-29)
 * Merge `wcs-lib` and `wcs-api` into `wcs-lib`.
 * json and yojson ReactiveML interface.
