@@ -127,5 +127,5 @@ git push origin wcs-XXXX-XX-XX.XX
 # Contribute
 
 Contributions and bug reports are welcome!
-To contribute please follows the instructions given in the file (CONTRIBUTING.md)[./CONTRIBUTING.md].
+To contribute please follows the instructions given in the file [CONTRIBUTING.md](./CONTRIBUTING.md).
 
