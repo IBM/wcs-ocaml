@@ -14,16 +14,16 @@ and  available online:
 * [`wcs-lib`](wcs-lib)
 
 The `wcs` command line tool allows to do operations like listing the workspaces,
-uploading or updating workspaces. The full documentation if avaible with the
+uploading or updating workspaces. The full documentation if available with the
 command `wcs -help` or [online](https://ibm.github.io/wcs-ocaml/wcs.html).
 
 ## Quick install with Opam
 
-The easiest way to install wcs-ocaml is through the Opam package manager for OCaml.
-Instructions to install Opam on you system can be found on the website:
+The easiest way to install `wcs-ocaml` is through the Opam package manager for OCaml.
+Instructions to install `Opam` on you system can be found on the website:
 <http://opam.ocaml.org/doc/Install.html>.
 
-Then you can install wcs-ocaml with the following command:
+Then you can install `wcs-ocaml` with the following command:
 ```
 opam install wcs
 ```
@@ -39,7 +39,7 @@ opam install wcs-lib
 
 ## Tutorial
 
-In order to illustrate the use of wcs-ocaml, we are going to program a
+In order to illustrate the use of `wcs-ocaml`, we are going to program a
 bot that tells a knock knock joke. It is going to use the `wcs-lib` package:
 
 ```ocaml
